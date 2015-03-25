@@ -1,0 +1,99 @@
+#set($FolderNameMaxLength = 123)
+#set($empty = $core_v2_utility.ParseGuid('00000000-0000-0000-0000-000000000000'))
+
+#set($library = false)
+#set($library = $sharepoint_v2_library.Current)
+
+#set($folder = false)
+#set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue("contentId")))
+#if ($contentId != $empty)
+	#set($folder = $sharepoint_v2_file.Get($contentId))
+#end
+
+#set($folderPath = '')
+#set($folderPath = $core_v2_page.GetQueryStringValue('folderPath'))
+
+<!DOCTYPE html>
+<html>
+	<head>
+		#set($isModal = true)
+		$core_v2_page.RenderThemeHeaders("%{ IsModal = $isModal}")
+
+		#set($title = "$library.Name | $folderPath")
+		#set($includeContext = false)
+		#set($includeSiteName = false)
+		$core_v2_page.SetTitle($library.Name, $includeContext, $includeSiteName)
+	</head>
+	<body>
+
+		<fieldset>
+			<ul class="field-list">
+				## Folder Name
+				<li class="field-item folder">
+					<label class="field-item-header">$core_v2_language.GetResource('FolderModal_NameField')</label>
+					<span class="field-item-description">$core_v2_language.GetResource('FolderModal_NameDescription')</span>
+					<span class="field-item-input">
+						<input id="$core_v2_widget.UniqueId('FolderName')" type="text" #if($folder) value="$folder.Name" #end maxlength="$!{FolderNameMaxLength}" required="required"/>
+					</span>
+					<span class="field-item-validation" style="display: none;">$core_v2_language.GetResource('FolderModal_NameInvalidCharacters')</span>
+				</li>
+				## Save
+				<li class="field-item submit-button">
+					<span class="field-item-input">
+						<a id="$core_v2_widget.UniqueId('Save')" href="#" class="internal-link save-post disabled button">$core_v2_language.GetResource('FolderModal_Save')</a>
+						<span class="processing" style="display: none;"></span>
+					</span>
+				</li>
+			</ul>
+		</fieldset>
+
+		#if($folder)
+			<fieldset class="footer-attributes" style="float: right; text-align: right;">
+				<ul class="field-list">
+					<li class="field-item">
+						<span class="field-item-description created">
+							$core_v2_language.FormatString("$core_v2_language.GetResource('FolderModal_Created')", $core_v2_language.FormatDate($folder.CreatedDate), $folder.Author.DisplayName)
+						</span>
+						<span class="field-item-description modified">
+							$core_v2_language.FormatString("$core_v2_language.GetResource('FolderModal_Modified')", $core_v2_language.FormatDate($folder.Modified), $folder.Editor.DisplayName)
+						</span>
+					</li>
+				</ul>
+			</fieldset>
+		#end
+
+		#registerEndOfPageHtml('telligent.sharepoint.widgets.documentLibrary.folder')
+			<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('create-edit-folder.js'))"></script>
+		#end
+		#registerEndOfPageHtml()
+			<script type="text/javascript">
+				#if($folder)
+					#set($saveUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('edit-folder.vm'), "applicationId=${library.Id}&contentId=${folder.ContentId}&folderPath=${folderPath}"))
+				#else
+					#set($saveUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('create-folder.vm'), "applicationId=${library.Id}&folderPath=${folderPath}"))
+				#end
+				jQuery(function(j){
+					j.telligent.sharepoint.widgets.documentLibrary.folder.register({
+						wrapper     : document,
+						folderNameId: "#$core_v2_widget.UniqueId('FolderName')",
+						saveUrl     : "$core_v2_encoding.JavascriptEncode($saveUrl)",
+						saveButtonId: "#$core_v2_widget.UniqueId('Save')",
+						onloadValidationEnabled: #if($folder) true #else false #end
+					});
+				});
+			</script>
+		#end
+	</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

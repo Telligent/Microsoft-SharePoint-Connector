@@ -1,0 +1,258 @@
+﻿/* $SharePoint Lists - Navigation
+/******************************/
+.group-application-navigation .navigation-list .navigation-item .sharepoint-lists span {background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/sharepoint_2D00_icons.png'); background-position: -16px 0px;}
+.group-application-navigation .navigation-list .navigation-item.selected .sharepoint-lists span {background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/sharepoint_2D00_icons.png'); background-position: -16px -16px;}
+.menu.group-application-navigation-content .navigation-list .sharepoint-list-app span {background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/sharepoint_2D00_icons.png'); background-position: -16px -32px;}
+
+/* $Browse SharePoint Lists Widget
+/******************************/
+.browse-sharepoint-lists {}
+	.browse-sharepoint-lists .sharepoint-lists {list-style-type: none; padding: 0px;}
+	.browse-sharepoint-lists .sharepoint-lists .list { clear: both; padding: 9px; background-color: red; border-radius: 0px 0px 8px 8px; margin-bottom: 12px; border: 1px solid #b8bdc0; position: relative; background-color: #dddddd; background-image: -moz-linear-gradient(center top , #f2f2f2, #dddddd); background-image: -webkit-linear-gradient(center top , #f2f2f2, #dddddd); background-image: -webkit-linear-gradient(top, #f2f2f2, #dddddd); background-image: -ms-linear-gradient(center top , #f2f2f2, #dddddd); background-image: -o-linear-gradient(center top , #f2f2f2, #dddddd); background-image: linear-gradient(center top , #f2f2f2, #dddddd); overflow: visible; min-height: 42px;}
+		.browse-sharepoint-lists .sharepoint-lists .list-header {background-color: #476879; height: 9px; width: 98%; margin-left: auto; margin-right: auto;}
+		.browse-sharepoint-lists .sharepoint-lists .list-indicator {width: 40px; height: 40px; background-color: #2e4a56; border: 1px solid #EEE; border-radius: 3px; float: left; margin-right: 12px; background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/browse_2D00_apps_2D00_indicator.png'); background-repeat: no-repeat; background-position: -1px -1px;}
+		.browse-sharepoint-lists .sharepoint-lists .list-indicator span {width: 26px; height: 26px; display: block; margin: 6px 0px 0px 7px; background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/browse_2D00_apps_2D00_list_2D00_icon.png'); background-repeat: no-repeat;}
+	.browse-sharepoint-lists .sharepoint-lists .list-identity {float: left; width: 35%; max-height: 40px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+		.browse-sharepoint-lists .sharepoint-lists .list-identity h3 {color: #263e4a; margin: 0px; font-size: 13px;}
+		.browse-sharepoint-lists .sharepoint-lists .list-identity h4 {display: block; font-size: 8px; text-transform: uppercase; font-family: Helvetica, Arial, sans-serif; margin: 0px; color: #d67145;}
+	.browse-sharepoint-lists .sharepoint-lists .attribute-item {float: left; padding: 6px; margin-right: 9px;}
+	.browse-sharepoint-lists .sharepoint-lists .attribute-item.latest-authors {padding: 6px 2px 0px 0px;}
+	.browse-sharepoint-lists .sharepoint-lists .attribute-item.tags {width: 25%;}
+	.browse-sharepoint-lists .sharepoint-lists .attribute-key {color: #80898e; text-transform: uppercase; display: block;}
+	.browse-sharepoint-lists .sharepoint-lists .attribute-value,
+	.browse-sharepoint-lists .sharepoint-lists .attribute-value a {display: block; color: #273d4a; font-weight: bold;}
+		.browse-sharepoint-lists .sharepoint-lists .tags .attribute-key,
+		.browse-sharepoint-lists .sharepoint-lists .latest-authors .attribute-key {display: none;}
+		.browse-sharepoint-lists .sharepoint-lists .latest-authors .attribute-value {margin-top: 2px;}
+			.browse-sharepoint-lists .sharepoint-lists .latest-authors .attribute-value a {float: left; margin-right: 3px;}
+	.browse-sharepoint-lists .sharepoint-lists .message {background-color: #FFFFFF; border: 1px solid #AAAAAA; border-radius: 2px 2px 2px 2px; font-size: 11px; font-weight: bold; margin: 1em 0; padding: 12px;}
+	.browse-sharepoint-lists .sharepoint-lists .message.norecords{background-color: #EEEEEE; border-color: #666666; color: #666666;}
+
+/* $SharePoint - List Administration Widget
+/******************************/
+.sharepoint-list-administration {}
+
+/* $SharePoint - Lists Widget
+/******************************/
+.sharepoint-lists-widget { position: relative; }
+.sharepoint-lists-widget .loading{background: url("~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/loading.gif") no-repeat center center; width: 100%; height: 128px;}
+.sharepoint-lists-widget .content { overflow-x: auto; overflow-y: hidden;}
+	.sharepoint-lists-widget .content .table-list {width: 100%;  border-collapse: collapse;}
+	.sharepoint-lists-widget .content .table-header {border-bottom: solid 1px #d8d8d8; vertical-align: top; cursor: pointer; }
+	.sharepoint-lists-widget .content .table-header-column:hover {color: #d55538;}
+	.sharepoint-lists-widget .content .table-header-column {border-top: 0px; text-align: left; margin: 0px; font-size: 9px; text-transform: uppercase; white-space: nowrap; height: 20px; padding: 4px; background: transparent;  color: inherit;text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.07);}
+	.sharepoint-lists-widget .content .table-header-column.docicon { width: 24px; min-width: 24px; }
+	.sharepoint-lists-widget .content .table-header-column.attachments {width: 16px; height: 16px;}
+	.sharepoint-lists-widget .content .table-header-column.attachments span {position:relative; display: block; width: 14px; height: 14px; background: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/lists_2D00_attachment_2D00_icon.gif') no-repeat center center; }
+		.sharepoint-lists-widget .content .table-header-column a {height: 16px; width: 16px; padding: 0px; margin: 0px; vertical-align: top;}
+		.sharepoint-lists-widget .content .table-header-column a.sort-ascending span {position: absolute; padding: 0px; height: 16px; width: 16px; background: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/up_2D00_down_2D00_icon.png') no-repeat; vertical-align: middle;}
+		.sharepoint-lists-widget .content .table-header-column a.sort-descending span {position: absolute; padding: 0px; height: 16px; width: 16px; background: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/up_2D00_down_2D00_icon.png') -16px 0px no-repeat; vertical-align: middle;}
+		.sharepoint-lists-widget .content .table-header-column:hover a.sort-ascending span {position: absolute; padding: 0px; height: 16px; width: 16px; background: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/up_2D00_down_2D00_icon.png') 0px -16px no-repeat; vertical-align: middle;}
+		.sharepoint-lists-widget .content .table-header-column:hover a.sort-descending span {position: absolute; padding: 0px; height: 16px; width: 16px; background: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/up_2D00_down_2D00_icon.png') -16px -16px no-repeat; vertical-align: middle;}
+	.sharepoint-lists-widget .content .table-header .table-header-column.item-checker { min-width: 22px; width: 22px; padding-left: 0; padding-right: 0;}
+	.sharepoint-lists-widget .content .table-item {height: 22px; border-bottom: dotted 1px #d8d8d8; }
+		.sharepoint-lists-widget .content .table-item:hover {background-color: #FAEDE7; }
+			.sharepoint-lists-widget .content .table-item:hover .table-column.item-checker input { visibility: visible; }
+	.sharepoint-lists-widget .content .table-column { padding: 4px; margin: 0px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+		.sharepoint-lists-widget .content .table-column.moderation-cell {vertical-align: top;}
+		.sharepoint-lists-widget .content .table-column .title {height: auto; padding: 0px; background: transparent;color: inherit;}
+		.sharepoint-lists-widget .content .table-column div {width:100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+		.sharepoint-lists-widget .content .table-column .post-moderate {position: absolute; right: 2px;}
+		.sharepoint-lists-widget .content .table-column .attachments { background: url('attach.gif') no-repeat; display: block; width: 8px; height: 14px; }
+		.sharepoint-lists-widget .content .table-column .attachments.false {display: none; }
+		.sharepoint-lists-widget .content .table-column .attachments.true { background: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/lists_2D00_attachment_2D00_icon.gif') no-repeat; display: block; width: 8px; height: 14px; }
+			.sharepoint-lists-widget .content .table-column .attachments.true span{display: none; }
+		.sharepoint-lists-widget .content .table-column .docicon { background: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/lists_2D00_document_2D00_icon.gif') no-repeat; display: block; width: 16px; height: 16px; }
+		.sharepoint-lists-widget .content .table-column.item-checker { text-align: left; min-width: 22px;  width: 22px;  padding-left: 0;  padding-right: 0;}
+			.sharepoint-lists-widget .content .table-column.item-checker input { visibility: hidden; }
+.sharepoint-lists-widget .footer { width: 100%; padding-top: 20px;}
+	.sharepoint-lists-widget .footer .left { width: 130px; float: left; white-space: nowrap; padding-top: 6px;}
+		.sharepoint-lists-widget .footer .left .btn-delete { font-size: 12px; }
+	.sharepoint-lists-widget .footer .center {position: relative; top: -40px;}
+	.sharepoint-lists-widget .footer .right { width: 130px; float: right; }
+		.sharepoint-lists-widget .footer select.nav-list-view { display: none; }
+	.sharepoint-lists-widget .footer .clear { height: 1px; clear: both; }
+/* Moderation Menu */
+.sharepoint-lists-widget .ui-moderate a { display: none; }
+.sharepoint-lists-widget .table-item:hover .ui-moderate a,
+.sharepoint-lists-widget .table-item:hover .ui-moderate a.open {display: block;}
+.sharepoint-lists-widget .table-item .ui-moderate a.open {display: block;}
+/* Evolution Sort */
+.sharepoint-lists-widget .filter { border: none 0; margin: 0; padding: 0; text-align: center; font-size:10px;}
+.sharepoint-lists-widget .filter a {display: block; width: 80px; padding: 6px 30px 4px 9px; margin: 0px; position: relative; text-transform: uppercase;}
+.sharepoint-lists-widget .filter .sorter a:hover {background: transparent;}
+.sharepoint-lists-widget .filter .sorter li:hover {background-color: #882B0A;}
+/* Attachments popup */
+.attachment-list-popup {font-family: Helvetica, Arial, sans-serif; background-color: transparent; border-width: 0; color: black; position: relative; margin: 0; padding: 12px 0 0 0; font-size: 13px; white-space: nowrap;}
+	.attachment-list-popup .fiji-arrow {width:260px; left:3px; top: -18px; background: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/bubble_2D00_arrows.png') no-repeat center top; z-index: 1; height: 16px; position: relative;}
+		.attachment-list-popup .outer-wrapper.evolution2-outer-wrapper.fiji-outer-wrapper{position: relative; top: -23px;}
+		.attachment-list-popup .attacment-list {position: relative; padding: 2px 0px; margin: 16px 3px 3px 3px; top: -12px; width:260px; border: 1px solid #CFCFCF; background-color: white; -moz-box-shadow: 0px 0px 3px 0px #E6E6E6; -webkit-box-shadow: 0px 0px 3px 0px #E6E6E6; box-shadow: 0px 0px 3px 0px #E6E6E6;}
+			.attachment-list-popup .attacment-list .attacment-item {padding: 2px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+			.attachment-list-popup .attacment-list .attacment-item:hover {background-color: #FCEBDD;}
+
+/* $SharePoint - Comments Widget
+/******************************/
+.document-library-comment-list.comment.post .content-item.comment { position: relative; min-height: 99px; margin-bottom: 12px; }
+.document-library-comment-list.comment.post .content-item.comment .post-author { background-color: #F5F5F5; color: #000; border-top: 1px solid #416F86; padding: 3px 3px 3px 6px; }
+.document-library-comment-list.comment.post .content-item.comment .post-author a:link,
+.document-library-comment-list.comment.post .content-item.comment .post-author a:visited,
+.document-library-comment-list.comment.post .content-item.comment .post-author a:active { color: #1c2c46; text-decoration: none; font-size: 12px; }
+.document-library-comment-list.comment.post .content-item.comment .post-author .avatar { position: absolute; top: 33px; left: 0px; }
+.document-library-comment-list.comment.post .content-item.comment .post-date { color: #7B7F7F; font-size: 12px; position: absolute; right: 30px; top: 3px; }
+.document-library-comment-list.comment.post .content-item.comment .post-content { padding: 0 0 0 60px; margin: 0px; }
+.document-library-comment-list.comment.post .content-item.comment .post-moderate { margin: 3px 3px 0px 0px; }
+.document-library-comment-list.comment.post .content-item.comment .post-moderate .ui-moderate a span { opacity: 0.7 }
+.document-library-comment-list.comment.post .content-item.comment .post-moderate .ui-moderate a:hover span { opacity: 1 }
+.document-library-comment-list.comment.post .content-item.comment .post-actions { background-color: #F5F5F5; margin-left: 60px; overflow: hidden; padding: 3px 3px 4px 5px; }
+.document-library-comment-list.comment.post .content-item.comment .like-toggle { float: left; margin-right: 9px; }
+.document-library-comment-list.comment.post .content-item.comment .count { float: left; }
+.document-library-comment-list.comment.post .content-item.comment .like-indicator { background-image: url("~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/sprite_2D00_icon.png"); background-position: 0px 0px; background-repeat: no-repeat; border: 0 none; float: left; height: 16px; margin: 0 7px 0 0; width: 16px; position: relative; top: 1px; }
+.document-library-comment-list.comment.post .content-item.comment .like-indicator.inline { background-image: url("~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/sprite_2D00_icon.png"); background-position: -18px 0; height: 14px; margin: 0 3px 0 0; width: 14px; }
+
+/* $SharePoint Lists - Comment Form Widget
+/******************************/
+.sharepoint-listItem-comment-create .message { display: none; }
+.sharepoint-listItem-comment-create .field-list .field-item .field-item-input textarea { background-color: #f5f5f5; border-color: #dadedf; width: 99%; min-height: 5em; }
+.sharepoint-listItem-comment-create .field-list .field-item .field-item-input textarea:focus { background-color: #fff; border-color: #da7048; }
+.sharepoint-listItem-comment-create .submit-button { float: right; }
+
+/* $SharePoint - List Item Widget
+/******************************/
+.sharepoint-listItem-widget .full-view { }
+	.sharepoint-listItem-widget .full-view .item-fields {overflow-x: auto;}
+	    .sharepoint-listItem-widget .full-view .field-item { position: relative; border-top: 1px dotted #9AADB6; min-height: 20px;  padding: 16px; overflow: auto;}
+		.sharepoint-listItem-widget .full-view .field-item-header { float: left; min-height: 20px; width: 30%; font-size: 15px; font-weight: bold;}
+		.sharepoint-listItem-widget .full-view .field-item-content { float: right; min-height: 20px; width: 60%;}
+	.sharepoint-listItem-widget .full-view .item-fields-content { background-color: #F2F2F2; height: 22px;}
+		.sharepoint-listItem-widget .full-view .item-fields .field-name,
+		.sharepoint-listItem-widget .full-view .item-fields .field-value { white-space: nowrap; width: 50px; max-width: 100px; padding: 3px 0px 3px 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+	.sharepoint-listItem-widget .full-view .list-item-name {padding-left: 42px; color: #D87146; font-size: 24px; font-weight: normal; margin: 9px 0; position: relative;}
+		.sharepoint-listItem-widget .full-view .list-item-name span {position:absolute; width:24px; height:24px; background: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/list_2D00_item_2D00_icon.png') no-repeat; margin: 5px; left: 0px;}
+	.sharepoint-listItem-widget .full-view .post-attributes { clear: both; font-size: 11px; color: #999; border: 0px; padding-top: 9px; }
+	.sharepoint-listItem-widget .full-view .post-attributes.meta {border: 0px; padding: 4px; position: relative; border-top: 1px dotted #ccc;}
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-list { font-family: Helvetica, Verdana, sans-serif; width: 100%; }
+		.sharepoint-listItem-widget .full-view .post-attributes.meta .attribute-list { width: auto; }
+		.sharepoint-listItem-widget .full-view .post-attributes a { color: #101010; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item { display: block; margin-right: 12px; position: relative; padding: 0 0 0 34px; color: #999; line-height: 1.3em; float: left; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item .attribute-name { position: absolute; left: 0; top: 0; width: 26px; height: 0; padding: 26px 0 0 0; overflow: hidden; margin: 3px 0px 0px 3px; opacity: .5; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.author { }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.author .attribute-name { opacity: 1; width: 20px; height: 20px; padding: 0px; margin: 3px 0px 0px 1px; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-reply-count,
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.like-count { padding: 0 0 0 24px; float: right;  line-height: 26px;  z-index: 500;}
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.like-count .attribute-name,
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-reply-count .attribute-name { position: absolute; left: 0; top: 1px; width: 18px; height: 0; padding: 18px 0 0 0; overflow: hidden; background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/sprite_2D00_icon.png'); background-repeat: no-repeat; background-position: 0px 0px; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-reply-count .attribute-name { background: url("~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/sprite_2D00_icon.png") 0px -20px no-repeat; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-liking { padding-left: 26px; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-liking .attribute-name { opacity: 1 }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-liking .attribute-name span { background-color: transparent; background: url("~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/like_2D00_icon.png") no-repeat; position: absolute; height: 16px; width: 16px; left: 0; overflow: hidden; padding: 0; top: 1px;}
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-liking .attribute-value { line-height: 26px; color: #717C7E; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-liking .attribute-value .like-toggle a { font-weight: bold; text-transform: uppercase; color: #717C7E; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-tags { padding: 0px; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-tags .attribute-name { color: #717C7E; float: left; font-weight: bold; height: auto; width: auto; line-height: 26px; margin-right: 9px; margin-top: 0px; opacity: 1; overflow: visible; padding: 0 0 0 18px; text-transform: uppercase; white-space: nowrap; position: absolute; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-tags .attribute-name span { position: absolute; left: 0; top: 3px; width: 16px; height: 16px; overflow: hidden; background-color: transparent; padding: 0px; background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/tags_2D00_icon.png'); background-repeat: no-repeat; background-position: -0px 0px; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-application { padding-left: 0px; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-application .attribute-name { display: none; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item .attribute-value { font-size: 11px; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.date .attribute-value { font-size: 12px; line-height: 26px; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.author .attribute-value { font-size: 12px; line-height: 26px; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.like-count .attribute-value,
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.like-count .attribute-value a,
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-reply-count .attribute-value,
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-reply-count .attribute-value a { color: #273F4B; font-size: 12px;  line-height: 26px;}
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item:last-child { margin-right: 9px; float: right; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-tags { float: left; overflow: visible; width: 70%; padding-top: 6px; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-tags .internal-link.edit-tags { color: #717C7E; text-transform: uppercase; text-decoration: none; display: inline; font-size: 11px; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-tags .attribute-value { float: left; margin-left: 70px; width: 100%; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-tags .attribute-value div { float: left; width: 80%; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-tags .tag-list { padding: 0; float: left; margin-right: 9px; min-width: 300px; max-width: 70%; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-tags .tag-item { background-color: transparent; float: left; margin: 0 2px 0 0; padding: 0 3px 0 0; max-width: 100%; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-tags .tag-list-footer { }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-tags .tag-list a { text-indent: 0; color: #da7046; text-transform: uppercase; text-decoration: underline; font-weight: normal; display: inline; padding: 0px; margin: 0px; float: none; background-color: inherit; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-tags .tag-list a, .full-post .post-attributes .attribute-item.post-tags .tag-list a:hover { background-color: transparent; white-space: normal; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-tags .tag-item a span { display: none; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.post-rating { float: right; padding-left: 18px; line-height: 22px; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.author .attribute-name.avatar { white-space: normal; position: absolute; top: 0px; left: 0px; height: 20px; width: 20px; }
+		.sharepoint-listItem-widget .full-view .post-attributes .attribute-item.author .attribute-name.avatar a { float: left; height: 20px; width: 20px; }
+		.sharepoint-listItem-widget .full-view .attribute-list-footer {clear: both}
+		.sharepoint-listItem-widget .full-view .edit-link {float: right; margin-top: 10px;}
+			.sharepoint-listItem-widget .full-view .ui-moderate a { display: none; }
+			.sharepoint-listItem-widget .full-view .ui-moderate a.open {display:block;}
+			.sharepoint-listItem-widget .full-view:hover .ui-moderate a,
+			.sharepoint-listItem-widget .full-view:hover .ui-moderate a.open {display:block;}
+/* simple view */
+.sharepoint-listItem-widget .simple-view ul { list-style: none outside none; margin: 0; padding: 0; }
+	.sharepoint-listItem-widget .simple-view li { display: list-item; position: relative; margin: 10px 0px; clear: both;}
+		.sharepoint-listItem-widget .simple-view .field-name {width: 48px; position: absolute; text-align:left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+		.sharepoint-listItem-widget .simple-view .field-value {margin-left: 55px; text-align:left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+		.sharepoint-listItem-widget .simple-view .delimiter {position: absolute; left:50px;}
+
+/* $SharePoint - Create/Edit List Item
+/******************************/
+.sharepoint-create-edit-list-item .loading {background: url("~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-7e987e474b714b01ba29b4336720c446-files/loading.gif") no-repeat center center; width: 100%; height: 128px;}
+.sharepoint-create-edit-list-item .error {background-color: #CADBEE; border: 1px solid #300; color: black; padding: 12px;}
+.sharepoint-create-edit-list-item .field-list .field-item .field-required,.invalid-msg{ color: red; font-family: verdana; font-size: 8pt; }
+.sharepoint-create-edit-list-item .field-list .field-item .single-line-of-text-editor { width: 100%; }
+	.sharepoint-create-edit-list-item .field-list .field-item .single-line-of-text-editor input { width: 50%; }
+	.sharepoint-create-edit-list-item .field-list .field-item .single-line-of-text-editor input.invalid { background-color: #fcc; }
+.sharepoint-create-edit-list-item .field-list .field-item .date-and-time-editor {width:100%;}
+	.sharepoint-create-edit-list-item .field-list .field-item .date-and-time-editor input { width: 25%; }
+	.sharepoint-create-edit-list-item .field-list .field-item .date-and-time-editor img {border: 0px solid rgb(204, 204, 204) !important; padding: 4px !important; margin: 2px; vertical-align: top !important; background-color: transparent !important; cursor: pointer;}
+.sharepoint-create-edit-list-item .field-list .field-item .hyperlink-or-picture-editor { width: 100%; }
+	.sharepoint-create-edit-list-item .field-list .field-item .hyperlink-or-picture-editor input { width: 25%; }
+	.sharepoint-create-edit-list-item .field-list .field-item .hyperlink-or-picture-editor input.invalid { background-color: #fcc; }
+.sharepoint-create-edit-list-item .field-list .field-item .currency-editor { width: 100%; }
+	.sharepoint-create-edit-list-item .field-list .field-item .currency-editor .currency { padding-left: 5px;}
+	.sharepoint-create-edit-list-item .field-list .field-item .currency-editor input { width: 25%;}
+	.sharepoint-create-edit-list-item .field-list .field-item .currency-editor input.invalid { background-color: #fcc; }
+.sharepoint-create-edit-list-item .field-list .field-item .file-editor { width: 100%; }
+	.sharepoint-create-edit-list-item .field-list .field-item .file-editor .name{ width: 50%; }
+	.sharepoint-create-edit-list-item .field-list .field-item .file-editor .extension{ padding-left: 5px; }
+	.sharepoint-create-edit-list-item .field-list .field-item .file-editor input { width: 100%; }
+	.sharepoint-create-edit-list-item .field-list .field-item .file-editor input.invalid { background-color: #fcc; }
+.sharepoint-create-edit-list-item .field-list .field-item .multiple-lines-of-text-editor { width: 100%; }
+	.sharepoint-create-edit-list-item .field-list .field-item .multiple-lines-of-text-editor.simple { width: 100%; border-collapse: collapse; overflow: hidden; table-layout: fixed; }
+	.sharepoint-create-edit-list-item .field-list .field-item .multiple-lines-of-text-editor.simple td { padding-right: 10px; }
+	.sharepoint-create-edit-list-item .field-list .field-item .multiple-lines-of-text-editor.simple textarea { width: 100%; }
+	.sharepoint-create-edit-list-item .field-list .field-item .multiple-lines-of-text-editor.simple textarea.invalid { background-color: #fcc; }
+.sharepoint-create-edit-list-item .field-list .field-item .choice-editor { width: 100%; border-collapse: collapse; font-size: inherit;}
+	.sharepoint-create-edit-list-item .field-list .field-item .choice-editor td { padding: 0; }
+	.sharepoint-create-edit-list-item .field-list .field-item .choice-editor .fill-in { width: 20px; }
+	.sharepoint-create-edit-list-item .field-list .field-item .choice-editor select { width: 25%; }
+	.sharepoint-create-edit-list-item .field-list .field-item .choice-editor .own-value { padding-right: 5px; }
+	.sharepoint-create-edit-list-item .field-list .field-item .choice-editor .own-value input { width: 25%; }
+.sharepoint-create-edit-list-item .field-list .field-item .number-editor { border-collapse: collapse; width: 100%; }
+	.sharepoint-create-edit-list-item .field-list .field-item .number-editor input { width: 25%; }
+		.sharepoint-create-edit-list-item .field-list .field-item .number-editor input.percentage { width: 25%; }
+	.sharepoint-create-edit-list-item .field-list .field-item .number-editor input.invalid { background-color: #fcc; }
+	.sharepoint-create-edit-list-item .field-list .field-item .number-editor .percentage { width: 10%; padding-left: 5px; }
+.sharepoint-create-edit-list-item .field-list .field-item .managedmetadata-editor { width: 100%; border-collapse: collapse; font-size: inherit;}
+	.sharepoint-create-edit-list-item .field-list .field-item .managedmetadata-editor td { padding: 0; }
+	.sharepoint-create-edit-list-item .field-list .field-item .managedmetadata-editor .fill-in { width: 20px; }
+	.sharepoint-create-edit-list-item .field-list .field-item .managedmetadata-editor input {width: 25%;}
+	.sharepoint-create-edit-list-item .field-list .field-item .managedmetadata-editor input.invalid { background-color: #fcc; }
+.sharepoint-create-edit-list-item .field-list .field-item .attachment-editor {width: 100%; border-collapse: collapse; font-size: inherit;}
+	.sharepoint-create-edit-list-item .field-list .field-item .attachment-editor ul {list-style-type: none; padding: 10px 0px;}
+	.sharepoint-create-edit-list-item .field-list .field-item .attachment-editor .add-attachment {text-transform: uppercase;}
+.sharepoint-create-edit-list-item .field-list .field-item .person-group-editor { }
+.sharepoint-create-edit-list-item .field-list .field-item .person-group-editor .person-add {width: 100%; display: inline-block;}
+.sharepoint-create-edit-list-item .field-list .field-item .person-group-editor .person-add .txt {width: 25%;}
+.sharepoint-create-edit-list-item .field-list .field-item .person-group-editor .person-add .icon { width: 30px; display: inline-block; vertical-align: middle;}
+.sharepoint-create-edit-list-item .field-list .field-item .person-group-editor .person-add .icon .checknames { width: 30px; height: 16px; background:  url("~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/check_2D00_names.png") center center no-repeat transparent; cursor: pointer;}
+.sharepoint-create-edit-list-item .field-list .field-item .person-group-editor .person-block {float: left; border: solid 1px #999; background: url("~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/remove_2D00_icon.gif") right top no-repeat; padding: 5px 15px 5px 5px; margin: 0px 3px 3px 0px; cursor: pointer;}
+.sharepoint-create-edit-list-item .field-list .field-item .person-group-editor .person-block .name {}
+.sharepoint-create-edit-list-item .field-list .field-item .lookup-editor {width: 100%; table-layout: fixed;}
+	.sharepoint-create-edit-list-item .field-list .field-item .lookup-editor td.select{min-width: 120px;}
+	.sharepoint-create-edit-list-item .field-list .field-item .lookup-editor td.select{min-width: 120px;}
+	.sharepoint-create-edit-list-item .field-list .field-item .lookup-editor td.select select{width: 100%;}
+	.sharepoint-create-edit-list-item .field-list .field-item .lookup-editor td.buttons{text-align: center; max-width: 250px;}
+
+/* $SharePoint - List Item - Attachements Modal
+/******************************/
+.sharepoint-listItem-upload-attachments {}
+	.sharepoint-listItem-upload-attachments .internal-link.submit-button {cursor: pointer;}
+	.sharepoint-listItem-upload-attachments .save-cancel-panel {float:right;}
+		.sharepoint-listItem-upload-attachments .save-cancel-panel .internal-link {margin-left: 10px;}
+
+/* SharePoint - Remove List Modal
+*******************************/
+.delete-library .field-list .field-item .field-item-input input[type=checkbox] { min-height: 1em; }

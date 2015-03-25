@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	#set($contentId = false)
+	#set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue("contentId")))
+
+	#set($listItem = false)
+	#set($listItem = $sharepoint_v2_listItem.Get($contentId))
+
+	#set($list = false)
+	#set($list = $sharepoint_v2_list.Get($listItem.ListId))
+
+	#set($pageTitle = $core_v2_language.GetResource('Permissions_Title'))
+	#if($listItem && $listItem.Errors.Count() == 0)
+		#set($pageTitle = $core_v2_language.FormatString("$core_v2_language.GetResource('Permissions_Title_Format')", $listItem.DisplayName))
+	#end
+
+	#set($includeContext = false)
+	#set($includeSiteName = false)
+	$core_v2_page.SetTitle($pageTitle, $includeContext, $includeSiteName)
+
+	#set($isModal = true)
+	$core_v2_page.RenderThemeHeaders("%{ IsModal = $isModal}")
+		
+</head>
+<body class="sharepoint-permissions">
+	<div id="$core_v2_widget.UniqueId('list-tab')" class="permissions-list-tab">
+		$core_v2_widget.ExecuteFile('permissions-list-view.vm')
+	</div>
+
+	<div id="$core_v2_widget.UniqueId('grant-tab')" class="permissions-grant-tab" style="display: none;">
+		$core_v2_widget.ExecuteFile('permissions-grant-view.vm')
+	</div>
+
+	<div id="$core_v2_widget.UniqueId('edit-tab')" class="permissions-edit-tab" style="display: none;">
+		$core_v2_widget.ExecuteFile('permissions-edit-view.vm')
+	</div>
+
+	#registerEndOfPageHtml('telligent.sharepoint.widgets.documentLibrary.permissionsTabs')
+		<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('permissions.js'))"></script>
+	#end
+	#registerEndOfPageHtml()
+		<script type="text/javascript">
+			jQuery(function(j){
+				j.telligent.sharepoint.widgets.documentLibrary.permissionsTabs.register({
+					listHolderTabId  : "#$core_v2_widget.UniqueId('list-tab')",
+					grantHolderTabId : "#$core_v2_widget.UniqueId('grant-tab')",
+					editHolderTabId  : "#$core_v2_widget.UniqueId('edit-tab')"
+				});
+			})
+		</script>
+	#end
+</body>
+</html>

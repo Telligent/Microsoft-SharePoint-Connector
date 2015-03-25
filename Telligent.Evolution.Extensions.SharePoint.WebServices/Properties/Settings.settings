@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Telligent.Evolution.Extensions.SharePoint.WebServices.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Telligent_Evolution_Extensions_SharePoint_WebServices_TaxonomyClientService_Taxonomy_x0020_web_x0020_service" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://telligentsharepoint.sharepoint.com/_vti_bin/TaxonomyClientService.asmx</Value>
+    </Setting>
+    <Setting Name="Telligent_Evolution_Extensions_SharePoint_WebServices_UserProfileChangeService_UserProfileChangeService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://telligentsharepoint.sharepoint.com/_vti_bin/UserProfileChangeService.asmx</Value>
+    </Setting>
+    <Setting Name="Telligent_Evolution_Extensions_SharePoint_WebServices_UserProfileService_UserProfileService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://telligentsharepoint.sharepoint.com/_vti_bin/UserProfileService.asmx</Value>
+    </Setting>
+    <Setting Name="Telligent_Evolution_Extensions_SharePoint_WebServices_VersionsService_Versions" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://telligentsharepoint.sharepoint.com/_vti_bin/Versions.asmx</Value>
+    </Setting>
+    <Setting Name="Telligent_Evolution_Extensions_SharePoint_WebServices_SPListsService_Lists" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://telligentsharepoint.sharepoint.com/_vti_bin/lists.asmx</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

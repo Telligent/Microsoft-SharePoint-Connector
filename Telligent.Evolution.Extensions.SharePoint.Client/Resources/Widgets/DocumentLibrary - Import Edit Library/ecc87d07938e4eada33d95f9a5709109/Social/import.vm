@@ -1,0 +1,36 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($groupId = $core_v2_utility.ParseInt($core_v2_page.GetFormValue('groupId')))
+#set($libraryId = $core_v2_utility.ParseGuid($core_v2_page.GetFormValue('libraryId')))
+#set($url = $core_v2_page.GetFormValue('webUrl'))
+
+#set($library = false)
+#set($library = $sharepoint_v2_library.Add($groupId, $libraryId, $url))
+#if ($library.HasErrors)
+	$core_v2_page.SendJsonError($library.Errors)
+#end
+
+#set($empty = $core_v2_utility.ParseGuid('00000000-0000-0000-0000-000000000000'))
+#set($viewId = $core_v2_utility.ParseGuid($core_v2_page.GetFormValue('viewId')))
+#if ($viewId != $empty)
+	#set($updateInfo = false)
+	#set($updateInfo = $sharepoint_v2_library.Update($libraryId, "%{DefaultViewId = $viewId}"))
+	#if ($updateInfo.HasErrors)
+		$core_v2_page.SendJsonError($updateInfo.Errors)
+	#end
+#end
+
+{
+	"valid"    : true, 
+	"library"  : {
+		"id"         : "$!{library.Id}",
+		"name"       : "$!{core_v2_encoding.JavascriptEncode($library.Name)}",
+		"description": "$!{core_v2_encoding.JavascriptEncode($library.Description)}",
+		"groupId"    : "$!{library.GroupId}",
+		"root"       : "$!{core_v2_encoding.JavascriptEncode($library.Root)}",
+		"url"        : "$!{core_v2_encoding.JavascriptEncode($library.Url)}",
+		"spviewUrl"  : "$!{core_v2_encoding.JavascriptEncode($library.SPViewUrl)}",
+		"spwebUrl"   : "$!{core_v2_encoding.JavascriptEncode($library.SPWebUrl)}"
+	},
+	"redirectUrl" : "$!{core_v2_encoding.JavascriptEncode($sharepoint_v2_fileUrls.Browse($library.Id))}"
+}

@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A0903CA3-7711-4F41-89D2-E9DBB7D2C7E9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Telligent.Evolution.Extensions.SharePoint.IdentityProvider</RootNamespace>
+    <AssemblyName>Telligent.Evolution.Extensions.SharePoint.IdentityProvider</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\Microsoft.IdentityModel.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Telligent.DynamicConfiguration">
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.DynamicConfiguration.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Api">
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Components">
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Components.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Core">
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.ScriptedContentFragments">
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.ScriptedContentFragments.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="IdentityProviderPlugin.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScriptedExtension\SAMLAuthentication.cs" />
+    <Compile Include="ScriptedExtension\ISAMLAuthentication.cs" />
+    <Compile Include="ServiceLocator.cs" />
+    <Compile Include="SPLog.cs" />
+    <Compile Include="STS\CertificateUtil.cs" />
+    <Compile Include="STS\STSConfiguration.cs" />
+    <Compile Include="STS\TelligentSTS.cs" />
+    <Compile Include="STS\UserInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Web\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\1102ee60e8c24da7a3de28e4d4e6b7dc\form_collect_email_address.vm" />
+    <EmbeddedResource Include="Resources\Widgets\1102ee60e8c24da7a3de28e4d4e6b7dc\form_join_manual.vm" />
+    <EmbeddedResource Include="Resources\Widgets\1102ee60e8c24da7a3de28e4d4e6b7dc\form_join_oauth.vm" />
+    <EmbeddedResource Include="Resources\Widgets\1102ee60e8c24da7a3de28e4d4e6b7dc\form_link_accounts.vm" />
+    <EmbeddedResource Include="Resources\Widgets\1102ee60e8c24da7a3de28e4d4e6b7dc\form_login.vm" />
+    <EmbeddedResource Include="Resources\Widgets\1102ee60e8c24da7a3de28e4d4e6b7dc\sub_form_credentials.vm" />
+    <EmbeddedResource Include="Resources\Widgets\1102ee60e8c24da7a3de28e4d4e6b7dc\sub_form_join_details.vm" />
+    <EmbeddedResource Include="Resources\Widgets\1102ee60e8c24da7a3de28e4d4e6b7dc\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\SharePointLoginAndCreateUser.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetDir)*.dll" "$(SolutionDir)Assemblies\"
+"$(ProjectDir)postbuild.bat"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

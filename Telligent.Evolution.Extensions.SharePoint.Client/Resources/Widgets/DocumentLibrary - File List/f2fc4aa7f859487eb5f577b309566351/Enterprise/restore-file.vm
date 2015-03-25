@@ -1,0 +1,23 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($contentId = false)
+#set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue('contentId')))
+
+#set($version = false)
+#set($version = $core_v2_page.GetFormValue('fileVersion'))
+
+#set($restoreFileInfo = false)
+#set($restoreFileInfo = $sharepoint_v2_file.Restore($contentId, $version))
+#if ($restoreFileInfo && $restoreFileInfo.Errors.Count() == 0)
+	{
+		"valid"     : true,
+		"contentId" : "$!contentId",
+		"version"   : "$!version"
+	}
+#elseif($restoreFileInfo)
+	$core_v2_page.SendJsonError($restoreFileInfo.Errors)
+#else
+	$core_v2_page.SendJsonError('Access denied. You do not have permission to perform this method or access this resource.')
+#end
+
+

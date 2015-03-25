@@ -1,0 +1,43 @@
+#set($library = false)
+#set($library = $sharepoint_v2_library.Current)
+
+#set($title = $core_v2_language.FormatString($core_v2_language.GetResource('DeleteTitle'), $library.Name))
+$core_v2_page.SetTitle($title, false, false)
+#set($isModal = true)
+$core_v2_page.RenderThemeHeaders("%{ IsModal = $isModal}")
+
+<fieldset class="field-list">
+	<ul class="field-list">
+		<legend>
+			<h4>$core_v2_language.GetResource('DeleteConfirmation')</h4>
+		</legend>
+		## Delete from SharePoint?
+		<li class="field-item">
+			<span class="field-item-input">
+				<input type="checkbox" id="$core_v2_widget.UniqueId('IsDelete')" />
+				<label for="$core_v2_widget.UniqueId('IsDelete')">$core_v2_language.GetResource('DeleteFromSharePoint')</label>
+			</span>
+		</li>
+		## Delete
+		<li class="field-item submit-button">
+			<span class="field-item-input">
+				<a id="$core_v2_widget.UniqueId('Delete')" href="#" class="internal-link delete-post button">$core_v2_language.GetResource('Delete')</a>
+				<span class="processing" style="display: none;"></span>
+			</span>
+		</li>
+	</ul>
+</fieldset>
+
+#registerEndOfPageHtml('telligent.sharepoint.widgets.documentLibraryDelete')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			j.telligent.sharepoint.widgets.documentLibraryDelete.register({
+				isDeleteHolderId: "#$core_v2_widget.UniqueId('IsDelete')",
+				deleteButtonId  : "#$core_v2_widget.UniqueId('Delete')"
+			});
+		})
+	</script>
+#end

@@ -1,0 +1,46 @@
+﻿$core_v2_page.SetContentType('application/json')
+
+#set($destinationFileName = $core_v2_page.GetFormValue('DestinationFileName'))
+#set($folder = $core_v2_page.GetFormValue('DestinationFolder'))
+#set($fileContextId = $core_v2_page.GetFormValue('FileContextId'))
+#set($fileName = $core_v2_page.GetFormValue('FileName'))
+#set($libraryId = $core_v2_utility.ParseGuid($core_v2_page.GetFormValue('LibraryId')))
+#set($overwrite = $core_v2_utility.ParseBool($core_v2_page.GetFormValue('Overwrite')))
+#set($tags = $core_v2_page.GetFormValue('Tags'))
+
+#set($file = false)
+#set($file = $core_v2_uploadedFile.Get($fileContextId, $fileName))
+#if ($file)
+	#set($document = $sharepoint_v2_file.Create($libraryId, $destinationFileName, "%{Url = $file.Url, FolderPath = $folder, Overwrite = $overwrite}"))
+	#if($document && $document.Errors.Count == 0)
+		#set($additionalInfoResponse = $core_v2_tags.Add($document.ContentId, $document.ContentTypeId, $tags))
+		#if ($additionalInfoResponse && $additionalInfoResponse.Errors.Count > 0)
+			$core_v2_page.SendJsonError($additionalInfoResponse.Errors)
+		#end
+
+		#set($listItem = false)
+		#set($listItem = $sharepoint_v2_listItem.Get($document.ContentId))
+		#set($currentList = $sharepoint_v2_list.Get($libraryId))
+		#set($ignoredFields = ['FileLeafRef'])
+		#foreach($field in $currentList.Fields)
+			#if(!$field.ReadOnlyField  && !$ignoredFields.Contains($field.InternalName))
+				$core_v2_widget.ExecuteFile('get-field-editor.vm')
+			#end
+		#end
+
+		#set($updatedItem = $sharepoint_v2_listItem.Update($document.ContentId, "%{Fields = $listItem.Fields}"))
+		#if ($updatedItem.Errors.Count > 0)
+			$core_v2_page.SendJsonError($updatedItem.Errors)
+		#end
+		{
+			"valid"       : true,
+			"redirectUrl" : "$!core_v2_encoding.JavascriptEncode($sharepoint_v2_fileUrls.Show($document.ContentId))"
+		}
+	#elseif($document && $document.Errors.Count > 0)
+		$core_v2_page.SendJsonError($document.Errors)
+	#else
+		$core_v2_page.SendJsonError($core_v2_language.GetResource('CreatingError_FileExists'))
+	#end
+#else
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('CreatingError_NoFileUploaded'))
+#end

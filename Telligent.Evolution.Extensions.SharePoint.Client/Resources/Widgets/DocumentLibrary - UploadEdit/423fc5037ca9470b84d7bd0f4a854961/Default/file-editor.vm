@@ -1,0 +1,36 @@
+﻿#if(!$core_v2_page.IsPost || $isInPreviewMode)
+	#set($MaxLength = 255)
+	#set($controlId = $core_v2_widget.UniqueId($field.InternalName))
+	#set($errorMsgId = "${field.InternalName}_msg")
+
+	#if ($field.Required)
+		<script type="text/javascript">
+			jQuery(function(j) {
+				var editor = j("#${controlId}"),
+				errorMsg = j("#${errorMsgId}"),
+				isValid = function (input){
+					return input.val().length > 0;
+				};
+				j.telligent.sharepoint.widgets.validator.registerInputValidation(editor, errorMsg, isValid);
+			});
+		</script>
+	#end
+
+	<div class="file-editor">
+		#set($fileName = '')
+		#set($fileExtension = '')
+		#if($listItem)
+			#set($filePath = $listItem.ValueForEdit($field.InternalName))
+			#set($fileName = $core_v2_utility.Replace($filePath, '\.\w*', ''))
+			#set($fileExtension = $core_v2_utility.Replace($filePath, '^.+\.', '.'))
+		#end
+		<input class="name" type="text" id="$!{controlId}" name="$!{field.InternalName}" value="$fileName" maxlength="$MaxLength" />
+		<span class="extension">$fileExtension</span>
+		<input type="hidden" name="$!{field.InternalName}_extension" value="$!{fileExtension}"/>
+		<div id="$!{errorMsgId}" class="invalid-msg" style="display: none;">$core_v2_language.GetResource('SharePoint_ListItem_FieldRequired')</div>
+	</div>
+#else
+	#set($value = $core_v2_page.GetFormValue($field.InternalName))
+	#set($extension = $core_v2_page.GetFormValue("${field.InternalName}_extension"))
+	$listItem.Fields.Add($field.InternalName, "${value}${extension}")
+#end

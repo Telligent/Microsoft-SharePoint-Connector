@@ -1,0 +1,211 @@
+//#dev
+/*@import "../../SupplementaryFiles/Social/sharepoint-variables.less";
+@import "../../SupplementaryFiles/Social/sharepoint-mixins.less";*/
+//#enddiv
+//#build
+@import "../s-fd-3fc3f82483d14ec485ef92e206116d49-files/sharepoint_2D00_variables.less";
+@import "../s-fd-3fc3f82483d14ec485ef92e206116d49-files/sharepoint_2D00_mixins.less";
+//#endbuild
+
+// Libraries - Document Library widget
+.document-library-widget {
+    .content-list .content.abbreviated .status .attribute-item.rating span {}
+    .content-list .content.abbreviated .status .attribute-item .attribute-value {}
+    .list-view {
+        .folder-up-button,
+        .folder-button {
+            position: relative;
+            padding-left: @document-library-list-view-icon-width;
+            width: @document-library-list-view-icon-width;
+            height: @document-library-list-view-icon-height;
+            overflow: hidden;
+        }
+        .folder-up-button::before{.content-icon(@upfolder-icon, @document-library-list-view-icon-width, @document-library-list-view-icon-height);}
+        .folder-button::before{.content-icon(@folder-icon, @document-library-list-view-icon-width, @document-library-list-view-icon-height);}
+        .content-item.processing{
+            opacity: 0.1 !important;
+        }
+    }
+    .explorer-view{
+        .folder-up-button,
+        .folder-button {
+            position: relative;
+            padding-left: @document-library-explorer-view-icon-padding;
+            width: @document-library-explorer-view-icon-padding;
+            height: @document-library-explorer-view-icon-padding;
+            overflow: hidden;
+        }
+        .folder-up-button::before{.content-icon(@upfolder-icon, @document-library-explorer-view-icon-width, @document-library-explorer-view-icon-height);}
+        .folder-button::before{.content-icon-left(@folder-icon, @document-library-explorer-view-icon-width, @document-library-explorer-view-icon-height, 5px);}
+        .content-item.processing{
+            opacity: 0.1;
+        }
+        .content.thumbnail .name{
+            white-space: nowrap;
+            overflow-x: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+    .loading {
+        position: relative;
+        width: @document-library-loading-icon-width;
+        height: @document-library-loading-icon-height;
+        text-indent: 200%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-align:center;
+    }
+    .loading::after {.processing-animation(@loading-icon, @document-library-loading-color, @document-library-loading-icon-width, @document-library-loading-icon-height, 700ms);}
+    .dropbox {
+        font-weight: 300;
+        position: absolute;
+        text-align: center;
+        border: 5px dashed;
+        border-color: @document-library-dropbox-border-color;
+        background-color: @document-library-dropbox-background-color;
+        .text-overflow-ellipsis(100%);
+        z-index: 2;
+        margin-top: -2px;
+        .dropped-files {list-style-type:none; padding: 1em; text-align: left;
+            .file {
+                position: relative;
+                .file-name {
+                    padding-left: 1em;
+                    display: inline-block;
+                    .text-overflow-ellipsis(400px);
+                }
+                &.uploading .file-name::before {.processing-animation(@loading-icon, @document-library-dropbox-file-loading-color, 1em, 1em, 700ms);}
+                &.completed .file-name::before {.content-icon(@document-library-dropbox-file-uploaded-icon, 1em, 1em);}
+            }
+            .success {color: @document-library-dropbox-success-color;}
+            .error {color: @document-library-dropbox-error-color;}
+            .progress-bar {
+                margin: 5px 40px 0px 0px;
+                padding: 3px;
+                border: @document-library-dropbox-progress-bar-border;
+                clear: both;
+                opacity: 0.5;
+                .transition(opacity 1s linear);
+            }
+            .progress-bar.in-progress {opacity: 1.0;}
+            .progress-bar .percent {background-color: @document-library-dropbox-progress-bar-percent-background-color; height: auto; text-align: center;}
+        }
+    }
+}
+
+// Libraries - Document widget
+.document-library-file {
+    .actions.download {
+        margin: 0px !important;
+        padding: 0px !important;
+        border: 0px !important;
+        float: right !important;
+        width: auto !important;
+
+        .download-attachment.button {
+            float: right;
+            line-height: @document-download-button-height;
+            height: @document-download-button-height;
+            padding: 0 30px 0 30px;
+            border: 0px;
+            border-radius: 3px;
+            display: inline-block;
+            background-color: @document-download-button-background-color;
+            color: @document-download-button-color;
+            font-family: @font-family;
+            font-size: @document-download-button-font-size;
+            margin: 32px 0;
+            .transition(background-color 0.15s);
+        }
+        .download-attachment.button:hover {background-color: @document-download-button-hover-background-color;}
+        .download-attachment.button:active {background-color: @document-download-button-active-background-color;}
+        .download-attachment.button.disabled {background-color: @document-download-button-disabled-background-color; color: @document-download-button-disabled-color; cursor: default;}
+    }
+}
+
+// Libraries - Upload/Edit Document widget
+.document-library-upload {
+    .folder-path {
+        padding: 3px 10px;
+        .border-radius(3px);
+        background-color: @document-upload-folder-path-color;
+    }
+    .folders-tree {
+        padding: 0px !important;
+        .folder-list {
+            .folder-item {
+                .folder-up-button,
+                .folder-button {
+                    position: relative;
+                    padding-left: @document-upload-folders-icon-width;
+                    width: @document-upload-folders-icon-width;
+                    height: @document-upload-folders-icon-height;
+                    overflow: hidden;
+                }
+                .folder-up-button::before{.content-icon(@upfolder-icon, @document-upload-folders-icon-width, @document-upload-folders-icon-height);}
+                .folder-button::before{.content-icon(@folder-icon, @document-upload-folders-icon-width, @document-upload-folders-icon-height);}
+            }
+        }
+    }
+}
+
+// Libraries - Folders Tree widget
+.document-library-folders-tree {
+    .folder-root.loading {
+        position: relative;
+        padding-left: 0px;
+        width: 100%;
+        overflow: hidden;
+    }
+    .folder-root.loading::before {
+        .processing-animation(@loading-icon, @folders-tree-loading-color, @folders-tree-icon-width, @folders-tree-icon-height, 700ms);
+        z-index: 1;
+        top: 4px;
+        left: 4px;
+    }
+    .folder-root>.folder-children>.folder-list {padding-left: 0px;}
+    .folder-list {position: relative; padding-left: @folders-tree-childs-padding-left; margin: 0px;
+        .folder-item {
+            .folder{
+                a {
+                    display: block;
+                    padding: 0 4px 4px 4px;
+                    color: @folders-tree-item-color;
+                    font-size: @folders-tree-font-size;
+                    .border-radius(3px);
+                    &:hover {background-color: @folders-tree-item-hover-color;}
+                }
+                .expand-collapse {
+                    position: relative;
+                    width: @folders-tree-icon-width;
+                    height: @folders-tree-icon-height;
+                    overflow: hidden;
+                    display: inline-block;
+                    top: 4px;
+                    left: 0;
+                }
+                .expand-collapse.haschilds::before {.content-icon(@expand-icon, @folders-tree-icon-width, @folders-tree-icon-height);}
+                .expand-collapse.haschilds.expanded::before {.content-icon(@collapse-icon, @folders-tree-icon-width, @folders-tree-icon-height);}
+                .folder-icon {
+                    position: relative;
+                    width: @folders-tree-icon-width + 4;
+                    height: @folders-tree-icon-height;
+                    overflow: hidden;
+                    display: inline-block;
+                    top: 4px;
+                    left: 0;
+                    &::before {.content-icon(@folder-icon, @folders-tree-icon-width, @folders-tree-icon-height);}
+                }
+                &.selected {
+                    a {background-color: @folders-tree-selected-background-color; color: @folders-tree-selected-color;}
+                    a:hover {background-color: @folders-tree-selected-background-color * 1.1;}
+                }
+            }
+        }
+    }
+}
+
+fieldset .document-library-folders-tree {width: 50%;}
+@media only screen and (max-width: 570px) {
+    fieldset .document-library-folders-tree {width: 100%;}
+}

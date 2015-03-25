@@ -1,0 +1,152 @@
+##Detail Results
+#set($detail_config_xml = $core_v2_widget.GetStringValue('OpenSearchProvider_DetailResults', ''))
+#set($detail_widget_configuration = false)
+#set($detail_widget_configuration = $telligent_v1_opensearch.Configuration($detail_config_xml))
+#if($detail_widget_configuration)
+	<div class="open-search-detail">
+		##Query String parameters
+		#set ($query = '')
+		#set ($query = $core_v2_page.GetQueryStringValue('w_q'))
+		#set ($pageSize = $detail_widget_configuration.ResultsPerPage)
+		#set ($pageIndex = $core_v2_ui.GetCurrentPageIndex())
+		#set ($searchQuery = "%{}")
+		$searchQuery.Add("Query", $query)
+		$searchQuery.Add("PageSize", $pageSize)
+		$searchQuery.Add("PageIndex", $pageIndex)
+		#set($results = false)
+		#set($results = $telligent_v1_opensearch.Search($detail_widget_configuration, $searchQuery))
+		#set($itemList = $results.GetItems($pageSize))
+		#set($count = $results.Count)
+		#if($count == 0)
+			#set($allresults = $telligent_v1_opensearch.Search($detail_widget_configuration, "%{Query = $query}"))
+			#set($results.Items = $allresults.Items)
+			#set($count = $results.Items.Count)
+		#end
+		#if($results)
+			<div class="os-results-summary">
+				<div class="summary-data">
+					<span class="result-heading">
+						$core_v2_language.GetResource('Search_Summary_Title')
+					</span>
+					<span class="result-count">
+						$count
+					</span>
+				</div>
+				<div class="summary-wrapper">
+					<div class="header"></div>
+					<div class="content">
+						<span>$core_v2_language.GetResource('Search_Results_Summary')</span>
+					</div>
+					<div class="footer"></div>
+				</div>
+				<div class="summary-category">
+					<div class="file-extension">
+						<div class="header"></div>
+						#set($iconext = "-small.gif")
+						#set($unknown="unknown")
+						#set($iconurl = "/utility/filethumbnails/")
+						#set($summaryCollection = false)
+						#set($summaryCollection = $telligent_v1_opensearch.Summary($results.Items))
+						#if($summaryCollection)
+							<ul class="content">
+								## Other files without extension
+								#set($otherKey = "")
+								#if($summaryCollection.Contains("$otherKey"))
+									<li class="navigation-item">
+										#set($iconname="$summary.Key")
+										<span class="navigation-item-title">
+											<object data="$iconurl$unknown$iconext">
+												<img src="$iconurl$unknown$iconext" style="vertical-align:middle;"/>
+											</object>
+											<span>$core_v2_language.GetResource('Search_Results_Other')</span>
+										</span>
+										<span class="navigation-item-count">($summaryCollection.get_item("$otherKey"))</span>
+									</li>
+								#end
+								#foreach($summary in $summaryCollection)
+									#if($summary.Key != $otherKey)
+									<li class="navigation-item">
+										<span class="navigation-item-title">
+											#set($iconname="$summary.Key")
+											<object data="$iconurl$iconname$iconext">
+												<img src="$iconurl$unknown$iconext" style="vertical-align:middle;"/>
+											</object>
+											<span>$summary.Key</span>
+										</span>
+										<span class="navigation-item-count">($summary.Value)</span>
+									</li>
+									#end
+								#end
+							</ul>
+						#end
+						<div class="footer"></div>
+					</div>
+				</div>
+			</div>
+			<div style="clear: both;"></div>
+			<div class="os-provider-title">
+				#set($faviconUrl = false)
+				#set($provider = $telligent_v1_opensearch.Provider($detail_widget_configuration.ProviderId))
+				#set($faviconUrl = $telligent_v1_opensearch.Favicon($provider))
+				#if($faviconUrl)
+					<img src="$faviconUrl"></img>
+				#end
+				<span>$results.GetTitle()</span>
+			</div>
+			#if ($itemList.Count==0)
+				<div class="os-no-results">
+					$core_v2_language.GetResource('Search_No_Results')
+				</div>
+			#else
+				<ul class="search-results">
+				##search results
+				#foreach($item in $itemList)
+					<li class="os-result">
+						<div class="os-detail">
+							#set($date = false)
+							#set($date = $item.PubDate)
+							#if($date)
+								<div class="os-date">$date.ToString("yyyy MMMM dd")</div>
+							#end
+							#if($item.Author.Trim()!='')
+								<div class="os-author">$core_v2_language.GetResource('Search_Results_Author') $item.Author</div>
+							#end
+							<div class="separate-line"></div>
+							#set($fileextension = $item.FileExtension)
+							#if($fileextension.Length>0)
+								#set($fileextension = $item.FileExtension.SubString(1))
+							#end
+							#if($fileextension.Trim()!='')
+								<div class="os-extension-selected">$core_v2_language.GetResource('Search_Results_FileExt'): $fileextension</div>
+								<div class="os-extension">$fileextension</div>
+							#end
+							#set($fileSize = $item.FileSize)
+							#if($fileSize>0)
+								<div class="os-extension-selected">$core_v2_language.GetResource('Search_Results_FileSize'): $fileSize KB</div>
+							#end
+						</div>
+						<div class="os-item">
+							<div class="os-title"><a href="$item.Link">$item.Title</a></div>
+							#if(!$detail_widget_configuration.TextOnlyResults)
+								<div class="os-description">$item.Description</div>
+							#else
+								<div class="os-summary">$item.HighlightedSummary</div>
+							#end
+						</div>
+					</li>
+				#end
+				</ul>
+			#end
+		#else
+			<div class="os-results-error">$core_v2_language.GetResource('Search_Invalid_Results')</div>
+		#end
+		#set($showmore = false)
+		#set($showmore = $telligent_v1_opensearch.Url($provider, $detail_widget_configuration, $searchQuery))
+		#if($showmore && ($results.Count > 0 || $itemList.Count > 0))
+			<div class="os-show-more-results">
+				<a target="_blank" href="$showmore">$core_v2_language.GetResource('Show_More_Results')</a>
+			</div>
+		#end
+	</div>
+#end
+<div style="clear:both"></div>

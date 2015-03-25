@@ -1,0 +1,30 @@
+#if(!$core_v2_page.IsPost || $isInPreviewMode)
+	#set($MaxLength = 255)
+	#set($controlId = $core_v2_widget.UniqueId($field.InternalName))
+	#set($errorMsgId = "${field.InternalName}-msg")
+
+	#if ($field.Required)
+		<script type="text/javascript">
+			jQuery(function(j) {
+				var editor = j("#${controlId}"),
+				errorMsg = j("#${errorMsgId}"),
+				isValid = function (input){
+					return input.val().length > 0;
+				};
+				j.telligent.sharepoint.widgets.validator.registerInputValidation(editor, errorMsg, isValid);
+			});
+		</script>
+	#end
+
+	<div class="single-line-of-text-editor">
+		#set($textValue = "")
+		#if ($listItem)
+			#set($textValue = $listItem.ValueForEdit($field.InternalName))
+		#end
+		<input type="text" id="${controlId}" name="$!{field.InternalName}" value="$!{textValue}" maxlength="$!{MaxLength}"/>
+		<div id="${errorMsgId}" class="invalid-msg" style="display: none;">$core_v2_language.GetResource('SharePoint_ListItem_FieldRequired')</div>
+	</div>
+#else
+	#set($value = $core_v2_page.GetFormValue($field.InternalName))
+	$listItem.Fields.Add($field.InternalName, "$value")
+#end

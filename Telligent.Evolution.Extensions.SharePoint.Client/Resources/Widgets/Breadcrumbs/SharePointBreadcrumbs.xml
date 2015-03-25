@@ -1,0 +1,195 @@
+﻿<scriptedContentFragments>
+	<scriptedContentFragment name="${resource:SharePointBreadCrumbs_Widget_Name}" description="${resource:SharePointBreadCrumbs_Widget_Description}" instanceIdentifier="82854c05997d464eae16302dab0a6730" cssClass="document-library-breadcrumbs" isCacheable="false" varyCacheByUser="true" showHeaderByDefault="false">
+		<contentScript>
+			<![CDATA[
+#set($spcurrentUrl = false)
+#set($spcurrentUrl = $sharepoint_v1_urls.Current)
+#if(!$spcurrentUrl)
+	$core_v2_widget.Hide()
+#end
+
+<div class="breadcrumb-list-header" style="display: none;">
+	<div>
+		<a href="#" class="internal-link" id="$core_v2_widget.UniqueId('libraryTitleHolder')"></a>
+	</div>
+</div>
+<div class="breadcrumb-list">
+	<span class="breadcrumb-item"><a href="$core_v2_encoding.HtmlAttributeEncode($core_v2_urls.Home())" class="internal-link view-home"><span></span>$core_v2_language.GetResource("Home")</a></span>
+	#foreach($group in $core_v2_group.CurrentGroupPath)
+	#each
+		<span class="separator">$core_v2_language.GetResource("BreadCrumb_Separator")</span>
+		<span class="breadcrumb-item"><a href="$core_v2_encoding.HtmlAttributeEncode($group.Url)" class="internal-link view-group"><span></span>$group.Name</a></span>
+	#end
+
+	<span id="$core_v2_widget.UniqueId('BreadCrumbs')">
+	</span>
+
+	<div id="$core_v2_widget.UniqueId('BreadCrumbsTemplate')" style="display:none;">
+		<span class="separator">$core_v2_language.GetResource("BreadCrumb_Separator")</span>
+		<span class="breadcrumb-item"><a href="javascript:void(0)" class="open-folder"></a></span>
+	</div>
+
+</div>
+<div class="breadcrumb-list-footer"></div>
+
+#if($spcurrentUrl == 'Documents')
+
+	#registerEndOfPageHtml('telligent.sharepoint.widgets.sharePointBreadcrumbs')
+		<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl("ui.js"))"></script>
+	#end
+	#registerEndOfPageHtml()
+		<script type="text/javascript">
+			jQuery(function(j){
+				j.telligent.sharepoint.widgets.sharePointBreadcrumbs.register({
+					wrapper           : j("#$core_v2_widget.UniqueId('BreadCrumbs')"),
+					template          : j("#$core_v2_widget.UniqueId('BreadCrumbsTemplate')"),
+					libraryTitleHolder: j("#$core_v2_widget.UniqueId('libraryTitleHolder')")
+				});
+			});
+		</script>
+	#end
+
+#elseif($spcurrentUrl == 'Document' || $spcurrentUrl == 'EditDocument')
+	#set($file = false)
+	#set($file = $sharepoint_v2_file.Current)
+	#set($library = false)
+	#if ($file) #set($library = $file.Library) #end
+	#set($libraryUrl = $sharepoint_v1_urls.Library("$library.ApplicationId"))
+	#registerEndOfPageHtml('telligent.sharepoint.widgets.sharePointBreadcrumbs')
+		<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl("ui.js"))"></script>
+	#end
+	#registerEndOfPageHtml()
+		<script type="text/javascript">
+			jQuery(function(j){
+				j.telligent.sharepoint.widgets.sharePointBreadcrumbs.register({
+					wrapper           : j("#$core_v2_widget.UniqueId('BreadCrumbs')"),
+					template          : j("#$core_v2_widget.UniqueId('BreadCrumbsTemplate')"),
+					libraryTitleHolder: j("#$core_v2_widget.UniqueId('libraryTitleHolder')"),
+					rootFolder        : "$!{library.Root}",
+					folderPath        : "$!{file.Path}",
+					redirectUrl       : "$!libraryUrl"
+				});
+			});
+		</script>
+	#end
+#elseif($spcurrentUrl == 'UploadDocument')
+	#set($library = false)
+	#set($library = $sharepoint_v2_library.Current)
+	#set($libraryUrl = $library.Url)
+	#registerEndOfPageHtml('telligent.sharepoint.widgets.sharePointBreadcrumbs')
+		<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl("ui.js"))"></script>
+	#end
+	#registerEndOfPageHtml()
+		<script type="text/javascript">
+			jQuery(function(j){
+				j.telligent.sharepoint.widgets.sharePointBreadcrumbs.register({
+					wrapper           : j("#$core_v2_widget.UniqueId('BreadCrumbs')"),
+					template          : j("#$core_v2_widget.UniqueId('BreadCrumbsTemplate')"),
+					libraryTitleHolder: j("#$core_v2_widget.UniqueId('libraryTitleHolder')"),
+					rootFolder        : "$!{library.Root}",
+					folderPath        : "$!{library.Root}",
+					redirectUrl       : "$!libraryUrl"
+				});
+			});
+		</script>
+	#end
+#elseif($spcurrentUrl == 'SPList')
+
+	#set($list = false)
+	#set($list = $sharepoint_v2_list.Current)
+
+	#if (!$list)
+		#set($lists = $sharepoint_v2_list.List($core_v2_group.Current.Id, "%{PageIndex = 0, PageSize = 1}"))
+		#if ($lists.Count == 1)
+			#set($list = $lists.get_item(0))
+		#end
+	#end
+
+	#registerEndOfPageHtml('telligent.sharepoint.widgets.sharePointBreadcrumbs')
+		<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl("ui.js"))"></script>
+	#end
+	#registerEndOfPageHtml()
+		<script type="text/javascript">
+			jQuery(function(j){
+				j.telligent.sharepoint.widgets.sharePointBreadcrumbs.register({
+					wrapper           : j("#$core_v2_widget.UniqueId('BreadCrumbs')"),
+					template          : j("#$core_v2_widget.UniqueId('BreadCrumbsTemplate')"),
+					libraryTitleHolder: j("#$core_v2_widget.UniqueId('libraryTitleHolder')"),
+					rootFolder        : "$!list.Title",
+					folderPath        : "$!list.Title",
+					redirectUrl       : "$!list.Url"
+				});
+			});
+		</script>
+	#end
+#elseif($spcurrentUrl == 'SPListItem')
+
+	#set($item = $sharepoint_v2_listItem.Current)
+	#set($list = $sharepoint_v2_list.Get($item.ListId))
+
+	#registerEndOfPageHtml('telligent.sharepoint.widgets.sharePointBreadcrumbs')
+		<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl("ui.js"))"></script>
+	#end
+	#registerEndOfPageHtml()
+		<script type="text/javascript">
+			jQuery(function(j){
+				j.telligent.sharepoint.widgets.sharePointBreadcrumbs.register({
+					wrapper           : j("#$core_v2_widget.UniqueId('BreadCrumbs')"),
+					template          : j("#$core_v2_widget.UniqueId('BreadCrumbsTemplate')"),
+					libraryTitleHolder: j("#$core_v2_widget.UniqueId('libraryTitleHolder')"),
+					rootFolder        : "$!list.Title",
+					folderPath        : "$!list.Title/$item.DisplayName",
+					redirectUrl       : "$!list.Url"
+				});
+			});
+		</script>
+	#end
+#elseif($spcurrentUrl == 'CreateSPListItem' || $spcurrentUrl == 'EditSPListItem')
+
+	#set($list = false)
+	#set($item = false)
+
+	#set($list = $sharepoint_v2_list.Current)
+	#set($item = $sharepoint_v2_listItem.Current)
+
+	#if (!$list)
+		#set($list = $sharepoint_v2_list.Get($item.ListId))
+	#end
+
+	#registerEndOfPageHtml('telligent.sharepoint.widgets.sharePointBreadcrumbs')
+		<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl("ui.js"))"></script>
+	#end
+	#registerEndOfPageHtml()
+		<script type="text/javascript">
+			jQuery(function(j){
+				j.telligent.sharepoint.widgets.sharePointBreadcrumbs.register({
+					wrapper           : j("#$core_v2_widget.UniqueId('BreadCrumbs')"),
+					template          : j("#$core_v2_widget.UniqueId('BreadCrumbsTemplate')"),
+					libraryTitleHolder: j("#$core_v2_widget.UniqueId('libraryTitleHolder')"),
+					rootFolder        : "$!list.Title",
+					folderPath        : "$!{list.Title}#if($item)/${item.DisplayName}#end",
+					redirectUrl       : "$!list.Url"
+				});
+			});
+		</script>
+	#end
+#end
+			]]>
+		</contentScript>
+		<headerScript>
+			<![CDATA[
+		$core_v2_widget.ApplyTokens($core_v2_widget.GetStringValue('CF_Widget_Title', '${resource:SharePointBreadCrumbs_Title_Value}'))
+	]]>
+		</headerScript>
+		<languageResources>
+			<language key="en-us">
+				<resource name="CF_Widget_Title">Widget Title</resource>
+				<resource name="SharePointBreadCrumbs_Widget_Name">SharePoint - Breadcrumbs</resource>
+				<resource name="SharePointBreadCrumbs_Widget_Description">This displays a SharePoint Application's Title with breadcrumbs</resource>
+				<resource name="SharePointBreadCrumbs_Title_Value">SharePoint - Breadcrumbs</resource>
+				<resource name="Home">Home</resource>
+				<resource name="BreadCrumb_Separator">»</resource>
+			</language>
+		</languageResources>
+	</scriptedContentFragment>
+</scriptedContentFragments>

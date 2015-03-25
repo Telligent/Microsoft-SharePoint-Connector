@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F7E0B876-70D3-421C-BE64-CE2967B26FC1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Telligent.Evolution.Extensions.SharePoint.Components</RootNamespace>
+    <AssemblyName>Telligent.Evolution.Extensions.SharePoint.Components</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\Microsoft.IdentityModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SharePoint.Client, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\Microsoft.SharePoint.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SharePoint.Client.Runtime, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\Microsoft.SharePoint.Client.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Telligent.Evolution.Api, Version=8.0.0.38232, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Components, Version=7.0.1539.24262, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Components.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Controls, Version=7.0.1539.24262, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Core, Version=8.0.0.38232, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.ScriptedContentFragments, Version=7.5.2281.32748, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.ScriptedContentFragments.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.SecurityModules, Version=7.0.1539.24262, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.SecurityModules.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="AuthenticationUtil\Authentication.cs" />
+    <Compile Include="AuthenticationUtil\AuthenticationBuilder.cs" />
+    <Compile Include="AuthenticationUtil\AuthenticationHelper.cs" />
+    <Compile Include="AuthenticationUtil\AuthenticationParam.cs" />
+    <Compile Include="AuthenticationUtil\Interfaces\IEncrypted.cs" />
+    <Compile Include="AuthenticationUtil\Methods\Anonymous.cs" />
+    <Compile Include="AuthenticationUtil\Methods\OAuth.cs" />
+    <Compile Include="AuthenticationUtil\Methods\SAML.cs" />
+    <Compile Include="AuthenticationUtil\Methods\ServiceAccount.cs" />
+    <Compile Include="AuthenticationUtil\Methods\Windows.cs" />
+    <Compile Include="Cache\CacheBox.cs" />
+    <Compile Include="ClientContext\SPContext.cs" />
+    <Compile Include="Controls\ItemCollection\ItemCollectionAttribute.cs" />
+    <Compile Include="Controls\ItemCollection\ItemCollectionControl.cs" />
+    <Compile Include="Controls\ItemCollection\Layout\CustomLayout.cs" />
+    <Compile Include="Controls\ItemCollection\Layout\HoverButtonsLayout.cs" />
+    <Compile Include="Controls\ItemCollection\Layout\IconsLayout.cs" />
+    <Compile Include="Controls\ItemCollection\Layout\LayoutAttribute.cs" />
+    <Compile Include="Controls\ItemCollection\Layout\LayoutFactory.cs" />
+    <Compile Include="Controls\ItemCollection\Layout\Region.cs" />
+    <Compile Include="Controls\ItemCollection\Layout\SubTitleLayout.cs" />
+    <Compile Include="Controls\ItemCollection\Layout\TitleLayout.cs" />
+    <Compile Include="Controls\ModalPage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ResourceControl.cs" />
+    <Compile Include="Data\BaseDataProvider.cs" />
+    <Compile Include="Data\Log\SPLog.cs" />
+    <Compile Include="Data\PerformanceProfiler.cs" />
+    <Compile Include="Data\ProfileSyncController.cs" />
+    <Compile Include="Data\Status.cs" />
+    <Compile Include="DI\Controller.cs" />
+    <Compile Include="Enumerations\SortOrder.cs" />
+    <Compile Include="Extensions\Documentation.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\ItemCollection\ItemCollection.js" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Telligent.Evolution.Extensions.SharePoint.IdentityProvider\Telligent.Evolution.Extensions.SharePoint.IdentityProvider.csproj">
+      <Project>{A0903CA3-7711-4F41-89D2-E9DBB7D2C7E9}</Project>
+      <Name>Telligent.Evolution.Extensions.SharePoint.IdentityProvider</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetDir)*.dll" "$(SolutionDir)Assemblies\"
+"$(ProjectDir)postbuild.bat"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

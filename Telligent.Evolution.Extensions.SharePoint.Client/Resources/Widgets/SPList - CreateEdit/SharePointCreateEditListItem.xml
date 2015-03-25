@@ -1,0 +1,206 @@
+﻿<scriptedContentFragments>
+	<scriptedContentFragment name="${resource:Widget_Name}" description="${resource:Widget_Description}" instanceIdentifier="e6ba8d0e2ea74f2eb5f2c68e8803533d" cssClass="sharepoint sharepoint-create-edit-list-item" isCacheable="false" varyCacheByUser="true" showHeaderByDefault="false">
+		<contentScript>
+			<![CDATA[
+$core_v2_widget.ExecuteFile('check-user-permissions.vm')
+#set($hasPermissions = $isAdmin || $isOwner || $isManager || $isMember)
+#if(!$hasPermissions)
+	$core_v2_page.Redirect($core_v2_urls.Message(31)) ##AccessDenied
+#end
+
+#set($list = false)
+#set($list = $sharepoint_v2_list.Current)
+#if(!$list || $list.HasErrors())
+	$core_v2_page.Redirect($core_v2_urls.Message(9)) ##PostNotFound
+#end
+
+#set($isInPreviewMode = $core_v2_page.IsPost)
+
+#set($uploadContextId = $core_v2_uploadedFile.CreateContextId())
+#set($uploadFileUrl = $core_v2_uploadedFile.GetUploadUrl($uploadContextId))
+
+#set($listItem = false)
+#set($listItem = $sharepoint_v2_listItem.Current)
+#if ($listItem && $listItem.HasErrors())
+	$core_v2_page.Redirect($core_v2_urls.Message(9)) ##PostNotFound
+#end
+
+#registerEndOfPageHtml('telligent.sharepoint.widgets.listItem')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+#end
+
+<div class="content full">
+	#if($listItem && !$listItem.HasErrors())
+		<h3 class="name">
+			$!{listItem.DisplayName}
+		</h3>
+		#set($canEdit = $sharepoint_v2_listItem.CanEdit($listItem.ContentId))
+		#if ($canEdit) 
+			$core_v2_widget.ExecuteFile('edit-list-item-view.vm') 
+		#else
+			<div class="error">$core_v2_language.GetResource('NoEditPermissions')</div>
+		#end
+	#else
+		<h3 class="name">
+			$!core_v2_language.FormatString($core_v2_language.GetResource("CreateListItem_In_List_FormattedTitle"), "$list.Title", "$list.Url")
+		</h3>
+		#set($canEdit = $sharepoint_v2_list.CanEdit($list.Id))
+		#if ($canEdit)
+			$core_v2_widget.ExecuteFile('create-list-item-view.vm') 
+		#else
+			<div class="error">$core_v2_language.GetResource('NoCreatePermissions')</div>
+		#end
+	#end
+</div>
+			]]>
+		</contentScript>
+		<headerScript>
+			<![CDATA[
+				$core_v2_widget.ApplyTokens($core_v2_widget.GetStringValue('fragmentHeader', '${resource:Widget_Name}'))
+			]]>
+		</headerScript>
+		<configuration>
+			<![CDATA[
+			<propertyGroup id="Options">
+				<property id="fragmentHeader" resourceName="CF_Title" dataType="string" defaultValue="${resource:Widget_Name}" controlType="Telligent.Evolution.Controls.ContentFragmentTokenStringControl, Telligent.Evolution.Controls" />
+			</propertyGroup>
+			]]>
+		</configuration>
+		<languageResources>
+			<language key="en-us">
+				<resource name="Widget_Name">SharePoint - Create/Edit ListItem</resource>
+				<resource name="Widget_Description">Allows user to create or edit a SharePoint ListItem</resource>
+				<resource name="CF_Title">Widget Title</resource>
+				<resource name="CreateListItem_In_List_FormattedTitle"><![CDATA[New Item in <a href="{1}">{0}</a>]]></resource>
+				<resource name="NoEditPermissions">You have no permissions to edit this ListItem.</resource>
+				<resource name="NotFound">List Item cannot be found.</resource>
+				<resource name="Save">Save</resource>
+				<resource name="Delete">Delete</resource>
+				<resource name="NoCreatePermissions">You have no permissions to create a ListItem.</resource>
+				<resource name="RequiredFieldWarning">You must specify a value for this required field.</resource>
+				<resource name="SharePointCreateEditListItem_Created">List Item was created successfully.</resource>
+				<resource name="SharePointCreateEditListItem_Updated">List Item was updated successfully.</resource>
+				<resource name="SharePointCreateEditListItem_NoListItemException">No exact list item was found.</resource>
+				<resource name="SharePointCreateEditListItem_NoListException">No exact list was found.</resource>
+				<!-- List item editor controls -->
+				<resource name="SharePoint_ListItem_FieldRequired">You must specify a value for this required field.</resource>
+				<resource name="SharePoint_ListItem_NumberEditor">The value of this field is not a valid number.</resource>
+				<resource name="SharePoint_ListItem_CurrencyEditor">The value of this field is not a valid number.</resource>
+				<resource name="SharePoint_ListItem_HyperlinkEditorText">Type the Web address: ({0}Click here to test{1})</resource>
+				<resource name="SharePoint_ListItem_SpecifyYourOwnValue">Specify your own value:</resource>
+				<resource name="SharePoint_ListItem_FieldEditor_Add">Add &gt;</resource>
+				<resource name="SharePoint_ListItem_PersonOrGroup_MultipleValuesNotAllowed">You are only allowed to enter one item.</resource>
+				<resource name="SharePoint_ListItem_PersonOrGroup_RemoveTitle">Remove</resource>
+				<resource name="SharePoint_ListItem_PersonOrGroup_NotFound">No exact match was found.</resource>
+				<resource name="SharePoint_ListItem_FieldEditor_Remove">&lt; Remove</resource>
+				<resource name="SharePoint_ListItem_Attachments_Delete">Delete</resource>
+				<resource name="SharePoint_ListItem_Attachments_Add">Add attachment</resource>
+				<resource name="SharePoint_Lookup_None">(None)</resource>
+				<resource name="Create">Create</resource>
+				<resource name="Save">Save</resource>
+				<resource name="SharePoint_ListItem_Ok">Ok</resource>
+				<resource name="SharePoint_ListItem_Save">Save</resource>
+				<resource name="SharePoint_ListItem_Cancel">Cancel</resource>
+				<resource name="SharePoint_ListItem_Attachment_Add">(Click to add)</resource>
+				<resource name="SharePoint_ListItem_Attachment_Remove">Remove</resource>
+				<resource name="SharePoint_ListItem_Attachment_Exception_NoFileUploadUrl">File upload url was not specified.</resource>
+				<resource name="SharePoint_ListItem_Attachment_Title">Attach file(s)</resource>
+				<resource name="SharePoint_ListItem_Attachment_Description">Select one or more files to upload from your computer to list item attachments.</resource>
+				<resource name="SharePoint_ListItem_Attachment_UploadFile_Name">Upload Files</resource>
+				<resource name="SharePoint_ListItem_Attachment_UploadFile_Description">Select files to upload.</resource>
+				<resource name="SharePoint_ListItem_Attachment_Save">Save</resource>
+				<resource name="SharePoint_ListItem_Attachment_Cancel">Cancel</resource>
+				<resource name="SharePoint_ListItem_NoAttachment">No attachments</resource>
+				<resource name="SharePoint_ListItem_YesNoEditor_AllDayEvent">Make this an all-day activity that doesn't start or end at a specific hour.</resource>
+				<resource name="SharePoint_ListItem_YesNoEditor_CrossProjectLink">Use a Meeting Workspace to organize attendees, agendas, documents, minutes, and other details for this event.</resource>
+				<resource name="SharePoint_ListItem_Recurrence_NotRecurring">Not a recurring event</resource>
+				<resource name="SharePoint_ListItem_RecurrenceDayOfWeek_day">day</resource>
+				<resource name="SharePoint_ListItem_RecurrenceDayOfWeek_weekday">weekday</resource>
+				<resource name="SharePoint_ListItem_RecurrenceDayOfWeek_weekend_day">weekend day</resource>
+				<resource name="SharePoint_ListItem_RecurrenceDayOfWeek_su">Sunday</resource>
+				<resource name="SharePoint_ListItem_RecurrenceDayOfWeek_mo">Monday</resource>
+				<resource name="SharePoint_ListItem_RecurrenceDayOfWeek_tu">Tuesday</resource>
+				<resource name="SharePoint_ListItem_RecurrenceDayOfWeek_we">Wednesday</resource>
+				<resource name="SharePoint_ListItem_RecurrenceDayOfWeek_th">Thursday</resource>
+				<resource name="SharePoint_ListItem_RecurrenceDayOfWeek_fr">Friday</resource>
+				<resource name="SharePoint_ListItem_RecurrenceDayOfWeek_sa">Saturday</resource>
+				<resource name="SharePoint_ListItem_RecurrenceOrder_first">first</resource>
+				<resource name="SharePoint_ListItem_RecurrenceOrder_second">second</resource>
+				<resource name="SharePoint_ListItem_RecurrenceOrder_third">third</resource>
+				<resource name="SharePoint_ListItem_RecurrenceOrder_fourth">fourth</resource>
+				<resource name="SharePoint_ListItem_RecurrenceOrder_last">last</resource>
+				<resource name="SharePoint_ListItem_Recurrence_Daily">Every {0} day(s)</resource>
+				<resource name="SharePoint_ListItem_Recurrence_Daily_Weekday">Every {0}</resource>
+				<resource name="SharePoint_ListItem_Recurrence_Weekly">Every {0} week(s) on:</resource>
+				<resource name="SharePoint_ListItem_Recurrence_Monthly">Every {0} month(s) on day {1}</resource>
+				<resource name="SharePoint_ListItem_Recurrence_MonthlyByDay">Every {0} month(s) on the {1} {2}</resource>
+				<resource name="SharePoint_ListItem_Recurrence_Yearly">Every year on {0}</resource>
+				<resource name="SharePoint_ListItem_Recurrence_Yearly_MonthDayFormat">MMMM d</resource>
+				<resource name="SharePoint_ListItem_Recurrence_YearlyByDay">Every {0} on the {1} {2}</resource>
+				<resource name="SharePoint_ListItem_Recurrence_YearlyByDay_MonthFormat">MMMM</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_IsRepeating">Make this a repeating event.</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_RecurrenceType">Recurrence Type: {0}</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_Pattern">Pattern</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_Daily">Daily</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_Weekly">Weekly</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_Monthly">Monthly</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_Yearly">Yearly</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_Daily_SelectedDayPattern">
+					<![CDATA[
+					Every 
+						<input name="{0}" type="text" maxlength="255" title="The number of days between recurrences of this event" size="3" value="{1}" />
+					day(s)
+				]]>
+				</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_Daily_WeekDayPattern">Every weekday</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_Weekly_Pattern">
+					<![CDATA[
+					Recur every 
+					<input name="{0}" type="text" maxlength="255" title="The number of weeks between recurrences of this event" size="3" value="{1}" />
+					week(s) on:
+				]]>
+				</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_Monthly_Pattern">
+					<![CDATA[
+					Day 
+					<input name="{0}" type="text" maxlength="255" title="The date each month that this event occurs" size="2" value="{1}" />
+					of every 
+					<input name="{2}" type="text" maxlength="255" title="The date each month that this event occurs" size="2" value="{3}" />
+					month(s)
+				]]>
+				</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_Monthly_ByDayPatternPrefix">The</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_Monthly_ByDayPattern">
+					<![CDATA[
+					of every
+					<input name="{0}" type="text" maxlength="255" title="The date each month that this event occurs" size="2" value="{1}" />
+					month(s)
+				]]>
+				</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_Yearly_PatternPrefix">Every</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_Yearly_Pattern">
+					<![CDATA[
+						<input name="{0}" type="text" maxlength="255" title="The date each month that this event occurs" size="2" value="{1}" />
+				]]>
+				</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_Yearly_BeforeWeekdayOrder">The</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_Yearly_BeforeWeekday"></resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_Yearly_BeforeMonth">of</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_DateRange_Title">Date Range</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_DateRange_NoEndDate">No end date</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_DateRange_EndByOccurrences">
+					<![CDATA[
+						End after:
+						<input name="{0}" type="text" maxlength="255" title="The number of times this event recurs" size="4" value="{1}" />
+						occurrence(s)
+				]]>
+				</resource>
+				<resource name="SharePoint_ListItem_RecurrenceEdit_DateRange_EndByDate">End by date</resource>
+				<resource name="SharePointLists_NoEditPermissions">Sorry you do not have permission to add/edit an item.</resource>
+				<resource name="SPFFs_ListItem_FieldRequired">Required</resource>
+				<resource name="Taxonomies_Loading">Loading...</resource>
+				<resource name="Taxonomies_Select">Select</resource>
+			</language>
+		</languageResources>
+	</scriptedContentFragment>
+</scriptedContentFragments>

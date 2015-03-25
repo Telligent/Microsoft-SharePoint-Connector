@@ -1,0 +1,121 @@
+$core_v2_page.SetTitle($core_v2_language.GetResource('CheckIn_Title'), false, false)
+
+#set($isModal = true)
+$core_v2_page.RenderThemeHeaders("%{ IsModal = $isModal}")
+
+## Get ContentId from Query string 
+#set($empty = $core_v2_utility.ParseGuid('00000000-0000-0000-0000-000000000000'))
+#set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue('contentId')))
+#if ($contentId == $empty)
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('NoPermissions'))
+#end
+
+#set($file = false)
+#set($file = $sharepoint_v2_file.Get($contentId))
+#if(!$file)
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('NoPermissions'))
+#end
+
+#set($fileInfo = false)
+#set($fileInfo = $sharepoint_v2_file.GetInfo($contentId))
+#if(!$fileInfo)
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('NoPermissions'))
+#end
+
+<fieldset class="checkin-form">
+	<ul class="field-list">
+
+		#if($fileInfo.EnableVersioning)
+			<li class="field-item checkin-version">
+				<label class="field-item-header">$core_v2_language.GetResource('CheckIn_Version')</label>
+				<span class="field-item-input">
+
+					## Choose a version
+					<fieldset>
+						<ul class="field-list version-list">
+
+							## Overwrite the current minor version
+							#if($fileInfo.MinorVersion > 1)
+								#set($minorVersion = $fileInfo.MinorVersion - 1)
+								#set($version = "${fileInfo.MajorVersion}.${minorVersion}")
+								<li class="field-item overwrite">
+									<input id="$core_v2_widget.UniqueId('CheckInOverwrite')" type="radio" name="checkin-version-group" data-type="OverwriteCheckIn" value="$!version" />
+									<label for="$core_v2_widget.UniqueId('CheckInOverwrite')">
+										$!core_v2_language.FormatString($core_v2_language.GetResource('CheckIn_Overwrite'), "$version")
+									</label>
+								</li>
+							#end
+
+							## Minor version (draft)
+							#if($fileInfo.EnableMinorVersions)
+								#set($version = "${fileInfo.MajorVersion}.${fileInfo.MinorVersion}")
+								<li class="field-item minor-version">
+									<input id="$core_v2_widget.UniqueId('CheckInMinorVersion')" type="radio" name="checkin-version-group" checked="checked" data-type="MinorCheckIn" value="$!version" />
+									<label for="$core_v2_widget.UniqueId('CheckInMinorVersion')">
+										$!core_v2_language.FormatString($core_v2_language.GetResource('CheckIn_MinorVersion'), "$version")
+									</label>
+								</li>
+							#end
+
+							## Major version (publish)
+							<li class="field-item major-version">
+								#set($majorVersion = $fileInfo.MajorVersion + 1)
+								#set($version = "${majorVersion}.0")
+								<input id="$core_v2_widget.UniqueId('CheckInMajorVersion')" type="radio" #if(!$fileInfo.EnableMinorVersions) checked="checked" #end name="checkin-version-group" data-type="MajorCheckIn" value="$!version" />
+								<label for="$core_v2_widget.UniqueId('CheckInMajorVersion')">
+									$!core_v2_language.FormatString($core_v2_language.GetResource('CheckIn_MajorVersion'), "$version")
+								</label>
+							</li>
+
+						</ul>
+					</fieldset>
+
+				</span>
+				<span class="field-item-validation" style="display: none;"></span>
+			</li>
+		#end
+
+		## Comment
+		#set($rowsCount = 5)
+		<li class="field-item checkin-comment">
+			<label class="field-item-header">$core_v2_language.GetResource('CheckIn_Comment')</label>
+			<span class="field-item-input">
+				<textarea id="$core_v2_widget.UniqueId('CheckInComment')" placeholder="$core_v2_language.GetResource('CheckIn_Leave_a_comment')" class="check-in-comment" rows="$rowsCount"></textarea>
+			</span>
+			<span class="field-item-validation" style="display: none;"></span>
+		</li>
+
+		## Keep the document checked out ?
+		<li class="field-item overwrite-document">
+			<span class="field-item-input">
+				<input type="checkbox" id="$core_v2_widget.UniqueId('KeepCheckedOut')" />
+				<label for="$core_v2_widget.UniqueId('KeepCheckedOut')">$core_v2_language.GetResource('CheckIn_KeepCheckedOut')</label>
+			</span>
+			<span class="field-item-validation" style="display: none;"></span>
+		</li>
+
+		## Save
+		<li class="field-item">
+			<span class="field-item-input">
+				<a id="$core_v2_widget.UniqueId('Save')" href="#" class="internal-link save button">$core_v2_language.GetResource('Save')</a>
+				<span class="processing" style="display: none;"></span>
+			</span>
+		</li>
+	</ul>
+</fieldset>
+
+#registerEndOfPageHtml('telligent.sharepoint.widgets.documentCheckIn')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			j.telligent.sharepoint.widgets.documentCheckIn.register({
+				commentId: "#$core_v2_widget.UniqueId('CheckInComment')",
+				keepCheckedOutId: "#$core_v2_widget.UniqueId('KeepCheckedOut')",
+				saveId: "#$core_v2_widget.UniqueId('Save')",
+				saveUrl: "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('checkin.vm'))"
+			});
+		});
+	</script>
+#end

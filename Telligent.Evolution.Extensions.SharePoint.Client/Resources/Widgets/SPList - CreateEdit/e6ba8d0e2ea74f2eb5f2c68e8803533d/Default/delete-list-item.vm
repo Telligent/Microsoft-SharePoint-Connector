@@ -1,0 +1,27 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($listItem = false)
+#set($listItem = $sharepoint_v2_listItem.Current)
+#if(!$listItem)
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('NotFound'))
+#end
+
+#if($listItem.HasErrors())
+	$core_v2_page.SendJsonError($listItem.Errors)
+#end
+
+#set($canEdit = $sharepoint_v2_listItem.CanEdit($listItem.ContentId))
+#if ($canEdit)
+	#set($deleteInfo = $sharepoint_v2_listItem.Delete($listItem.ContentId))
+	#if(!$deleteInfo)
+		$core_v2_page.SendJsonError($core_v2_language.GetResource('NotFound'))
+	#end
+	#if($deleteInfo.Errors.Count > 0)
+		$core_v2_page.SendJsonError($deleteInfo.Errors)
+	#end
+	{
+		"valid"      : true
+	}
+#else
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('NoEditPermissions'))
+#end

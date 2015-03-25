@@ -1,0 +1,43 @@
+<fieldset class="create-list-item create">
+	#set ($supportedFieldTypes = ['Text', 'Note', 'Choice', 'MultiChoice', 'Number', 'Lookup', 'DateTime', 'User', 'Boolean', 'AllDayEvent', 'CrossProjectLink', 'URL', 'Currency', 'Attachments', 'File', 'Invalid'])
+	#set ($hiddenFields = ['TaskGroup', 'RelatedItems'])
+	#foreach($field in $list.Fields)
+	#beforeall
+		#set($currentList = $list)
+		<ul class="field-list">
+	#each
+		#if(!$field.ReadOnlyField && $supportedFieldTypes.Contains("$field.FieldTypeKind") && !$hiddenFields.Contains($field.InternalName))
+			<li class="field-item">
+					<label for="$core_v2_widget.UniqueId($field.InternalName)" class="field-item-header">
+						$!{field.Title}
+						#if($field.Required)
+							<span class="field-required" title="$core_v2_language.GetResource('RequiredFieldWarning')">*</span>
+						#end
+					</label>
+				<div class="field-item-input" name="$!{field.InternalName}">
+					$core_v2_widget.ExecuteFile('render-field-value.vm')
+				</div>
+			</li>
+		#end
+	#afterall
+		<li class="field-item submit-button">
+			<span class="field-item-input">
+				<a href="#" class="internal-link create-post button">$core_v2_language.GetResource('Save')</a>
+				<span class="processing" style="display: none;"></span>
+			</span>
+		</li>
+	</ul>
+	#end
+	<div class="footer"></div>
+</fieldset>
+
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			j.telligent.sharepoint.widgets.createListItem.register({
+				wrapper          : j("#$core_v2_widget.WrapperElementId"),
+				createListItemUrl: "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('create-list-item.vm'))"
+			});
+		});
+	</script>
+#end

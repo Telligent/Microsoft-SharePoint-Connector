@@ -1,0 +1,947 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{796806AC-D776-4E5D-8FDF-8765DB8F116C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Telligent.Evolution.Extensions.SharePoint.Client</RootNamespace>
+    <AssemblyName>Telligent.Evolution.Extensions.SharePoint.Client</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.IdentityModel.Extensions">
+      <HintPath>..\3rdParty\Microsoft.IdentityModel.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SharePoint.Client, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\Microsoft.SharePoint.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SharePoint.Client.Runtime, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\Microsoft.SharePoint.Client.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SharePoint.Client.Taxonomy, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\Microsoft.SharePoint.Client.Taxonomy.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Telligent.Common, Version=1.0.50.34258, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.DynamicConfiguration, Version=1.0.133.22115, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.DynamicConfiguration.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Api, Version=7.0.1539.24262, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Components, Version=7.0.2028.29668, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Components.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Controls, Version=7.0.1539.24262, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Core">
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.MediaGalleries, Version=7.0.1539.24262, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.MediaGalleries.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Rest">
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Rest.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.ScriptedContentFragments, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.ScriptedContentFragments.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="Configuration\LibraryControl.cs" />
+    <Compile Include="Configuration\LibraryItem.cs" />
+    <Compile Include="Configuration\ListControl.cs" />
+    <Compile Include="Configuration\ViewControl.cs" />
+    <Compile Include="Configuration\ViewNameControl.cs" />
+    <Compile Include="Configuration\WebControl.cs" />
+    <Compile Include="Exceptions\AddLibraryException.cs" />
+    <Compile Include="Exceptions\SPDataException.cs" />
+    <Compile Include="Exceptions\SPFileAlreadyExistsException.cs" />
+    <Compile Include="Exceptions\SPInternalException.cs" />
+    <Compile Include="Extensions\ApiEntityQueryableExtension.cs" />
+    <Compile Include="Extensions\ExceptionsExtensions.cs" />
+    <Compile Include="Extensions\HtmlExtensions.cs" />
+    <Compile Include="Extensions\InternalApiExtensions.cs" />
+    <Compile Include="Extensions\PermissionExtensions.cs" />
+    <Compile Include="Extensions\ValidationHelpers.cs" />
+    <Compile Include="InternalApi\ApplicationKeyValidationService.cs" />
+    <Compile Include="InternalApi\Common.cs" />
+    <Compile Include="InternalApi\SPContextService.cs" />
+    <Compile Include="InternalApi\SPFileService.cs" />
+    <Compile Include="InternalApi\CredentialsManagerService.cs" />
+    <Compile Include="InternalApi\Data\DataHelpers.cs" />
+    <Compile Include="InternalApi\Data\SPItemDataService.cs" />
+    <Compile Include="InternalApi\Data\SPListDataService.cs" />
+    <Compile Include="InternalApi\Entities\ItemUrlQuery.cs" />
+    <Compile Include="InternalApi\Entities\ListUrlQuery.cs" />
+    <Compile Include="InternalApi\FieldTypes\SPTaxonomiesService.cs" />
+    <Compile Include="InternalApi\FieldTypes\SPAttachmentsService.cs" />
+    <Compile Include="InternalApi\SecurityService.cs" />
+    <Compile Include="InternalApi\SPCacheService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InternalApi\SPCoreService.cs" />
+    <Compile Include="InternalApi\SPPermissionsService.cs" />
+    <Compile Include="InternalApi\Entities\ItemBase.cs" />
+    <Compile Include="InternalApi\Entities\ListBase.cs" />
+    <Compile Include="InternalApi\Entities\SPCamlQuery.cs" />
+    <Compile Include="InternalApi\Entities\SPPagedList.cs" />
+    <Compile Include="InternalApi\SPFieldsService.cs" />
+    <Compile Include="InternalApi\Urls\ListItemUrls.cs" />
+    <Compile Include="InternalApi\Urls\ListUrls.cs" />
+    <Compile Include="InternalApi\Urls\DocumentUrls.cs" />
+    <Compile Include="InternalApi\Urls\LibraryUrls.cs" />
+    <Compile Include="InternalApi\UserProfileService.cs" />
+    <Compile Include="InternalApi\Utility\CAMLQueryBuilder.cs" />
+    <Compile Include="InternalApi\Utility\EmbeddedResources.cs" />
+    <Compile Include="Plugins\Content\List\ItemContentType.cs" />
+    <Compile Include="InternalApi\SPFolderService.cs" />
+    <Compile Include="InternalApi\SPItemService.cs" />
+    <Compile Include="InternalApi\SPListService.cs" />
+    <Compile Include="InternalApi\SharePointDataService.cs" />
+    <Compile Include="Plugins\Content\DocumentLibrary\DocumentContentType.cs" />
+    <Compile Include="Plugins\Content\DocumentLibrary\LibraryApplicationType.cs" />
+    <Compile Include="Plugins\Content\List\ListApplicationType.cs" />
+    <Compile Include="Plugins\Content\Search\RemoteAttachment.cs" />
+    <Compile Include="Plugins\Content\SharePointPermissionsPlugin.cs" />
+    <Compile Include="Plugins\Entities\ContentPageFile.cs" />
+    <Compile Include="Plugins\Entities\JavaScriptFile.cs" />
+    <Compile Include="Plugins\Entities\CssResource.cs" />
+    <Compile Include="Plugins\Entities\ResourceFile.cs" />
+    <Compile Include="Plugins\Entities\SupplementaryFile.cs" />
+    <Compile Include="Plugins\Entities\SupportedThemes.cs" />
+    <Compile Include="Plugins\SharePointOAuth.cs" />
+    <Compile Include="Plugins\SharePointPlugin.cs" />
+    <Compile Include="PublicApi\ContentPages.cs" />
+    <Compile Include="PublicApi\Entities\SPAttachments.cs" />
+    <Compile Include="PublicApi\Entities\Calendar\DailyRule.cs" />
+    <Compile Include="PublicApi\Entities\Calendar\MonthlyRule.cs" />
+    <Compile Include="PublicApi\Entities\Calendar\RecurrenceDayOfWeek.cs" />
+    <Compile Include="PublicApi\Entities\Calendar\RecurrenceOrder.cs" />
+    <Compile Include="PublicApi\Entities\Calendar\RecurrenceRule.cs" />
+    <Compile Include="PublicApi\Entities\Calendar\RecurrenceRulePool.cs" />
+    <Compile Include="PublicApi\Entities\Calendar\RecurrenceType.cs" />
+    <Compile Include="PublicApi\Entities\Calendar\WeeklyRule.cs" />
+    <Compile Include="PublicApi\Entities\Calendar\YearlyRule.cs" />
+    <Compile Include="PublicApi\Entities\DocumentLibrary\Author.cs" />
+    <Compile Include="PublicApi\Entities\DocumentLibrary\Document.cs" />
+    <Compile Include="PublicApi\Entities\DocumentLibrary\Folder.cs" />
+    <Compile Include="PublicApi\Entities\DocumentLibrary\Library.cs" />
+    <Compile Include="PublicApi\Entities\DocumentLibrary\ViewType.cs" />
+    <Compile Include="PublicApi\Entities\Permissions\Inheritance.cs" />
+    <Compile Include="PublicApi\Entities\Permissions\SPUser.cs" />
+    <Compile Include="PublicApi\Entities\SPCalendar.cs" />
+    <Compile Include="PublicApi\Entities\SPDocumentInfo.cs" />
+    <Compile Include="PublicApi\Entities\SPEvent.cs" />
+    <Compile Include="PublicApi\Entities\Permissions\SPGroup.cs" />
+    <Compile Include="PublicApi\Entities\SPLibrary.cs" />
+    <Compile Include="PublicApi\Entities\SPList.cs" />
+    <Compile Include="PublicApi\Entities\SPListItem.cs" />
+    <Compile Include="PublicApi\Entities\SPPermissions.cs" />
+    <Compile Include="PublicApi\Entities\Permissions\SPPermissionsLevel.cs" />
+    <Compile Include="PublicApi\Entities\SPUser.cs" />
+    <Compile Include="PublicApi\Entities\SPUserPrincipal.cs" />
+    <Compile Include="PublicApi\Entities\SPView.cs" />
+    <Compile Include="PublicApi\Entities\Versions\SPDocumentCheckOutInfo.cs" />
+    <Compile Include="PublicApi\Entities\Versions\SPDocumentVersion.cs" />
+    <Compile Include="PublicApi\Entities\Versions\SPDocumentVersionComparer.cs" />
+    <Compile Include="PublicApi\Entities\Versions\SPDocumentVersionList.cs" />
+    <Compile Include="PublicApi\Extensibility\Attachments.cs" />
+    <Compile Include="PublicApi\Extensibility\SPFields.cs" />
+    <Compile Include="PublicApi\Extensibility\Taxonomies.cs" />
+    <Compile Include="PublicApi\Extensibility\DocumentEvents.cs" />
+    <Compile Include="PublicApi\Extensibility\Documents.cs" />
+    <Compile Include="PublicApi\Extensibility\Folders.cs" />
+    <Compile Include="PublicApi\Extensibility\ICacheable.cs" />
+    <Compile Include="PublicApi\Extensibility\Libraries.cs" />
+    <Compile Include="PublicApi\Extensibility\LibraryEvents.cs" />
+    <Compile Include="PublicApi\Extensibility\ListEvents.cs" />
+    <Compile Include="PublicApi\Extensibility\ListItemEvents.cs" />
+    <Compile Include="PublicApi\Extensibility\ListItems.cs" />
+    <Compile Include="PublicApi\Extensibility\Lists.cs" />
+    <Compile Include="PublicApi\Extensibility\Permissions.cs" />
+    <Compile Include="PublicApi\Extensibility\SharePointUrls.cs" />
+    <Compile Include="PublicApi\Extensibility\UserProfiles.cs" />
+    <Compile Include="PublicApi\PublicApi.cs" />
+    <Compile Include="RestApi\Controllers\SPUserOrGroupControllerHelper.cs" />
+    <Compile Include="RestApi\Controllers\SPViewControllerHelper.cs" />
+    <Compile Include="RestApi\Controllers\SPListControllerHelper.cs" />
+    <Compile Include="RestApi\Entities\RestSPList.cs" />
+    <Compile Include="RestApi\Entities\RestSPUserOrGroup.cs" />
+    <Compile Include="RestApi\Entities\RestSPView.cs" />
+    <Compile Include="RestApi\Resources\SPUserOrGroupData.cs" />
+    <Compile Include="RestApi\Resources\SPUserOrGroupRequest.cs" />
+    <Compile Include="RestApi\Resources\SPViewCollectionRequest.cs" />
+    <Compile Include="RestApi\Resources\SPViewCollectionData.cs" />
+    <Compile Include="RestApi\Resources\SPViewItemData.cs" />
+    <Compile Include="RestApi\Resources\SPViewItemRequest.cs" />
+    <Compile Include="RestApi\Resources\SPListCollectionRequest.cs" />
+    <Compile Include="RestApi\Resources\SPListCollectionData.cs" />
+    <Compile Include="RestApi\Resources\SPListItemRequest.cs" />
+    <Compile Include="RestApi\Resources\SPListItemData.cs" />
+    <Compile Include="RestApi\RestApi.cs" />
+    <Compile Include="RestApi\SharePointEndpoints.cs" />
+    <Compile Include="Routing\ListItemsRouteTable.cs" />
+    <Compile Include="Routing\ListsRouteTable.cs" />
+    <Compile Include="Routing\SPRouteTable.cs" />
+    <Compile Include="Routing\DocumentsRouteTable.cs" />
+    <Compile Include="Routing\Entities\RoutedPage.cs" />
+    <Compile Include="Routing\LibrariesRouteTable.cs" />
+    <Compile Include="Routing\Utility.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedListExtension\SharePointFields.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedListExtension\SharePointPermissions.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedListExtension\SharePointUrls.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedListExtension\SharePointCalendar.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedListExtension\SharePointFolder.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedListExtension\SharePointUI.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedListExtension\SharePointFile.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedListExtension\SharePointLibrary.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedListExtension\SharePointList.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedListExtension\SharePointListItem.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedListExtension\SharePointView.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedTypeExtension\AttachmentsEditor.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedTypeExtension\ChoiceEditor.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedTypeExtension\DateTimeEditor.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedTypeExtension\FieldEditor.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedTypeExtension\HyperlinkOrPictureEditor.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedTypeExtension\LookupEditor.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedTypeExtension\ManagedMetadataEditor.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedTypeExtension\MultiChoiceEditor.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedTypeExtension\NumberEditor.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedTypeExtension\PersonOrGroupEditor.cs" />
+    <Compile Include="WidgetApi\V1\ScriptedTypeExtension\RecurrenceEditor.cs" />
+    <Compile Include="WidgetApi\V2\ScriptedListExtension\SharePointListItemUrls.cs" />
+    <Compile Include="WidgetApi\V2\ScriptedListExtension\SharePointListUrls.cs" />
+    <Compile Include="WidgetApi\V2\ScriptedListExtension\SharePointFileUrls.cs" />
+    <Compile Include="WidgetApi\V2\ScriptedListExtension\SharePointFile.cs" />
+    <Compile Include="WidgetApi\V2\ScriptedListExtension\SharePointLibrary.cs" />
+    <Compile Include="WidgetApi\V2\ScriptedListExtension\SharePointLibraryUrls.cs" />
+    <Compile Include="WidgetApi\V2\ScriptedListExtension\SharePointList.cs" />
+    <Compile Include="WidgetApi\V2\ScriptedListExtension\SharePointListItem.cs" />
+    <Compile Include="WidgetApi\V2\ScriptedListExtension\SharePointPermissions.cs" />
+    <Compile Include="WidgetApi\V2\ScriptedTypeExtension\AttachmentsEditor.cs" />
+    <Compile Include="WidgetApi\V2\ScriptedTypeExtension\PersonOrGroupEditor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceLocator.cs" />
+    <Compile Include="Utility\ExtensionMethods.cs" />
+    <Compile Include="Utility\SPCookie.cs" />
+    <Compile Include="WidgetApi\V2\ScriptedListExtension\Taxonomies.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Configuration\ViewControl.js" />
+    <EmbeddedResource Include="Configuration\ViewNameControl.js" />
+    <EmbeddedResource Include="Configuration\LibraryControl.js" />
+    <EmbeddedResource Include="Configuration\WebControl.js" />
+    <EmbeddedResource Include="Resources\Pages\Fiji\document-library.xml" />
+    <EmbeddedResource Include="Resources\Pages\Fiji\lists.xml" />
+    <EmbeddedResource Include="Resources\Pages\Social\lists.xml" />
+    <EmbeddedResource Include="Resources\Widgets\Breadcrumbs\SharePointBreadcrumbs-Enterprise.xml" />
+    <EmbeddedResource Include="Resources\Widgets\Breadcrumbs\SharePointBreadcrumbs.xml" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Administration\0850b2455cf34899add6a61a921d29c9\Default\add.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Administration\0850b2455cf34899add6a61a921d29c9\Default\addcreatemodal.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Administration\0850b2455cf34899add6a61a921d29c9\Default\check-user-permissions.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Administration\0850b2455cf34899add6a61a921d29c9\Default\create.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Administration\0850b2455cf34899add6a61a921d29c9\Default\remove.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Administration\0850b2455cf34899add6a61a921d29c9\Default\removemodal.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Administration\0850b2455cf34899add6a61a921d29c9\Default\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Administration\DocumentLibraryAdministration.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - CheckInOut\DocumentLibraryCheckInOut.xml" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - CommentForm\DocumentLibraryCommentForm-Enterprise.xml" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - CommentForm\DocumentLibraryCommentForm-Fiji.xml" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - CommentList\DocumentLibraryCommentList-Enterprise.xml" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - CommentList\DocumentLibraryCommentList-Fiji.xml" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\DocumentLibrary-Enterprise.xml" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\DocumentLibrary-Social.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File\DocumentLibraryFile-Enterprise.xml" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File\DocumentLibraryFile-Fiji.xml" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Sync Location\DocumentLibrarySyncLocation.xml" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\DocumentLibraryUploadEdit.xml" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Administration\SharePointListAdministration.xml" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Browse Lists\BrowseSharePointLists-Enterprise.xml" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Browse Lists\BrowseSharePointLists-Fiji.xml" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CommentForm\ListItemCommentCreate-Enterprise.xml" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CommentForm\ListItemCommentCreate-Fiji.xml" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CommentList\ListItemCommentList-Enterprise.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Widgets\SPList - CommentList\ListItemCommentList-Fiji.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\attachmentsEditor.js" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\AttachmentsEditor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\attachmentsModal.js" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\attachmentsModal.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\ChoiceEditor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\create-list-item-view.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\create-list-item.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\CurrencyEditor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\DateAndTimeEditor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\edit-list-item-view.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\edit-list-item.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\FileEditor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\HyperlinkOrPictureEditor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\LookupEditor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\MultiChoiceEditor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\MultipleLinesOfTextEditor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\NumberEditor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\PersonOrGroupEditor.js" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\PersonOrGroupEditor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\RecurrenceEditor.js" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\RecurrenceEditor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\RecurrenceViewer.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\render-field-value.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\SingleLineOfTextEditor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\YesNoEditor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\SharePointCreateEditListItem.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\SharePointLists-Enterprise.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\SharePointLists.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Widgets\SPList - ListItem\SharePointListItem-Enterprise.xml" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - ListItem\SharePointListItem-Fiji.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Telligent.Evolution.Extensions.SharePoint.Components\Telligent.Evolution.Extensions.SharePoint.Components.csproj">
+      <Project>{F7E0B876-70D3-421C-BE64-CE2967B26FC1}</Project>
+      <Name>Telligent.Evolution.Extensions.SharePoint.Components</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Telligent.Evolution.Extensions.SharePoint.IntegrationManager\Telligent.Evolution.Extensions.SharePoint.IntegrationManager.csproj">
+      <Project>{D5E59F97-E28F-4240-ACFE-742C8B711212}</Project>
+      <Name>Telligent.Evolution.Extensions.SharePoint.IntegrationManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Telligent.Evolution.Extensions.SharePoint.WebServices\Telligent.Evolution.Extensions.SharePoint.WebServices.csproj">
+      <Project>{b4a0d6a9-1a0f-4cf3-a13d-26fbd2b45882}</Project>
+      <Name>Telligent.Evolution.Extensions.SharePoint.WebServices</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Pages\Enterprise\lists.xml" />
+    <EmbeddedResource Include="Resources\Sql\uninstall.sql" />
+    <EmbeddedResource Include="Resources\Sql\install.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Css\Enterprise\sharepoint-lists-Enterprise.css" />
+    <EmbeddedResource Include="Resources\Css\Enterprise\sharepoint-libraries-Enterprise.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Pages\Enterprise\document-library.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\create-edit-folder.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\EditSharePointDocument.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\jquery.contextmenu.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\permissions.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\upload-document.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\versioning.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\create-edit-folder.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\EditSharePointDocument.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\jquery.contextmenu.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\permissions.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\upload-document.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\versioning.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - CommentForm\32823aeaa2db479797561bef039f6ef3\Enterprise\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - CommentForm\32823aeaa2db479797561bef039f6ef3\Fiji\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - ListItem\35dac46143634f27b0374c68313e87ab\Enterprise\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - ListItem\35dac46143634f27b0374c68313e87ab\Fiji\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\cbce648772fb470eb5094cb6671de6b9\Enterprise\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\cbce648772fb470eb5094cb6671de6b9\Default\jquery.evolutionsort.js" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\cbce648772fb470eb5094cb6671de6b9\Default\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CommentList\41d619c08aba4c5cab9fdf6aebd96572\Enterprise\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CommentList\41d619c08aba4c5cab9fdf6aebd96572\Fiji\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CommentForm\2f6f257448574e2e8ca2805a03fd0c86\Enterprise\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CommentForm\2f6f257448574e2e8ca2805a03fd0c86\Fiji\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Browse Lists\aaf4b7445eaa4dd68e7b3eef273ef070\Enterprise\browselists.js" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Browse Lists\aaf4b7445eaa4dd68e7b3eef273ef070\Fiji\browselists.js" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Administration\8f5180c1d2974592954344d3d9e79f2c\Default\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\person-or-group-editor.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File\cf6e80c020fd482bb4956008f8fe2e28\Fiji\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File\cf6e80c020fd482bb4956008f8fe2e28\Enterprise\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - CommentList\43ee3df603f74d138725adcb09b9187f\Enterprise\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - CommentList\43ee3df603f74d138725adcb09b9187f\Fiji\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - CheckInOut\90f1423d46d84eaea2de94d9558c4098\Default\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\Breadcrumbs\82854c05997d464eae16302dab0a6730\Enterprise\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\Breadcrumbs\82854c05997d464eae16302dab0a6730\Default\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Browse Libraries\a7d57e104935421b97122440c0aa71a3\Fiji\browselibraries.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Browse Libraries\a7d57e104935421b97122440c0aa71a3\Enterprise\browselibraries.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Browse Libraries\a7d57e104935421b97122440c0aa71a3\Social\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Browse Libraries\BrowseDocumentLibraries-Social.xml" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Browse Libraries\BrowseDocumentLibraries-Fiji.xml" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Browse Libraries\BrowseDocumentLibraries-Enterprise.xml" />
+    <EmbeddedResource Include="Resources\Css\Fiji\sharepoint-lists-Fiji.css" />
+    <EmbeddedResource Include="Resources\Css\Fiji\sharepoint-libraries-Fiji.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Browse Libraries\a7d57e104935421b97122440c0aa71a3\Social\content.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Browse Libraries\a7d57e104935421b97122440c0aa71a3\Social\header.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Browse Libraries\a7d57e104935421b97122440c0aa71a3\Social\list.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Browse Libraries\a7d57e104935421b97122440c0aa71a3\Social\searchresults.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Browse Libraries\a7d57e104935421b97122440c0aa71a3\Enterprise\content.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Browse Libraries\a7d57e104935421b97122440c0aa71a3\Enterprise\header.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Browse Libraries\a7d57e104935421b97122440c0aa71a3\Enterprise\list.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Browse Libraries\a7d57e104935421b97122440c0aa71a3\Enterprise\searchresults.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Browse Libraries\a7d57e104935421b97122440c0aa71a3\Fiji\content.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Browse Libraries\a7d57e104935421b97122440c0aa71a3\Fiji\header.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Browse Libraries\a7d57e104935421b97122440c0aa71a3\Fiji\list.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Browse Libraries\a7d57e104935421b97122440c0aa71a3\Fiji\searchresults.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - CheckInOut\90f1423d46d84eaea2de94d9558c4098\Default\check-in-out.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - CheckInOut\90f1423d46d84eaea2de94d9558c4098\Default\check-user-permissions.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - CommentList\43ee3df603f74d138725adcb09b9187f\Enterprise\delete.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - CommentList\43ee3df603f74d138725adcb09b9187f\Enterprise\load.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - CommentList\43ee3df603f74d138725adcb09b9187f\Fiji\delete.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - CommentList\43ee3df603f74d138725adcb09b9187f\Fiji\load.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - CommentForm\32823aeaa2db479797561bef039f6ef3\Enterprise\addCommentForm.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - CommentForm\32823aeaa2db479797561bef039f6ef3\Fiji\addCommentForm.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File\cf6e80c020fd482bb4956008f8fe2e28\Fiji\delete.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File\cf6e80c020fd482bb4956008f8fe2e28\Enterprise\delete.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\choice-editor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\create-document-view.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\create-document.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\currency-editor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\date-and-time-editor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\edit-document-view.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\edit-document.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\file-editor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\get-field-editor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\hyperlink-or-picture-editor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\lookup-editor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\multi-choice-editor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\multiple-lines-of-text-editor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\number-editor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\person-or-group-editor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\single-line-of-text-editor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\uploadfilemodal.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\yes-no-editor.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Administration\8f5180c1d2974592954344d3d9e79f2c\Default\add.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Administration\8f5180c1d2974592954344d3d9e79f2c\Default\addcreatemodal.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Administration\8f5180c1d2974592954344d3d9e79f2c\Default\check-user-permissions.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Administration\8f5180c1d2974592954344d3d9e79f2c\Default\create.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Administration\8f5180c1d2974592954344d3d9e79f2c\Default\remove.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Administration\8f5180c1d2974592954344d3d9e79f2c\Default\removemodal.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Browse Lists\aaf4b7445eaa4dd68e7b3eef273ef070\Enterprise\content.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Browse Lists\aaf4b7445eaa4dd68e7b3eef273ef070\Enterprise\header.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Browse Lists\aaf4b7445eaa4dd68e7b3eef273ef070\Enterprise\list.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Browse Lists\aaf4b7445eaa4dd68e7b3eef273ef070\Enterprise\searchresults.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Browse Lists\aaf4b7445eaa4dd68e7b3eef273ef070\Fiji\content.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Browse Lists\aaf4b7445eaa4dd68e7b3eef273ef070\Fiji\header.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Browse Lists\aaf4b7445eaa4dd68e7b3eef273ef070\Fiji\list.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Browse Lists\aaf4b7445eaa4dd68e7b3eef273ef070\Fiji\searchresults.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CommentForm\2f6f257448574e2e8ca2805a03fd0c86\Enterprise\addCommentForm.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CommentForm\2f6f257448574e2e8ca2805a03fd0c86\Fiji\addCommentForm.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CommentList\41d619c08aba4c5cab9fdf6aebd96572\Enterprise\delete.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CommentList\41d619c08aba4c5cab9fdf6aebd96572\Enterprise\load.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CommentList\41d619c08aba4c5cab9fdf6aebd96572\Fiji\delete.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - CommentList\41d619c08aba4c5cab9fdf6aebd96572\Fiji\load.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\cbce648772fb470eb5094cb6671de6b9\Enterprise\delete.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\cbce648772fb470eb5094cb6671de6b9\Enterprise\list-items-options.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\cbce648772fb470eb5094cb6671de6b9\Enterprise\list-items.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\cbce648772fb470eb5094cb6671de6b9\Default\delete.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\cbce648772fb470eb5094cb6671de6b9\Default\list-items-options.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\cbce648772fb470eb5094cb6671de6b9\Default\list-items.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - ListItem\35dac46143634f27b0374c68313e87ab\Enterprise\check-user-permissions.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - ListItem\35dac46143634f27b0374c68313e87ab\Enterprise\delete.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - ListItem\35dac46143634f27b0374c68313e87ab\Enterprise\full-view.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - ListItem\35dac46143634f27b0374c68313e87ab\Enterprise\simple-view.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - ListItem\35dac46143634f27b0374c68313e87ab\Fiji\check-user-permissions.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - ListItem\35dac46143634f27b0374c68313e87ab\Fiji\delete.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - ListItem\35dac46143634f27b0374c68313e87ab\Fiji\full-view.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - ListItem\35dac46143634f27b0374c68313e87ab\Fiji\simple-view.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\check-user-permissions.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\create-edit-folder-modal.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\create-folder.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\edit-folder.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\explorer-view.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\file-versions.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\list-options.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\list-view.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\permissions-edit-view.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\permissions-grant-view.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\permissions-list-view.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\permissions-list.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\permissions-modal.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\permissions-principals.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\permissions-update.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\restore-file.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\update-document.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\upload-document-direct.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\upload-document-modal.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Enterprise\upload-document.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\check-user-permissions.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\create-edit-folder-modal.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\create-folder.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\edit-folder.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\explorer-view.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\file-versions.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\list-options.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\list-view.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\permissions-edit-view.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\permissions-grant-view.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\permissions-list-view.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\permissions-list.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\permissions-modal.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\permissions-principals.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\permissions-update.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\restore-file.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\update-document.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\upload-document-direct.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\upload-document-modal.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Fiji\upload-document.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - Browse Lists\BrowseSharePointLists-Social.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\DocumentLibrary-Fiji.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\check-user-permissions.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\create-edit-folder-modal.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\create-edit-folder.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\create-folder.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\edit-folder.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\explorer-view.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\file-versions.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\process-options.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\list-view.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\permissions-list.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\permissions-modal.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\permissions-principals.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\permissions-update.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\permissions.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\restore-file.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\ui.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\upload-document-direct.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\upload-document-modal.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\upload-document.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\upload-document.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\versioning.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\header.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File\DocumentLibraryFile-Social.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File\cf6e80c020fd482bb4956008f8fe2e28\Social\delete.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File\cf6e80c020fd482bb4956008f8fe2e28\Social\ui.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File Sync Status\044fd503b82048e69737c808c830bf41\Default\check-user-permissions.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File Sync Status\044fd503b82048e69737c808c830bf41\Default\file-versions.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File Sync Status\044fd503b82048e69737c808c830bf41\Default\restore-file.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File Sync Status\044fd503b82048e69737c808c830bf41\Default\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File Sync Status\044fd503b82048e69737c808c830bf41\Default\versioning.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File Sync Status\DocumentLibraryFileSyncStatus.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - Browse Lists\aaf4b7445eaa4dd68e7b3eef273ef070\Social\content.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - Browse Lists\aaf4b7445eaa4dd68e7b3eef273ef070\Social\header.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - Browse Lists\aaf4b7445eaa4dd68e7b3eef273ef070\Social\list.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - Browse Lists\aaf4b7445eaa4dd68e7b3eef273ef070\Social\searchresults.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - Browse Lists\aaf4b7445eaa4dd68e7b3eef273ef070\Social\ui.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - ListItem\SharePointListItem-Social.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - ListItem\35dac46143634f27b0374c68313e87ab\Social\check-user-permissions.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - ListItem\35dac46143634f27b0374c68313e87ab\Social\ui.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - ListItem\35dac46143634f27b0374c68313e87ab\Social\delete.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\SharePointLists-Social.xml" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\cbce648772fb470eb5094cb6671de6b9\Social\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\cbce648772fb470eb5094cb6671de6b9\Social\delete.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\cbce648772fb470eb5094cb6671de6b9\Social\list-options.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\cbce648772fb470eb5094cb6671de6b9\Social\list.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\cbce648772fb470eb5094cb6671de6b9\Social\header.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\cbce648772fb470eb5094cb6671de6b9\Social\current.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\cbce648772fb470eb5094cb6671de6b9\Social\list-view.vm" />
+    <EmbeddedResource Include="Resources\Widgets\SPList - Item List\cbce648772fb470eb5094cb6671de6b9\Social\check-user-permissions.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\check-user-permissions.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Folders Tree\DocumentLibrary-FoldersTree-Social.xml" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Folders Tree\633a1dfb62584b4ab8b52fd01207bfa3\Social\get-related-folders.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Folders Tree\633a1dfb62584b4ab8b52fd01207bfa3\Social\get-folders.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Folders Tree\633a1dfb62584b4ab8b52fd01207bfa3\Social\ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\check-user-permissions.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\notification-modal.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\find-users-or-emails.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\notification-ui.js" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\notification.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Css\Social\sharepoint-common.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Css\Social\sharepoint-libraries.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Css\Social\sharepoint-lists.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\browse-apps-indicator.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\browse-apps-library-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\browse-apps-list-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\bubble-arrows.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\check-names.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\document-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\library-checkedout-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\library-context-menu-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\library-folder-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\library-new-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\like-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\list-item-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\lists-attachment-icon.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\lists-document-icon.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\loading.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\menu-background.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\permissions-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\remove-icon.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\sharepoint-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\sharepoint-icons.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\sharepoint-list-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\sprite-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\tags-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\thumbnail-list-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Enterprise\up-down-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\app-administration-icons.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\app-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\browse-apps-background.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\browse-apps-search-clear.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\browse-apps-search-input.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\browse-apps-title-background.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\bubble-arrows.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\button-sprite.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\check-names.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\close-icon.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\comment-author-quote-ml.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\comment-author-quote-mr.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\comment-hf-set.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\comment-quote-ml.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\comment-quote-mr.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\download-icon.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\filter-background.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\filter-separator-background.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\library-checkedout-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\library-folder-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\library-new-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\lists-attachment-icon.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\lists-document-icon.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\loading.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\menu-background.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\permissions-icon.png" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\remove-icon.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\spinner.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\tags-icon.gif" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Fiji\thumbnail-list-icon.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Social\sharepoint-mixins.less" />
+    <EmbeddedResource Include="Resources\SupplementaryFiles\Social\sharepoint-variables.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\preview-attachment.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\delete-document.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Create Library\DocumentLibrary-CreateLibrary-Social.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Import Edit Library\DocumentLibrary-ImportEditLibrary-Social.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Create Library\68bb4a9839a34d10a01e32e6c2a6f563\Social\check-user-permissions.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Import Edit Library\ecc87d07938e4eada33d95f9a5709109\Social\check-user-permissions.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Import Edit Library\ecc87d07938e4eada33d95f9a5709109\Social\import.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Import Edit Library\ecc87d07938e4eada33d95f9a5709109\Social\ui.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Javascript\sharepoint.controls.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Import Edit Library\ecc87d07938e4eada33d95f9a5709109\Social\import-view.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Import Edit Library\ecc87d07938e4eada33d95f9a5709109\Social\edit-view.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Import Edit Library\ecc87d07938e4eada33d95f9a5709109\Social\edit.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Import Edit Library\ecc87d07938e4eada33d95f9a5709109\Social\delete.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Create Library\68bb4a9839a34d10a01e32e6c2a6f563\Social\ui.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Create Library\68bb4a9839a34d10a01e32e6c2a6f563\Social\create.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - Import Edit List\SPList-ImportEditList-Social.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - Import Edit List\956082803a89415f89b95f5ae0fdc58a\Social\check-user-permissions.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - Import Edit List\956082803a89415f89b95f5ae0fdc58a\Social\delete.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - Import Edit List\956082803a89415f89b95f5ae0fdc58a\Social\edit-view.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - Import Edit List\956082803a89415f89b95f5ae0fdc58a\Social\edit.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - Import Edit List\956082803a89415f89b95f5ae0fdc58a\Social\import-view.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - Import Edit List\956082803a89415f89b95f5ae0fdc58a\Social\import.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - Import Edit List\956082803a89415f89b95f5ae0fdc58a\Social\ui.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\get-folders.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\get-related-folders.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File\cf6e80c020fd482bb4956008f8fe2e28\Social\check-user-permissions.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Pages\Social\libraries.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File\cf6e80c020fd482bb4956008f8fe2e28\Social\checkin-modal.vm" />
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File\cf6e80c020fd482bb4956008f8fe2e28\Social\checkin.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\checkin-modal.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\checkin.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\delete-document.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File\cf6e80c020fd482bb4956008f8fe2e28\Social\checkedout.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\delete-list-item.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - Import Edit List\956082803a89415f89b95f5ae0fdc58a\Social\delete-modal.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - Import Edit Library\ecc87d07938e4eada33d95f9a5709109\Social\delete-modal.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\OAuth\office365.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\taxonomies-editor.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\taxonomies.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\taxonomies-terms.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\taxonomies-editor.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\taxonomies-terms.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\taxonomies.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - UploadEdit\423fc5037ca9470b84d7bd0f4a854961\Default\taxonomies-keywords.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\SPList - CreateEdit\e6ba8d0e2ea74f2eb5f2c68e8803533d\Default\taxonomies-keywords.vm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Widgets\DocumentLibrary - File List\f2fc4aa7f859487eb5f577b309566351\Social\browserExtensions.js" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(SolutionDir)3rdParty\MSOIDCLIL.dll" "$(SolutionDir)Assemblies\"
+copy "$(TargetDir)*.dll" "$(SolutionDir)Assemblies\"
+"$(ProjectDir)postbuild.bat"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,33 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($empty = $core_v2_utility.ParseGuid('00000000-0000-0000-0000-000000000000'))
+#set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetFormValue("contentId")))
+
+#set($method = false)
+#set($method = $core_v2_page.GetFormValue('method'))
+
+#if($contentId != $empty && $method && $sharepoint_v2_listItem.CanEdit($contentId))
+
+	#set($additionalInfo = false)
+	#if($method == 'checkout')
+		#set($additionalInfo = $sharepoint_v2_file.CheckOut($contentId))
+	#elseif($method == 'checkin')
+		#set($additionalInfo = $sharepoint_v2_file.CheckIn($contentId))
+	#elseif($method == 'discardcheckout')
+		#set($additionalInfo = $sharepoint_v2_file.UndoCheckOut($contentId))
+	#elseif($method == 'delete')
+		#set($additionalInfo = $sharepoint_v2_file.Delete($contentId))
+	#end
+
+	#if($additionalInfo && $additionalInfo.Errors.Count() == 0)
+		{
+			"valid" : true
+		}
+	#elseif($additionalInfo)
+		$core_v2_page.SendJsonError($additionalInfo.Errors)
+	#else
+		$core_v2_page.SendJsonError('Access denied. You do not have permission to perform this method or access this resource.')
+	#end
+#else
+	$core_v2_page.SendJsonError('Access denied. You do not have permission to perform this method or access this resource.')
+#end

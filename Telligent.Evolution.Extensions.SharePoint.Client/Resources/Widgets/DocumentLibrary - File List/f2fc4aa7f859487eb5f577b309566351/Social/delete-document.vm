@@ -1,0 +1,19 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($empty = $core_v2_utility.ParseGuid('00000000-0000-0000-0000-000000000000'))
+#set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetFormValue("contentId")))
+#if ($contentId != $empty && $sharepoint_v2_listItem.CanEdit($contentId))
+	#set($result = false)
+	#set($result = $sharepoint_v2_file.Delete($contentId))
+	#if ($result && $result.Errors.Count() == 0)
+		{
+			"valid" : true
+		}
+	#elseif($result)
+		$core_v2_page.SendJsonError($result.Errors)
+	#else
+		$core_v2_page.SendJsonError($core_v2_language.GetResource('NoPermissions'))
+	#end
+#else
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('NoPermissions'))
+#end

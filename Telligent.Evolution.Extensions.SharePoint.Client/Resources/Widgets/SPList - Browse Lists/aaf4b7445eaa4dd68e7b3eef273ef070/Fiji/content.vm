@@ -1,0 +1,35 @@
+﻿#foreach($list in $lists)
+#each
+	<tr class="table-item">
+		<td class="table-column list-title">
+			#set($url = $sharepoint_v1_urls.SPList($list.Id))
+			<a href="$!core_v2_encoding.HtmlAttributeEncode($url)" class="internal-link view-sharepoint-list">$!list.Title</a>
+			<div>$!list.Description</div>
+		</td>
+		#if($showGroup)
+			<td class="table-column application-group">$gallery.Group.Name</td>
+		#end
+
+		#if($showItemCount)
+			<td class="table-column item-count">$!list.ItemCount</td>
+		#end
+
+		#if($showCreatedDate)
+			<td class="table-column created-date">$core_v2_language.FormatDate($list.Created)</td>
+		#end
+
+		#if($showModifiedDate)
+			<td class="table-column modified-date">$core_v2_language.FormatAgoDate($list.Modified)</td>
+		#end
+
+		#if($showVersioning)
+			<td class="table-column versioning">
+				#if($list.VersioningEnabled)
+					$core_v2_language.GetResource('BrowseSharePointLists_Versioning_Enabled')
+				#else
+					$core_v2_language.GetResource('BrowseSharePointLists_Versioning_Disabled')
+				#end
+			</td>
+		#end
+	</tr>
+#end

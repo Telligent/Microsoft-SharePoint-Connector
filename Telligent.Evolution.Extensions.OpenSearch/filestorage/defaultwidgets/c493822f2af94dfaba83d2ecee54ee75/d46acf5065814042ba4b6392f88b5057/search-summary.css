@@ -1,0 +1,14 @@
+﻿.open-search-summary {font-family: Helvetica, Arial, sans-serif; color: #444; font-size: 11px;}
+	.open-search-summary .os-provider-title {font-weight:bold; vertical-align:middle; padding: 3px;}
+		.open-search-summary .os-provider-title img {width: 16px; height: 16px; vertical-align: middle;}
+	.open-search-summary .os-results-error {font-weight:bold; color: red;}
+		.open-search-summary .os-title {margin: 10px 0px;}
+		.open-search-summary .os-item {padding: 5px 0px;}
+			.open-search-summary .os-item .os-title {margin: 0px; padding: 0px; color: #0173BC !important;}
+				.open-search-summary .os-item .os-title a {color: #0173BC !important;}
+				.open-search-summary .os-item .os-title a:hover {color: #0173BC !important;}
+			.open-search-summary .os-item .os-description { }
+			.open-search-summary .os-item a {color: #008001 !important;}
+			.open-search-summary .os-item a:hover {color: #004400 !important;}
+	.open-search-summary .os-show-more-results a { color: #0066DD !important; font-weight: bold; text-decoration: underline;}
+	.open-search-summary .os-show-more-results a:hover { color: #0000ff !important; font-weight: bold; text-decoration: underline;}

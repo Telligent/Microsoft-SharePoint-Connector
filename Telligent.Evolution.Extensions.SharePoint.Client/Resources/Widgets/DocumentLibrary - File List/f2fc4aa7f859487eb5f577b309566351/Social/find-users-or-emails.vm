@@ -1,0 +1,38 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($searchText = $core_v2_page.GetQueryStringValue('w_SearchText'))
+
+#set($emailPattern = '^([\w.-]+)@([\w-]+)((\.(\w){2,3})+)$')
+#set($isEmail = $core_v2_utility.IsMatch($searchText, $emailPattern))
+#if ($isEmail)
+	{
+		"matches":[{
+			"email": "$searchText"
+		}]
+	}
+#else
+	#set($matchingUsers = $core_v2_searchResult.List("%{Query=username:$loweredSearchText OR userdisplayname:$loweredSearchText,Filters='type::user',PageSize=20}"))
+	#set($exactUser = false)
+	#set($exactUser = $core_v2_user.Get("%{Username=$searchText}"))
+	{"matches":[
+
+		#if ($exactUser)
+			{
+				"userId":"$exactUser.Id",
+				"title" :"$core_v2_encoding.JavascriptEncode($exactUser.DisplayName)#if($exactUser.DisplayName != $exactUser.Username) ($core_v2_encoding.JavascriptEncode($exactUser.Username))#end"
+			},
+		#end
+
+		#foreach($matchedUser in $matchingUsers)
+			#foreach($user in $matchedUser.Users)
+			#each
+				#if ($user && (!$exactUser || $exactUser.Id != $user.Id))
+					{
+						"userId": "$user.Id",
+						"title" : "$core_v2_encoding.JavascriptEncode($user.DisplayName)#if($user.DisplayName != $user.Username) ($core_v2_encoding.JavascriptEncode($user.Username))#end"
+					},
+				#end
+			#end
+		#end
+	null]}
+#end

@@ -1,0 +1,66 @@
+﻿<scriptedContentFragments>
+	<scriptedContentFragment name="${resource:Ext_Search_Widget_Name}" description="${resource:Ext_Search_Widget_Description}" instanceIdentifier="d46acf5065814042ba4b6392f88b5057" isCacheable="false" varyCacheByUser="true" showHeaderByDefault="true">
+	<contentScript>
+		<![CDATA[
+<link rel="stylesheet" href="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('search-summary.css'))" type="text/css" />
+$!core_v2_page.RedirectToHashedQuery()
+#registerEndOfPageHtml('telligent.evolution.widgets.utility')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl("utility.js"))"></script>
+#end
+#registerEndOfPageHtml('telligent.evolution.widgets.externalSearchSummaryResults')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl("ui.js"))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(){
+			jQuery.telligent.evolution.widgets.externalSearchSummaryResults.register({
+				wrapperId : '$core_v2_encoding.JavascriptEncode($core_v2_widget.WrapperElementId)',
+				contentWrapper: '$core_v2_encoding.JavascriptEncode("#$core_v2_widget.WrapperElementId div.content-fragment-content")',
+				resultHolder: '#$core_v2_encoding.JavascriptEncode($core_v2_widget.UniqueId('SummaryResultsHolder'))',
+				searchUrl: '$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl("search.vm"))',
+				pageIndexQueryStringKey: '$core_v2_encoding.JavascriptEncode($core_v2_ui.PageIndexQueryStringKey)',
+				searchButton: jQuery("a.searchbutton"),
+				searchTextInput: jQuery("input.search-query.search"),
+				timeout: 15000,
+				error: '$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl("error.vm"))'
+			});
+		});
+	</script>
+#end
+##<input type="text" value="" class="search-query search"/>
+##<a class="searchbutton">Search</a>
+<div id="$core_v2_widget.UniqueId('SummaryResultsHolder')"></div>
+		]]>
+	</contentScript>
+	<headerScript>
+		<![CDATA[
+#set($pageTitle = $core_v2_language.GetResource('Widget_Title'))
+#set($summary_config_xml = $core_v2_widget.GetStringValue('OpenSearchProvider_SummaryResults', ''))
+#set($summary_widget_configuration = false)
+#set($summary_widget_configuration = $telligent_v1_opensearch.Configuration($summary_config_xml))
+#if($summary_widget_configuration && $summary_widget_configuration.Name != '')
+	#set($pageTitle = $summary_widget_configuration.Name)
+#end
+$pageTitle
+		]]>
+	</headerScript>
+	<configuration>
+		<![CDATA[
+<propertyGroup id="Options">
+	<property id="OpenSearchProvider_SummaryResults" dataType="string" defaultValue="" controlType="Telligent.Evolution.Extensions.OpenSearch.ResultsConfigurationControl, Telligent.Evolution.Extensions.OpenSearch" />
+</propertyGroup>
+		]]>
+	</configuration>
+	<languageResources>
+		<language key="en-us">
+			<resource name="Ext_Search_Widget_Name">External Search - Summary Results Widget</resource>
+			<resource name="Ext_Search_Widget_Description">This widget allows user to make search using Open Search Standard</resource>
+			<resource name="ShowPager">Show pager</resource>
+			<resource name="Widget_Title">External Search - Summary Results Widget</resource>
+			<resource name="Search_No_Results">We couldn’t find anything that matches your search.</resource>
+			<resource name="Show_More_Results">Show more results</resource>
+			<resource name="Search_Invalid_Results">Invalid results returned, cannot display information.</resource>
+		</language>
+	</languageResources>
+	</scriptedContentFragment>
+</scriptedContentFragments>

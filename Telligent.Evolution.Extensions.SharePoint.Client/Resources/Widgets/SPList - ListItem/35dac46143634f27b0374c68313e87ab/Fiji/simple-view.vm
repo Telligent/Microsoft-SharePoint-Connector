@@ -1,0 +1,47 @@
+<div class="simple-view">
+	<ul>
+		#set($list = $sharepoint_v2_list.Get($listItem.ListId))
+		#foreach($field in $list.Fields)
+			#if(!$field.ReadOnlyField && !$field.Hidden && $field.FieldTypeKind != "Attachments")
+				<li class="field">
+					<div class="field-name">
+						$!{field.Title}
+					</div>
+					<div class="delimiter">
+						## : 
+					</div>
+					<div class="field-value">
+						#set($value = false)
+						#set($value = $listItem.get_item($field.InternalName))
+						#if(!$value || $value == '')
+							$core_v2_language.GetResource('SharePoint_ListItem_EmptyValue')
+						#else
+							#set($listField = $list.GetField($field.InternalName))
+							#if ($listField.FieldTypeKind == 'Number' && $sharepoint_v1_fieldnumber.ShowAsPercentage($listField))
+								#set($value = 100 * $core_v2_utility.ParseDouble($value))
+								#set($value = "${value} %")
+							#end
+							$!{value}
+						#end
+					</div>
+				</li>
+			#end
+		#end
+	</ul>
+
+	#set($showEditUrl = $core_v2_widget.GetBoolValue('showEditUrl', false))
+	#if ($showEditUrl)
+		#set($fullControl = false)
+		#set($membershipType = false)
+		$core_v2_widget.ExecuteFile('check-user-permissions.vm')
+		#set($canEdit = $fullControl || $membershipType == 'Owner' || $membershipType == 'Manager')
+		#if ($canEdit)
+			#set($url = $sharepoint_v1_urls.SPListItem($listItem.ContentId))
+			<div class="edit-link">
+				<a href="$url" >
+					<span></span>$core_v2_language.GetResource('SharePoint_ListItem_EditLink')
+				</a>
+			</div>
+		#end
+	#end
+</div>

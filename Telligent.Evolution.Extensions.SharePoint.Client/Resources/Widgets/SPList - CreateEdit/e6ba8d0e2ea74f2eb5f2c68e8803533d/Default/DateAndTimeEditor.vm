@@ -1,0 +1,37 @@
+﻿#if(!$core_v2_page.IsPost || $isInPreviewMode)
+	#set($allowBlankvalue = false)
+	#if(!$field.Required)
+		#set($allowBlankvalue = true)
+	#end
+
+	<script type="text/javascript">
+		jQuery(function(j) {
+			j(".date-and-time-editor .$field.InternalName").glowDateTimeSelector({
+				allowBlankvalue: "${allowBlankvalue}",
+				pattern: #if($field.DisplayFormat == 'DateOnly') '<01-12>/<01-31>/<1900-2100>' #else '<01-12>/<01-31>/<1900-2100> <01-12>:<00-59> <am,pm>'#end,
+				monthIndex: 0,
+				dayIndex: 1,
+				yearIndex: 2, 
+				#if($field.DisplayFormat == 'DateTime')
+					hourIndex: 3, 
+					minuteIndex: 4, 
+					amPmIndex: 5,
+				#end
+				showPopup: true,
+				calendarButtonImageUrl: "/utility/images/glow/DateTimeSelectorCalendar.gif"
+			});
+		});
+	</script>
+
+	<div class="date-and-time-editor">
+		#set($value = '')
+		#if($listItem)
+			#set($value = $listItem.ValueForEdit("$field.InternalName"))
+		#end
+		<input id="$core_v2_widget.UniqueId($field.InternalName)" type="text" class="$!{field.InternalName}" name="$!{field.InternalName}" value="$!{value}" />
+	</div>
+#else
+	#set($value = $core_v2_page.GetFormValue("$field.InternalName"))
+	#set($date = $sharepoint_v1_datetimeeditor.GetValueToSave($value))
+	$listItem.Fields.Add("$field.InternalName", $date)
+#end

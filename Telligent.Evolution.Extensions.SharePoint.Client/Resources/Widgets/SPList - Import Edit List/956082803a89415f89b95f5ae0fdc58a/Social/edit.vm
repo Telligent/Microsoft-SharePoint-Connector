@@ -1,0 +1,17 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($listId = $core_v2_utility.ParseGuid($core_v2_page.GetFormValue('listId')))
+#set($listName = $core_v2_page.GetFormValue('listName'))
+#set($listDescription = $core_v2_page.GetFormValue('listDescription'))
+#set($viewId = $core_v2_utility.ParseGuid($core_v2_page.GetFormValue('viewId')))
+
+#set($updateInfo = false)
+#set($updateInfo = $sharepoint_v2_list.Update($listId, "%{Title = $listName, Description = $listDescription, DefaultViewId = $viewId}"))
+#if ($updateInfo.HasErrors)
+	$core_v2_page.SendJsonError($updateInfo.Errors)
+#end
+
+{
+	"valid": true,
+	"redirectUrl": "$core_v2_encoding.JavascriptEncode($sharepoint_v2_listItemUrls.Browse($listId))"
+}

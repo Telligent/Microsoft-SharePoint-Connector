@@ -1,0 +1,79 @@
+﻿#if(!$core_v2_page.IsPost || $isInPreviewMode)
+	#set($templateId = "${field.InternalName}_template")
+	#set($addLinkId = "${field.InternalName}_attach")
+	#set($addHolderId = "${field.InternalName}_add")
+	#set($removeHolderId = "${field.InternalName}_remove")
+
+	<div class="attachment-editor" id="${field.InternalName}">
+		<ul class="attachment-list">
+			<input type="hidden" id="${field.InternalName}_contextId" name="${field.InternalName}_contextId" value="${uploadContextId}"/>
+			<input type="hidden" id="${addHolderId}" name="${field.InternalName}_add" value=""/>
+			<input type="hidden" id="${removeHolderId}" name="${field.InternalName}_remove" value=""/>
+
+			#if($listItem)
+				#set($hasItems = $listItem.Value($field.InternalName))
+				#if ($hasItems)
+					#set($attachments = false)
+					#set($attachments = $sharepoint_v2_attachments.List($listItem.ContentId, $field.InternalName))
+					#foreach($attach in $attachments)
+						<li class="attachment-item" data-name="$!{attach.Name}">
+							<a class="attachment file-name" href="$!attach.Uri">$!{attach.Name}</a>
+							<a class="remove" href="#" fileName="$!{attach.Name}">$core_v2_language.GetResource('SharePoint_ListItem_Attachment_Remove')</a>
+						</li>
+					#end
+				#end
+			#end
+
+			<li id="${templateId}" class="attachment-item added" style="display:none;">
+				<span class="attachment file-name"></span>
+				<a class="remove" href="#">$core_v2_language.GetResource('SharePoint_ListItem_Attachment_Remove')</a>
+			</li>
+
+			<li class="add-attachment">
+				<a href="#" class="internal-link" id="${addLinkId}">$core_v2_language.GetResource('SharePoint_ListItem_Attachment_Add')</a>
+			</li>
+		</ul>
+	</div>
+
+	#registerEndOfPageHtml('telligent.sharepoint.widgets.attachmentsEditor')
+		<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('attachmentsEditor.js'))"></script>
+	#end
+	#registerEndOfPageHtml()
+		<script type="text/javascript">
+			jQuery(function(j){
+				j.telligent.sharepoint.widgets.attachmentsEditor.register({
+					wrapperId: "#${field.InternalName}",
+					htmlTemplateId: "#${templateId}",
+					addedHiddenId: "#${addHolderId}",
+					removedHiddenId: "#${removeHolderId}",
+					uploadId: "#${addLinkId}",
+					#set($uploadModalUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('attachmentsModal.vm'), "uploadFileUrl=${core_v2_encoding.UrlEncode($uploadFileUrl)}"))
+					uploadModalUrl: "$core_v2_encoding.JavascriptEncode($uploadModalUrl)"
+				});
+			});
+		</script>
+	#end
+#else
+	## remove files
+	#set($filesToRemove = false)
+	#set($filesToRemove = $core_v2_page.GetFormValue("${field.InternalName}_remove"))
+	#if ($filesToRemove && $filesToRemove != '')
+		#set($result = $sharepoint_v2_attachments.Remove($listItem.ContentId, "%{FieldName = $field.InternalName, FileNames = $filesToRemove}"))
+	#end
+
+	## add files
+	#set($contextId = false)
+	#set($contextId = $core_v2_page.GetFormValue("${field.InternalName}_contextId"))
+	#if ($contextId)
+		#set($filesToAdd = false)
+		#set($filesToAdd = $core_v2_page.GetFormValue("${field.InternalName}_add"))
+		#if ($filesToAdd && $filesToAdd != '')
+			#set($fileNames = $core_v2_utility.Split(';', $filesToAdd))
+			#foreach($fileName in $fileNames)
+				#set($uploadedFile = $core_v2_uploadedFile.Get($contextId, $fileName))
+				#set($result = $sharepoint_v2_attachments.Add($listItem.ContentId, "%{FieldName = $field.InternalName, File = $uploadedFile.Name, Data = $uploadedFile.FileData}"))
+			#end
+		#end
+		$core_v2_uploadedFile.Clear($contextId)
+	#end
+#end

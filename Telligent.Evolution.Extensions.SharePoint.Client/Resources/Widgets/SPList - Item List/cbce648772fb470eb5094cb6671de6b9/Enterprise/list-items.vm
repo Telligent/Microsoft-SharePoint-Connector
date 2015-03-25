@@ -1,0 +1,202 @@
+#set($list = false)
+#set($list = $sharepoint_v2_list.Current)
+#if(!$list)
+	#set($lists = false)
+	#set($lists = $sharepoint_v2_list.List($core_v2_group.Current.Id, "%{PageIndex = 0, PageSize = 1}"))
+	#if ($lists && $lists.Errors.Count() == 0 && $lists.TotalCount == 1)
+		#set($list = $lists.get_item(0))
+	#end
+#end
+
+#if(!$list)
+	$core_v2_widget.Hide()
+#elseif($list && $list.Errors.Count() > 0)
+	$core_v2_page.SendJsonError($list.Errors)
+#end
+
+#set($viewList = false)
+#set($viewList = $sharepoint_v1_view.List($list))
+#if(!$viewList)
+	$core_v2_widget.Hide()
+#elseif($viewList && $viewList.Errors.Count() > 0)
+	$core_v2_page.SendJsonError($viewList.Errors)
+#elseif($viewList && $viewList.Count == 0)
+	$core_v2_widget.Hide()
+#end
+
+#set($view = false)
+#set($viewId = false)
+#set($viewId = $core_v2_page.GetQueryStringValue('viewId'))
+#if ($viewId)
+	#set($view = $sharepoint_v1_view.Get("%{List = $list, ById = $viewId}"))
+#end
+#if(!$view)
+	#set($view = $viewList.get_Item(0)) 
+#end
+
+## $listItemsOptions
+$core_v2_widget.ExecuteFile('list-items-options.vm')
+
+## render list items on the base of the current view
+#set($viewFields = $view.Fields)
+#set($items = $sharepoint_v2_listItem.List($list.Id, $listItemsOptions))
+<div class="content">
+	<table class="table-list">
+		<thead>
+			<tr class="table-header">
+				<th class="table-header-column item-checker">
+					<input type="checkbox" />
+				</th>
+
+				<th class="table-header-column moderation-cell">&nbsp;</th>
+
+				#set ($titleRelatedFieldsCount = 0)
+				#foreach($field in $viewFields)
+					#set($order = '')
+					#if ($field == 'Title' || $field == 'LinkTitle' || $field == 'LinkTitleNoMenu')
+						#set ($titleRelatedFieldsCount = $titleRelatedFieldsCount + 1)
+						#if ($titleRelatedFieldsCount == 1)
+							#if($sortBy == 'Title') #set($order = $sortOrder.ToLower()) #end
+							<th class="table-header-column $field.toLower()" sortBy="Title" sortOrder="$order">
+								$!{view.get_item($field)}
+								<a href='#' sortBy="$field" class="internal-link sort-${order}"><span></span></a>
+							</th>
+						#end
+					#else
+						#if($sortBy == $field) #set($order = $sortOrder.ToLower()) #end
+						<th class="table-header-column $field.toLower()" sortBy="$!{field}" sortOrder="$order">
+							#if($field == "Attachments")
+								<span></span>
+							#else
+								$!{view.get_item($field)}
+								<a href='#' sortBy="$field" class="internal-link sort-${order}"><span></span></a>
+							#end
+						</th>
+					#end
+				#end
+
+			</tr>
+		</thead>
+		<tbody>
+		#set($DQ = '"')
+		#foreach($item in $items)
+			<tr class="table-item" itemid="$!{item.ContentId}">
+				<td class="table-column item-checker">
+					<input type="checkbox" value="$!{item.ContentId}" />
+				</td>
+
+				<td class="table-column moderation-cell">
+					<div class="post-moderate">
+						#if ($core_v2_user.IsRegistered($core_v2_user.Accessing.Id))
+
+							#set($menuItems = $core_v2_utility.MakeList())
+
+							#set($viewUrl = false)
+							#set($viewUrl = $sharepoint_v1_urls.View($item.ContentId, $item.ContentTypeId))
+							#if ($viewUrl && $viewUrl.Length > 0)
+								#set ($index = $menuItems.Add("{${DQ}text${DQ}:${DQ}${core_v2_language.GetResource('SharePointLists_ModerationMenu_View')}${DQ}, ${DQ}href${DQ}:${DQ}${viewUrl}${DQ}}"))
+							#end
+
+							#set($hasEditPermission = false)
+							#set($hasEditPermission = $sharepoint_v2_listItem.CanEdit($item.ContentId))
+							#if ($hasEditPermission)
+								#set($editUrl = false)
+								#set($editUrl = $sharepoint_v1_urls.Edit($item.ContentId, $item.ContentTypeId))
+								#if ($editUrl && $editUrl.Length > 0)
+									#set ($index = $menuItems.Add("{${DQ}text${DQ}:${DQ}${core_v2_language.GetResource('SharePointLists_ModerationMenu_Edit')}${DQ}, ${DQ}href${DQ}:${DQ}${editUrl}${DQ}}"))
+								#end
+							#end
+
+							#set($moderateOptions = "%{}")
+							$moderateOptions.Add('CssClass','expanded')
+							$moderateOptions.Add('AdditionalLinks', "[${core_v2_utility.Join(',', $menuItems)}]")
+							$core_v2_ui.Moderate($file.ContentId, $file.ContentTypeId, $moderateOptions)
+
+						#end
+					</div>
+				</td>
+
+				#set ($titleRelatedFieldsCount = 0)
+				#foreach ($field in $viewFields)
+					#if ($field == 'Title' || $field == 'LinkTitle' || $field == 'LinkTitleNoMenu')
+						#set ($titleRelatedFieldsCount = $titleRelatedFieldsCount + 1)
+						#if ($titleRelatedFieldsCount == 1)
+							<td class="table-column">
+								<div class="title">
+									<span></span>$!{item.get_item('Title')}
+								</div>
+							</td>
+						#end
+					#else
+						#set($stripHtml = true)
+						#set($fieldValue = false)
+						#set($fieldValue = $item.ValueAsText($field, $stripHtml))
+						<td class="table-column">
+							#if($fieldValue)
+								#set($listField = $list.GetField($field))
+								#if ($listField.FieldTypeKind == 'Attachments' && $fieldValue == 'True')
+									<div class="show-attachment-list $!{field.toLower()} $!{fieldValue.toLower()}">
+										#set($attachmentList = false)
+										#set($attachmentList = $sharepoint_v1_attachments.Attachments($item, $list, $item.Value($field)))
+										<div class="attacment-list-holder" style="display:none;">
+											<div class="arrow evolution2-arrow fiji-arrow"></div>
+											<div class="outer-wrapper evolution2-outer-wrapper fiji-outer-wrapper">
+												<div class="inner-wrapper evolution2-inner-wrapper fiji-inner-wrapper">
+													<div class="attacment-list">
+														#foreach($attachment in $attachmentList)
+															<div class="attacment-item">
+																<a href="${list.SPWebUrl}${attachment.ServerRelativeUrl}" onclick="var e = arguments[0] || window.event; e.stopPropagation();">$!{attachment.Name}</a>
+															</div>
+														#end
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								#elseif($listField.FieldTypeKind == 'Attachments' || $field == 'DocIcon')
+									<div class="$!{field.toLower()} $!{fieldValue.toLower()}"></div>
+								#elseif($listField.FieldTypeKind == 'Number' && $sharepoint_v1_fieldnumber.ShowAsPercentage($listField))
+									#set($fieldValue = 100 * $core_v2_utility.ParseDouble($fieldValue))
+									#set($fieldValue = "${fieldValue} %")
+									<div class="$!{field.toLower()}">
+										<span></span>$!{fieldValue}
+									</div>
+								#else
+									<div class="$!{field.toLower()}">
+										<span></span>$!{fieldValue}
+									</div>
+								#end
+							#else
+								<span class="empty"></span>
+							#end
+						</td>
+					#end
+				#end
+			</tr>
+		#end
+		</tbody>
+	</table>
+</div>
+<div class="footer">
+	<div class="left">
+		<a class="btn-delete button" href="#">
+			<span></span>$core_v2_language.GetResource('SharePointLists_DeleteSelected')
+		</a>
+	</div>
+	<div class="right">
+		<div class="filter">
+			<select class="nav-list-view">
+				#foreach($v in $viewList)
+					<option value="$!{v.Id}" #if($v.Id == $view.Id)selected#end>$!{v.Name}</option>
+				#end
+			</select>
+		</div>
+	</div>
+	<div class="center">
+		<span></span>
+		#if($items.TotalCount > $pageSize)
+			$core_v2_ui.Pager($pageIndex, $pageSize, $items.TotalCount)
+		#end
+	</div>
+	<div class="clear"></div>
+</div>

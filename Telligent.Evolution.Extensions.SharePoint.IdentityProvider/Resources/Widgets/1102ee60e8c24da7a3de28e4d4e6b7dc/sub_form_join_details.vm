@@ -1,0 +1,55 @@
+##
+## Sub-Form which renders dynamic profile fields and other detail fields for new user joins (both manual and oauth)
+##
+
+## open a dynamic form xml node
+#set ($formXml = '<propertyGroup id="profileData" resourceName="" resourceFile="" text="" descriptionResourceName="" descriptionResourceFile="" descriptionText="" orderNumber="1" visible="true">')
+#set ($requiredFields = "")
+## append each dynamic profile field to the dynamic form xml
+#set ($index = 1)
+#foreach ($field in $selectedProfileFields)
+	#if ($requiredProfileFields.contains($field))
+		#set ($requiredFields = "${requiredFields},${field}")
+	#end
+	#set ($formXml = "${formXml}${core_v2_userProfileField.dynamicFormXml(${field}, '%{OrderNumber = $index}')}")
+	#set ($index = $index + 1)
+#end
+## close dynamic form xml node
+#set ($formXml = "${formXml}</propertyGroup>")
+
+## build a querystring of current values for the dynamic form fields
+#set ($data = $core_v2_page.ParseQueryString(''))
+#foreach ($profileField in $user.ProfileFields)
+	$data.Add($profileField.Label, $profileField.Value)
+#end
+
+## render dynamic profile fields
+#set ($propertyHeader = '<li class="field-item"><label class="field-item-name">{PropertyName}</label><span class="field-item-input">')
+#set ($propertyFooter = '</span></li>')
+$core_v2_dynamicForm.RenderForm($dynamicFieldsForm, $formXml, $data, "%{ GroupFooterHtmlFormat='', GroupHeaderHtmlFormat='', HidePropertiesWithoutValues='false', PropertyHeaderHtmlFormat=$propertyHeader, PropertyFooterHtmlFormat=$propertyFooter }")
+<input type="hidden" name="$core_v2_encoding.HtmlAttributeEncode($profileFieldsInput)" id="$core_v2_encoding.HtmlAttributeEncode($profileFieldsInput)" value="testvalue" />
+
+#if ($core_v2_configuration.ShowContactCheckboxes)
+	<li class="field-item">
+		<span class="field-item-input">
+			<input type="checkbox" name="$core_v2_encoding.HtmlAttributeEncode($allowSiteToContactInput)" id="$core_v2_encoding.HtmlAttributeEncode($allowSiteToContactInput)" />
+			<label for="$core_v2_encoding.HtmlAttributeEncode($allowSiteToContactInput)">$core_v2_language.GetResource('CreateNewAccount_AllowSiteToContact')</label>
+		</span>
+	</li>
+	<li class="field-item">
+		<span class="field-item-input">
+			<input type="checkbox" name="$core_v2_encoding.HtmlAttributeEncode($allowSitePartnersToContactInput)" id="$core_v2_encoding.HtmlAttributeEncode($allowSitePartnersToContactInput)" />
+			<label for="$core_v2_encoding.HtmlAttributeEncode($allowSitePartnersToContactInput)">$core_v2_language.GetResource('CreateNewAccount_AllowSitePartnersToContact')</label>
+		</span>
+	</li>
+#end
+
+#if ($termsOfServiceUrl)
+	<li class="field-item required site-agreement">
+		<span class="field-item-input">
+			<input type="checkbox" name="$core_v2_encoding.HtmlAttributeEncode($acceptAgreementInput)" id="$core_v2_encoding.HtmlAttributeEncode($acceptAgreementInput)" />
+			<label for="$core_v2_encoding.HtmlAttributeEncode($acceptAgreementInput)">$core_v2_language.GetResource('CreateNewAccount_ForumRules_AgreeText') <a href="$core_v2_encoding.HtmlAttributeEncode($termsOfServiceUrl)" target="_blank">$core_v2_language.GetResource('CreateNewAccount_ForumRulesDescLink')</a></label>
+		</span>
+		<span class="field-item-validation" style="display: none;"></span>
+	</li>
+#end

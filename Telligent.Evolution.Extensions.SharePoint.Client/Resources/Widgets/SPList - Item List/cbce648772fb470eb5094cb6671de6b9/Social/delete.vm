@@ -1,0 +1,41 @@
+﻿$core_v2_page.SetContentType('application/json')
+
+#set($empty = $core_v2_utility.ParseGuid('00000000-0000-0000-0000-000000000000'))
+
+#set($listId = false)
+#set($listId = $sharepoint_v2_list.Current.Id)
+#if ($listId == $empty)
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('ErrorNoList'))
+#end
+
+#set($itemIds = false)
+#set($itemIds = $core_v2_page.GetFormValue('itemIds'))
+#if(!$itemIds || $itemIds.Length == 0)
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('ErrorNoSelectedItems'))
+#end
+
+#set($itemUniqueIds = $core_v2_utility.Split(',', $itemIds))
+#foreach($itemUniqueId in $itemUniqueIds)
+	#set($contentId = $core_v2_utility.ParseGuid($itemUniqueId))
+	#if ($contentId == $empty)
+		$core_v2_page.SendJsonError($core_v2_language.GetResource('ErrorInvalidId'))
+	#end
+	#set($canEdit = false)
+	#set($canEdit = $sharepoint_v2_listItem.CanEdit($contentId))
+	#if ($canEdit)
+		#set($deleteInfo = $sharepoint_v2_listItem.Delete($contentId))
+		#if ($deleteInfo.Errors.Count > 0)
+			$core_v2_page.SendJsonError($deleteInfo.Errors) 
+		#end
+	#else
+		$core_v2_page.SendJsonError($core_v2_language.GetResource('ErrorNoPermissions'))
+	#end
+#end
+
+{
+	"valid" : true, 
+	"list"  : {
+		"id"         : "$listId",
+		"itemIds"    : "$itemIds"
+	}
+}

@@ -1,0 +1,27 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($applicationId = false)
+#set($applicationId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue("applicationId")))
+
+#set($folderName = false)
+#set($folderName = $core_v2_page.GetFormValue('folderName'))
+
+#set($folderPath = '/')
+#set($folderPath = $core_v2_page.GetQueryStringValue('folderPath'))
+
+#set($updatedFolder = false)
+#set($updatedFolder = $sharepoint_v1_folder.Rename("$applicationId", $folderPath, $folderName))
+#if ($updatedFolder && $updatedFolder.Errors.Count() == 0)
+	{
+		"valid"  : true,
+		"folder" : {
+			"name": "$!{updatedFolder.Name}"
+		}
+	}
+#elseif($updatedFolder)
+	$core_v2_page.SendJsonError($updatedFolder.Errors)
+#else
+	{
+		"valid"  : false
+	}
+#end

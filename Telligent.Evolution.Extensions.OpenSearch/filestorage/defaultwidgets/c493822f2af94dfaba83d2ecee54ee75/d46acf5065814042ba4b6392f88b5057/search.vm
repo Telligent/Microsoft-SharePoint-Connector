@@ -1,0 +1,69 @@
+##Summary Results
+#set($summary_configXml = $core_v2_widget.GetStringValue('OpenSearchProvider_SummaryResults', ''))
+#set($summary_widget_configuration = false)
+#set($summary_widget_configuration = $telligent_v1_opensearch.Configuration($summary_configXml))
+#if($summary_widget_configuration)
+	<div class="open-search-summary">
+		##Query String parameters
+		#set ($query = '')
+		#set ($query = $core_v2_page.GetQueryStringValue('w_q'))
+		#set ($pageSize = $summary_widget_configuration.ResultsPerPage)
+		#set ($pageIndex = $core_v2_ui.GetCurrentPageIndex())
+		#set ($searchQuery = "%{}")
+		$searchQuery.Add("Query", $query)
+		$searchQuery.Add("PageSize", $pageSize)
+		$searchQuery.Add("PageIndex", $pageIndex)
+		#set($results = false)
+		#set($results = $telligent_v1_opensearch.Search($summary_widget_configuration, $searchQuery))
+		#set($itemList = $results.GetItems($pageSize))
+		#set($count = $results.Count)
+		#if($count == 0)
+			#set($allresults = $telligent_v1_opensearch.Search($summary_widget_configuration, "%{Query = $query}"))
+			#set($results.Items = $allresults.Items)
+			#set($count = $results.Items.Count)
+		#end
+		#if($results)
+			<div class="os-provider-title">
+			#set($faviconUrl = false)
+			#set($provider = $telligent_v1_opensearch.Provider($summary_widget_configuration.ProviderId))
+			#set($faviconUrl = $telligent_v1_opensearch.Favicon($provider))
+			#if($faviconUrl)
+				<img src="$faviconUrl"></img>
+			#end
+				<span>
+					$results.GetTitle()
+					($count)
+				</span>
+			</div>
+			#if ($itemList.Count == 0)
+				<div>
+					$core_v2_language.GetResource('Search_No_Results')
+				</div>
+			#else
+				##search results
+				#foreach($item in $itemList)
+					<div class="os-item">
+						<div class="os-title">
+							<a href="$item.Link">$item.Title</a>
+						</div>
+						#if(!$summary_widget_configuration.TextOnlyResults)
+							<div class="os-description">$item.Description</div>
+						#else
+							<div class="os-summary">$item.HighlightedSummary</div>
+						#end
+					</div>
+				#end
+			#end
+		#else
+			<div class="os-results-error">$core_v2_language.GetResource('Search_Invalid_Results')</div>
+		#end
+		#set($showmore = false)
+		#set($showmore = $telligent_v1_opensearch.Url($provider, $summary_widget_configuration, $searchQuery))
+		#if($showmore && ($results.Count > 0 || $itemList.Count > 0))
+			<div class="os-show-more-results">
+				<a target="_blank" href="$showmore">$core_v2_language.GetResource('Show_More_Results')</a>
+			</div>
+		#end
+	</div>
+#end
+<div style="clear:both;"></div>

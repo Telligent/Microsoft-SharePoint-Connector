@@ -1,0 +1,19 @@
+#set($isAdmin   = false)
+#set($isOwner   = false)
+#set($isManager = false)
+#set($isMember  = false)
+
+#if($core_v2_user.IsRegistered($core_v2_user.Accessing.Id))
+	#set($isAdmin = $core_v2_roleUsers.IsUserInRoles($core_v2_user.Accessing.Username, $core_v2_utility.MakeList('Administrators')))
+	#set($groupUserMember = false)
+	#set($groupUserMember = $core_v2_groupUserMember.Get($core_v2_group.Current.Id, "%{UserId = $core_v2_user.Accessing.Id}"))
+	#if($groupUserMember)
+		#if($groupUserMember.MembershipType == 'Owner')
+			#set($isOwner = true)
+		#elseif($groupUserMember.MembershipType == 'Manager')
+			#set($isManager = true)
+		#elseif($groupUserMember.MembershipType == 'Member')
+			#set($isMember = true)
+		#end
+	#end
+#end

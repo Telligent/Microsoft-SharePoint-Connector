@@ -1,0 +1,34 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($groupId = $core_v2_utility.ParseInt($core_v2_page.GetFormValue('groupId')))
+#set($url = $core_v2_page.GetFormValue('spwebUrl'))
+#set($name = $core_v2_page.GetFormValue('name'))
+#set($description = $core_v2_page.GetFormValue('description'))
+
+#set($list = false)
+#set($list = $sharepoint_v2_list.Create($groupId, $url, $name, "%{Description = $description}"))
+#if ($list && !$list.HasErrors)
+	{
+		"valid"    : true, 
+		"list"  : {
+			"id"         : "$!{list.Id}",
+			"name"       : "$!{core_v2_encoding.JavascriptEncode($list.Title)}",
+			"description": "$!{core_v2_encoding.JavascriptEncode($list.Description)}",
+			"groupId"    : "$!{list.GroupId}",
+			"url"        : "$!{core_v2_encoding.JavascriptEncode($list.Url)}",
+			"spviewUrl"  : "$!{core_v2_encoding.JavascriptEncode($list.SPViewUrl)}",
+			"spwebUrl"   : "$!{core_v2_encoding.JavascriptEncode($list.SPWebUrl)}"
+		}
+		#set($pagedList = $sharepoint_v2_list.List($groupId, "%{PageIndex = 0, PageSize = 1}"))
+		#if ($pagedList && $pagedList.Errors.Count == 0)
+			#if($pagedList.TotalCount == 1)
+				"urlRedirect" : "$!{core_v2_encoding.JavascriptEncode($sharepoint_v1_urls.SPList($list.Id))}",
+			#end
+			"count"      : $!{pagedList.TotalCount}
+		#elseif($pagedList)
+			$core_v2_page.SendJsonError($pagedList.Errors)
+		#end
+	}
+#elseif($list)
+	$core_v2_page.SendJsonError($list.Errors)
+#end

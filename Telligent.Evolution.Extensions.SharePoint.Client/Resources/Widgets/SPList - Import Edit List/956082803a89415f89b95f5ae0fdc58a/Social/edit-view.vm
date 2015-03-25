@@ -1,0 +1,79 @@
+<div class="message error" id="$core_v2_widget.UniqueId('ErrorMessageId')" style="display:none;"></div>
+<fieldset class="field-list">
+	<h1>$!list.Title</h1>
+	<ul class="field-list">
+		## SharePoint Web
+		<li class="field-item">
+			<label class="field-item-header">$core_v2_language.GetResource('SiteUrl')</label>
+			<span class="field-item-input">
+				<input id="$core_v2_widget.UniqueId('WebUrl')" type="text" required="required" value="$list.SPWebUrl" disabled="disabled" />
+			</span>
+			<span class="field-item-validation" style="display: none;"></span>
+		</li>
+		## List Name
+		<li class="field-item">
+			<label class="field-item-header">$core_v2_language.GetResource('ListName')</label>
+			<span class="field-item-input">
+				<input id="$core_v2_widget.UniqueId('ListName')" type="text" required="required" value="$list.Title"/>
+			</span>
+			<span class="field-item-validation" style="display: none;"></span>
+		</li>
+		## List Description
+		<li class="field-item">
+			<label class="field-item-header">$core_v2_language.GetResource('ListDescription')</label>
+			<span class="field-item-input">
+				$core_v2_editor.Render("$core_v2_widget.UniqueId('ListDescription')", "%{Value = $list.Description}")
+			</span>
+			<span class="field-item-validation" style="display: none;"></span>
+		</li>
+		## List Default View
+		<li class="field-item">
+			<label class="field-item-header">$core_v2_language.GetResource('DefaultView')</label>
+			<span class="field-item-input">
+				#set($view = false)
+				#set($empty = $core_v2_utility.ParseGuid('00000000-0000-0000-0000-000000000000'))
+				#if ($list.ViewId != $empty)
+					#set($view = $sharepoint_v1_view.Get("%{List = $list, ById = $list.ViewId}"))
+				#end
+				<input id="$core_v2_widget.UniqueId('ViewId')" type="text" #if ($view) data-name="$view.Name" value="$view.Id" #end />
+			</span>
+			<span class="field-item-validation" style="display: none;"></span>
+		</li>
+		## Save/Delete
+		<li class="field-item submit-button">
+			<span class="field-item-input">
+				<a id="$core_v2_widget.UniqueId('Save')" href="#" class="internal-link save-post button">$core_v2_language.GetResource('Save')</a>
+				<a id="$core_v2_widget.UniqueId('Delete')" href="#" class="internal-link delete-post">$core_v2_language.GetResource('Delete')</a>
+				<span class="processing" style="display: none;"></span>
+			</span>
+		</li>
+	</ul>
+</fieldset>
+
+#registerEndOfPageHtml('telligent.sharepoint.widgets.listEdit')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			j.telligent.sharepoint.widgets.listEdit.register({
+				webUrl          : "$core_v2_encoding.JavascriptEncode($list.SPWebUrl)",
+				listId          : "$list.Id",
+				editUrl         : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('edit.vm'))",
+				deleteUrl       : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('delete.vm'))",
+				listNameId      : "#$core_v2_widget.UniqueId('ListName')",
+				listNameErrorMessage: "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('ListNameErrorMessage'))",
+				listDescriptionId: "#$core_v2_widget.UniqueId('ListDescription')",
+				get_listDescription: function() {
+					return $core_v2_editor.GetContentScript("$core_v2_widget.UniqueId('ListDescription')");
+				},
+				viewHolderId    : "#$core_v2_widget.UniqueId('ViewId')",
+				isDeleteHolderId: "#$core_v2_widget.UniqueId('IsDelete')",
+				saveButtonId    : "#$core_v2_widget.UniqueId('Save')",
+				deleteModalUrl  : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('delete-modal.vm'))",
+				deleteButtonId  : "#$core_v2_widget.UniqueId('Delete')",
+				afterDeleteRedirectUrl: "$core_v2_encoding.JavascriptEncode($sharepoint_v2_listUrls.Browse($core_v2_group.Current.Id))"
+			});
+		})
+	</script>
+#end

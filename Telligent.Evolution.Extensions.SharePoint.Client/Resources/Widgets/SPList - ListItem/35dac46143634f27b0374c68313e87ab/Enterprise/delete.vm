@@ -1,0 +1,40 @@
+﻿$core_v2_page.SetContentType('application/json')
+
+#set($url = $core_v2_page.GetQueryStringValue('webUrl'))
+#if(!$url || $url.Length == 0)
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('SharePoint_ListItem_Delete_EmptyWebUrl'))
+#end
+
+#set($empty = $core_v2_utility.ParseGuid('00000000-0000-0000-0000-000000000000'))
+#set($listId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue("listId")))
+#if ($listId == $empty)
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('SharePoint_ListItem_Delete_EmptyListId'))
+#end
+
+#set($itemIds = $core_v2_page.GetFormValue('itemIds'))
+#if(!$itemIds || $itemIds.Length == 0)
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('SharePoint_ListItem_Delete_EmptyListItemId'))
+#end
+
+#set($ids = $core_v2_utility.Split(',', $itemIds))
+#foreach($id in $ids)
+	#set($canEdit = $sharepoint_v2_listItem.CanEdit($url, $listId, "$id"))
+	#if(!$canEdit)
+		$core_v2_page.SendJsonError($core_v2_language.GetResource('SharePoint_ListItem_Delete_NoPermissions'))
+	#end
+#end
+
+#set($deleteInfo = $sharepoint_v2_listItem.Delete($url, $listId, $itemIds))
+#if ($deleteInfo.Errors.Count == 0)
+	{
+		"valid"      : true,
+		"statusMsg"  : "$!{core_v2_language.GetResource('SharePoint_ListItem_Deleted')}",
+		"listId"     : "$!{listId}",
+		"itemIds"    : "$!{itemIds}",
+		"webUrl"     : "$!{core_v2_encoding.JavascriptEncode($url)}",
+		#set($listUrl = $sharepoint_v1_urls.SPList($listId))
+		"UrlRedirect": "$!{core_v2_encoding.JavascriptEncode($listUrl)}"
+	}
+#else
+	$core_v2_page.SendJsonError($deleteInfo.Errors)
+#end

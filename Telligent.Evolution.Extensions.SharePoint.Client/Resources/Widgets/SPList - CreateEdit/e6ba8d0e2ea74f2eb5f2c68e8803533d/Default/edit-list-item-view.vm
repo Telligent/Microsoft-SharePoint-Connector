@@ -1,0 +1,49 @@
+<fieldset class="edit-list-item edit">
+	#set ($supportedFieldTypes = ['Text', 'Note', 'Choice', 'MultiChoice', 'Number', 'Lookup', 'DateTime', 'User', 'Boolean', 'AllDayEvent', 'CrossProjectLink', 'URL', 'Currency', 'Attachments', 'File', 'Invalid'])
+	#set ($hiddenFields = ['TaskGroup', 'RelatedItems'])
+	#foreach($field in $list.Fields)
+	#beforeall
+		#set($currentList = $list)
+		<ul class="field-list">
+	#each
+		#if(!$field.ReadOnlyField && $supportedFieldTypes.Contains("$field.FieldTypeKind") && !$hiddenFields.Contains($field.InternalName))
+			<li class="field-item">
+				<label for="$core_v2_widget.UniqueId($field.InternalName)" class="field-item-header">
+					$!{field.Title}
+					#if($field.Required)
+						<span class="field-required" title="$core_v2_language.GetResource('RequiredFieldWarning')">*</span>
+					#end
+				</label>
+				<div class="field-item-input" name="$!{field.InternalName}">
+					$core_v2_widget.ExecuteFile('render-field-value.vm')
+				</div>
+			</li>
+		#end
+	#afterall
+		<li class="field-item submit-button">
+				<span class="field-item-input">
+					<a href="#" class="internal-link update-post button">$core_v2_language.GetResource('Save')</a>
+					#set($canEdit = $sharepoint_v2_list.CanEdit($list.Id))
+					#if ($canEdit)
+						<a href="#" class="internal-link delete-post">$core_v2_language.GetResource('Delete')</a>
+					#end
+					<span class="processing" style="display: none;"></span>
+				</span>
+			</li>
+		</ul>
+	#end
+</fieldset>
+
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			j.telligent.sharepoint.widgets.editListItem.register({
+				wrapper        : j("#$core_v2_widget.WrapperElementId"),
+				editListItemUrl: "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('edit-list-item.vm'))",
+				deleteUrl      : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('delete-list-item.vm'))",
+				#set($listUrl = $sharepoint_v2_listItemUrls.Browse($list.Id))
+				listUrl  : "$core_v2_encoding.JavascriptEncode($listUrl)"
+			});
+		});
+	</script>
+#end

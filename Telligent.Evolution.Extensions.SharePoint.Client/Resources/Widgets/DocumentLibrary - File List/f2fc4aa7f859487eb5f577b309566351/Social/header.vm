@@ -1,0 +1,73 @@
+#set($maxLinks = 0)
+#set($links = $core_v2_page.ParseQueryString($core_v2_widget.GetCustomValue('links','Link=quickUpload&amp;Link=addFolder&amp;Link=openLibrary&amp;Link=editLibrary')))
+#foreach($link in $links.Values('Link'))
+#beforeall
+	<div class="navigation-list navigation ui-links" data-minlinks="$maxLinks" data-maxlinks="$maxLinks">
+		<ul>
+#each
+	#if($link == 'quickUpload' && $canUpload)
+		<li class="navigation-list-item">
+			<a href="#" class="internal-link upload" data-messagename="newFileSubscribe">
+				<span></span>$core_v2_language.GetResource('Header_QuickUpload')
+			</a>
+		</li>
+	#elseif($link == 'addFolder' && $canAddFolder)
+		<li class="navigation-list-item">
+			<a href="#" class="internal-link" data-messagename="newFolderSubscribe">
+				<span></span>$core_v2_language.GetResource('Header_AddFolder')
+			</a>
+		</li>
+	#elseif($link == 'openLibrary')
+		<li class="navigation-list-item">
+			<a href="$!library.SPViewUrl" class="internal-link">
+				<span></span>$core_v2_language.GetResource('Header_OpenLibrary')
+			</a>
+		</li>
+	#elseif($link == 'editLibrary' && $canEditLibrary)
+		<li class="navigation-item">
+			<a href="$!sharepoint_v2_libraryUrls.Edit($library.Id)" class="internal-link edit-library">
+				<span></span>$core_v2_language.GetResource('Header_EditLibrary')
+			</a>
+		</li>
+	#end
+#afterall
+			<li class="navigation-list-item">
+				<a href="#" data-more>$core_v2_language.GetResource('Header_More')</a>
+			</li>
+			<li class="navigation-list-item">
+				<a href="#" data-cancel>$core_v2_language.GetResource('Header_Cancel')</a>
+			</li>
+		</ul>
+	</div>
+#end
+
+<div class="sort">
+	<span class="by">
+		<select class="ui-select">
+			<option value="FileLeafRef" #if($sortBy == 'FileLeafRef') selected #end>$core_v2_language.GetResource('Header_SortBy_Name')</option>
+			<option value="Modified" #if($sortBy == 'Modified') selected #end>$core_v2_language.GetResource('Header_SortBy_Date')</option>
+			<option value="Author" #if($sortBy == 'Author') selected #end>$core_v2_language.GetResource('Header_SortBy_Author')</option>
+		</select>
+	</span>
+	<span class="order">
+		<select class="ui-select">
+			<option value="Descending" #if ($sortOrder.ToLower() == 'descending') selected #end>$core_v2_language.GetResource('Header_SortOrder_Descending')</option>
+			<option value="Ascending" #if ($sortOrder.ToLower() == 'ascending') selected #end>$core_v2_language.GetResource('Header_SortOrder_Ascending')</option>
+		</select>
+	</span>
+</div>
+
+<div class="view">
+	<select class="ui-select">
+		<option value="ExplorerView" #if($viewType == 'ExplorerView') selected #end>
+			<a class="explorer-view" href="#" >
+				<span></span>$core_v2_language.GetResource('Header_ExplorerView')
+			</a>
+		</option>
+		<option value="ListView" #if($viewType == 'ListView') selected #end>
+			<a class="list-view" href="#" >
+				<span></span>$core_v2_language.GetResource('Header_ListView')
+			</a>
+		</option>
+	</select>
+</div>

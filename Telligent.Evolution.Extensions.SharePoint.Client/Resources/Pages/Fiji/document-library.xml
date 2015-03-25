@@ -1,0 +1,182 @@
+<theme name="7e987e474b714b01ba29b4336720c446" version="7.0.0.1">
+  <contentFragmentPages>
+    <contentFragmentPage pageName="sharepoint-document-add" isCustom="false" layout="HeaderTopContentLeftSidebarRight" themeType="c6108064-af65-11dd-b074-de1a56d89593" title="SharePoint - Upload Document">
+      <regions>
+        <region regionName="Header">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::70e09fc5b5754e56bcf1ed619f8fee69" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::82854c05997d464eae16302dab0a6730" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ADocumentLibraryBreadCrumbs_Widget_Name%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::ab92f9a89af24721bba1c464c1334be6" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::359bb808134b48b390a51dcceca0490c" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+          </contentFragments>
+        </region>
+        <region regionName="Content">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::423fc5037ca9470b84d7bd0f4a854961" showHeader="False" cssClassAddition="full-border with-header" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ADocumentLibraryUploadEdit_Widget_Title%7D" />
+          </contentFragments>
+        </region>
+      </regions>
+      <contentFragmentTabs />
+    </contentFragmentPage>
+    <contentFragmentPage pageName="sharepoint-document-edit" isCustom="false" layout="HeaderTopContentLeftSidebarRight" themeType="c6108064-af65-11dd-b074-de1a56d89593" title="SharePoint - Edit Document">
+      <regions>
+        <region regionName="Header">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::70e09fc5b5754e56bcf1ed619f8fee69" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3AGroups_GroupAccessibilityInformation_Name%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::82854c05997d464eae16302dab0a6730" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ADocumentLibraryBreadCrumbs_Widget_Name%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::ab92f9a89af24721bba1c464c1334be6" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::359bb808134b48b390a51dcceca0490c" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+          </contentFragments>
+        </region>
+        <region regionName="RightSidebar">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::044fd503b82048e69737c808c830bf41" showHeader="True" cssClassAddition="full-border with-header" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ASharePoint_SyncStatus_Widget_Title%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::90f1423d46d84eaea2de94d9558c4098" showHeader="True" cssClassAddition="full-border with-header" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ASharePoint_CheckInOut_Widget_Title%7D" />
+          </contentFragments>
+        </region>
+        <region regionName="Content">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::423fc5037ca9470b84d7bd0f4a854961" showHeader="False" cssClassAddition="full-border with-header" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ADocumentLibraryUploadEdit_Widget_Title%7D" />
+          </contentFragments>
+        </region>
+      </regions>
+      <contentFragmentTabs />
+    </contentFragmentPage>
+    <contentFragmentPage pageName="sharepoint-document-show" isCustom="false" layout="HeaderTopContentLeftSidebarRight" themeType="c6108064-af65-11dd-b074-de1a56d89593" title="SharePoint - Document">
+      <regions>
+        <region regionName="Header">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::70e09fc5b5754e56bcf1ed619f8fee69" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::82854c05997d464eae16302dab0a6730" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ADocumentLibraryBreadCrumbs_Widget_Name%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::ab92f9a89af24721bba1c464c1334be6" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::359bb808134b48b390a51dcceca0490c" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+          </contentFragments>
+        </region>
+        <region regionName="RightSidebar">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::044fd503b82048e69737c808c830bf41" showHeader="True" cssClassAddition="full-border with-header" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ASharePoint_SyncStatus_Widget_Title%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::90f1423d46d84eaea2de94d9558c4098" showHeader="True" cssClassAddition="full-border with-header" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ASharePoint_CheckInOut_Widget_Title%7D" />
+          </contentFragments>
+        </region>
+        <region regionName="Content">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::cf6e80c020fd482bb4956008f8fe2e28" showHeader="False" cssClassAddition="full-border with-header" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ADocumentLibrary_File_WidgetTitle%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::32823aeaa2db479797561bef039f6ef3" showHeader="False" cssClassAddition="no-wrapper-with-spacing" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ADocumentLibrary_PostCommentForm_Name%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::43ee3df603f74d138725adcb09b9187f" showHeader="False" cssClassAddition="no-wrapper-with-spacing" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ADocumentLibrary_CommentList_Name%7D" />
+          </contentFragments>
+        </region>
+      </regions>
+      <contentFragmentTabs />
+    </contentFragmentPage>
+    <contentFragmentPage pageName="sharepoint-document-list" isCustom="false" layout="HeaderTopContentLeftSidebarRight" themeType="c6108064-af65-11dd-b074-de1a56d89593" title="SharePoint - Documents">
+      <regions>
+        <region regionName="Header">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::70e09fc5b5754e56bcf1ed619f8fee69" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3AGroups_GroupAccessibilityInformation_Name%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::82854c05997d464eae16302dab0a6730" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ADocumentLibraryBreadCrumbs_Widget_Name%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::ab92f9a89af24721bba1c464c1334be6" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::359bb808134b48b390a51dcceca0490c" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+          </contentFragments>
+        </region>
+        <region regionName="RightSidebar">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::0850b2455cf34899add6a61a921d29c9" showHeader="True" cssClassAddition="full-border with-header" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ADocumentLibraryAdministration_Widget_Name%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::c871678f0fc749c7949cb7ec29d441a1" showHeader="True" cssClassAddition="full-border with-header" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ASharePoint_SyncLocation_Widget_Title%7D" />
+          </contentFragments>
+        </region>
+        <region regionName="Content">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::f2fc4aa7f859487eb5f577b309566351" showHeader="True" cssClassAddition="full-border with-header" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ADocumentLibrary_Widget_Name%7D" />
+          </contentFragments>
+        </region>
+      </regions>
+      <contentFragmentTabs />
+    </contentFragmentPage>
+    <contentFragmentPage pageName="sharepoint-library-add" isCustom="false" layout="HeaderTopContentLeftSidebarRight" themeType="c6108064-af65-11dd-b074-de1a56d89593" title="SharePoint - Import Document Library">
+      <regions>
+        <region regionName="Header">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::70e09fc5b5754e56bcf1ed619f8fee69" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3AGroups_GroupAccessibilityInformation_Name%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::82854c05997d464eae16302dab0a6730" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ADocumentLibraryBreadCrumbs_Widget_Name%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::ab92f9a89af24721bba1c464c1334be6" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::359bb808134b48b390a51dcceca0490c" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+          </contentFragments>
+        </region>
+        <region regionName="RightSidebar">
+          <contentFragments>
+          </contentFragments>
+        </region>
+        <region regionName="Content">
+          <contentFragments>
+          </contentFragments>
+        </region>
+      </regions>
+      <contentFragmentTabs />
+    </contentFragmentPage>
+    <contentFragmentPage pageName="sharepoint-library-edit" isCustom="false" layout="HeaderTopContentLeftSidebarRight" themeType="c6108064-af65-11dd-b074-de1a56d89593" title="SharePoint - Edit Document Library">
+      <regions>
+        <region regionName="Header">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::70e09fc5b5754e56bcf1ed619f8fee69" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3AGroups_GroupAccessibilityInformation_Name%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::82854c05997d464eae16302dab0a6730" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ADocumentLibraryBreadCrumbs_Widget_Name%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::ab92f9a89af24721bba1c464c1334be6" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::359bb808134b48b390a51dcceca0490c" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+          </contentFragments>
+        </region>
+        <region regionName="RightSidebar">
+          <contentFragments>
+          </contentFragments>
+        </region>
+        <region regionName="Content">
+          <contentFragments>
+          </contentFragments>
+        </region>
+      </regions>
+      <contentFragmentTabs />
+    </contentFragmentPage>
+    <contentFragmentPage pageName="sharepoint-library-show" isCustom="false" layout="HeaderTopContentLeftSidebarRight" themeType="c6108064-af65-11dd-b074-de1a56d89593" title="SharePoint - Document Library">
+      <regions>
+        <region regionName="Header">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::70e09fc5b5754e56bcf1ed619f8fee69" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3AGroups_GroupAccessibilityInformation_Name%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::82854c05997d464eae16302dab0a6730" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ADocumentLibraryBreadCrumbs_Widget_Name%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::ab92f9a89af24721bba1c464c1334be6" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::359bb808134b48b390a51dcceca0490c" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+          </contentFragments>
+        </region>
+        <region regionName="RightSidebar">
+          <contentFragments>
+          </contentFragments>
+        </region>
+        <region regionName="Content">
+          <contentFragments>
+          </contentFragments>
+        </region>
+      </regions>
+      <contentFragmentTabs />
+    </contentFragmentPage>
+    <contentFragmentPage pageName="sharepoint-library-list" isCustom="false" layout="HeaderTopContentLeftSidebarRight" themeType="c6108064-af65-11dd-b074-de1a56d89593" title="SharePoint - Document Libraries">
+      <regions>
+        <region regionName="Header">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::70e09fc5b5754e56bcf1ed619f8fee69" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3AGroups_GroupAccessibilityInformation_Name%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::82854c05997d464eae16302dab0a6730" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ADocumentLibraryBreadCrumbs_Widget_Name%7D" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::ab92f9a89af24721bba1c464c1334be6" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::359bb808134b48b390a51dcceca0490c" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+          </contentFragments>
+        </region>
+        <region regionName="RightSidebar">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::0850b2455cf34899add6a61a921d29c9" showHeader="True" cssClassAddition="full-border with-header" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ADocumentLibraryAdministration_Widget_Name%7D" />
+          </contentFragments>
+        </region>
+        <region regionName="Content">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::a7d57e104935421b97122440c0aa71a3" showHeader="True" cssClassAddition="full-border with-header" isLocked="False" configuration="fragmentHeader=%24%7Bresource%3ABrowseDocumentLibraries_Widget_Name%7D" />
+          </contentFragments>
+        </region>
+      </regions>
+      <contentFragmentTabs />
+    </contentFragmentPage>
+  </contentFragmentPages>
+</theme>

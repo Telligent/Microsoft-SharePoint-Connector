@@ -1,0 +1,31 @@
+## Returns:  $fileListOptions
+## Required: $library
+
+#set($fileListOptions = "%{}")
+
+#set($folder = false)
+#set($folder = $core_v2_page.GetQueryStringValue('w_FolderPath'))
+#if ($folder)
+	#set($sharepoint_v2_library.Directory = $folder)
+#end
+$fileListOptions.Add('FolderPath',"$folder")
+
+#if(!$sortBy) #set($sortBy = $core_v2_page.GetQueryStringValue('w_sortBy')) #end
+#if ($sortBy)
+	$fileListOptions.Add('SortBy',"$sortBy") 
+#end
+
+#if(!$sortOrder) #set($sortOrder = $core_v2_page.GetQueryStringValue('w_sortOrder')) #end
+#if ($sortOrder)
+	$fileListOptions.Add('SortOrder',"$sortOrder") 
+#end
+
+#set($pageSize = $core_v2_widget.GetIntValue('pageSize',25))
+#if ($pageSize)
+	$fileListOptions.Add('PageSize',"$pageSize") 
+#end
+
+#set($pageIndex = $core_v2_ui.GetCurrentPageIndex("%{QueryStringProperty = 'page'}"))
+#if ($pageIndex)
+	$fileListOptions.Add('PageIndex',"$pageIndex")
+#end

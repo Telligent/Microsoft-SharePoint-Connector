@@ -1,0 +1,67 @@
+﻿#set($showGroup = false)
+#set($showItemCount = false)
+#set($showCreatedDate = false)
+#set($showModifiedDate = false)
+
+#set($attributes = $core_v2_page.ParseQueryString($core_v2_widget.GetCustomValue('attributes','Attr=itemCount&amp;Attr=createdDate&amp;Attr=modifiedDate')))
+#foreach($attribute in $attributes.Values('Attr'))
+	#if($attribute == 'group')
+		#set($showGroup = true)
+	#elseif($attribute == 'itemCount')
+		#set($showItemCount = true)
+	#elseif($attribute == 'createdDate')
+		#set($showCreatedDate = true)
+	#elseif($attribute == 'modifiedDate')
+		#set($showModifiedDate = true)
+	#end
+#end
+
+#foreach($list in $lists)
+#beforeall
+	<ul class="content-list content simple">
+#each
+	<li class="content-item">
+		<div class="content abbreviated">
+			<h3 class="name">
+				#if($showGroup)
+					#set($group = $core_v2_group.Current)
+					<a class="internal-link view-application" href="$core_v2_encoding.HtmlAttributeEncode($group.Url)">$!{group.Name}: </a>
+				#end
+				<a class="internal-link view-application" href="$core_v2_encoding.HtmlAttributeEncode($!list.Url)">$!{list.Title}</a>
+			</h3>
+			<div class="attributes">
+				<ul class="attribute-list">
+					#if($showItemCount)
+						<li class="attribute-item">
+							<span class="attribute-value">
+								$!list.ItemCount
+							</span>
+						</li>
+					#end
+					#if($showCreatedDate)
+						<li class="attribute-item">
+							<span class="attribute-value">
+								$core_v2_language.FormatDate($list.Created)
+							</span>
+						</li>
+					#end
+					#if($showModifiedDate)
+						<li class="attribute-item">
+							<span class="attribute-value">
+								$core_v2_language.FormatAgoDate($list.Modified)
+							</span>
+						</li>
+					#end
+				</ul>
+			</div>
+			#if($list.Description)
+				<div class="content">$!{list.Description}</div>
+			#end
+		</div>
+		</li>
+		#set($hasResults = true)
+#nodata
+	<div class="message norecords">$core_v2_language.GetResource('NoRecords')</div>
+#afterall
+	</ul>
+#end

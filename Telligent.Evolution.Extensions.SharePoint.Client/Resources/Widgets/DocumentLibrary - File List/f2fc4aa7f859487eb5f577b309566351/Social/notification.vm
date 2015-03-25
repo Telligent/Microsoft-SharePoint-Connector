@@ -1,0 +1,31 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($contentId = false)
+#set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue("contentId")))
+
+#set($document = false)
+#set($document = $sharepoint_v2_file.Get($contentId))
+#if(!$document)
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('NoPermissions'))
+#end
+#if($document.Errors.Count > 0)
+	$core_v2_page.SendJsonError($document.Errors)
+#end
+
+#set($subject = $core_v2_page.GetFormValue('subject'))
+#set($body = $core_v2_page.GetFormValue('body'))
+#set($userIds = $core_v2_page.GetFormValue('userIds'))
+#set($userEmails = $core_v2_page.GetFormValue('userEmails'))
+#set($result = false)
+#set($result = $sharepoint_v2_file.SendEmail($contentId, "%{Subject = $subject, Body = $body, UserIds = $userIds, UserEmails = $userEmails}"))
+#if(!$result)
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('NoPermissions'))
+#end
+
+#if($result.Errors.Count > 0)
+	$core_v2_page.SendJsonError($result.Errors)
+#end
+
+{
+	"valid": true
+}

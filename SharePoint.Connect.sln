@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telligent.Evolution.Extensions.SharePoint.WebServices", "Telligent.Evolution.Extensions.SharePoint.WebServices\Telligent.Evolution.Extensions.SharePoint.WebServices.csproj", "{B4A0D6A9-1A0F-4CF3-A13D-26FBD2B45882}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telligent.Evolution.Extensions.SharePoint.ProfileSync", "Telligent.Evolution.Extensions.SharePoint.ProfileSync\Telligent.Evolution.Extensions.SharePoint.ProfileSync.csproj", "{99AC6BA3-28EC-450B-9F6B-C536503FD8D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telligent.Evolution.Extensions.OpenSearch", "Telligent.Evolution.Extensions.OpenSearch\Telligent.Evolution.Extensions.OpenSearch.csproj", "{51D0420E-FDAF-4BAD-A714-60D155250728}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telligent.Evolution.Extensions.SharePoint.IntegrationManager", "Telligent.Evolution.Extensions.SharePoint.IntegrationManager\Telligent.Evolution.Extensions.SharePoint.IntegrationManager.csproj", "{D5E59F97-E28F-4240-ACFE-742C8B711212}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telligent.Evolution.Extensions.SharePoint.Client", "Telligent.Evolution.Extensions.SharePoint.Client\Telligent.Evolution.Extensions.SharePoint.Client.csproj", "{796806AC-D776-4E5D-8FDF-8765DB8F116C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telligent.Evolution.Extensions.SharePoint.Components", "Telligent.Evolution.Extensions.SharePoint.Components\Telligent.Evolution.Extensions.SharePoint.Components.csproj", "{F7E0B876-70D3-421C-BE64-CE2967B26FC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telligent.Evolution.Extensions.SharePoint.IdentityProvider", "Telligent.Evolution.Extensions.SharePoint.IdentityProvider\Telligent.Evolution.Extensions.SharePoint.IdentityProvider.csproj", "{A0903CA3-7711-4F41-89D2-E9DBB7D2C7E9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B4A0D6A9-1A0F-4CF3-A13D-26FBD2B45882}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4A0D6A9-1A0F-4CF3-A13D-26FBD2B45882}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4A0D6A9-1A0F-4CF3-A13D-26FBD2B45882}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4A0D6A9-1A0F-4CF3-A13D-26FBD2B45882}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99AC6BA3-28EC-450B-9F6B-C536503FD8D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99AC6BA3-28EC-450B-9F6B-C536503FD8D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99AC6BA3-28EC-450B-9F6B-C536503FD8D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99AC6BA3-28EC-450B-9F6B-C536503FD8D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51D0420E-FDAF-4BAD-A714-60D155250728}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51D0420E-FDAF-4BAD-A714-60D155250728}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51D0420E-FDAF-4BAD-A714-60D155250728}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51D0420E-FDAF-4BAD-A714-60D155250728}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5E59F97-E28F-4240-ACFE-742C8B711212}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5E59F97-E28F-4240-ACFE-742C8B711212}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5E59F97-E28F-4240-ACFE-742C8B711212}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5E59F97-E28F-4240-ACFE-742C8B711212}.Release|Any CPU.Build.0 = Release|Any CPU
+		{796806AC-D776-4E5D-8FDF-8765DB8F116C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{796806AC-D776-4E5D-8FDF-8765DB8F116C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{796806AC-D776-4E5D-8FDF-8765DB8F116C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{796806AC-D776-4E5D-8FDF-8765DB8F116C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7E0B876-70D3-421C-BE64-CE2967B26FC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7E0B876-70D3-421C-BE64-CE2967B26FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7E0B876-70D3-421C-BE64-CE2967B26FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7E0B876-70D3-421C-BE64-CE2967B26FC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0903CA3-7711-4F41-89D2-E9DBB7D2C7E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0903CA3-7711-4F41-89D2-E9DBB7D2C7E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0903CA3-7711-4F41-89D2-E9DBB7D2C7E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0903CA3-7711-4F41-89D2-E9DBB7D2C7E9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	$core_v2_page.SetTitle($core_v2_language.GetResource('UploadModal_Title'), false, false)
+	#set($isModal = true)
+	$core_v2_page.RenderThemeHeaders("%{ IsModal = $isModal}")
+</head>
+<body>
+
+	#set($wrapperId = 'CreateADocument')
+	#set($uploaderId = 'FileUploader')
+	#set($overwriteCheckBoxId = 'OverwriteCheckBox')
+	#set($fileNameInputId = 'FileNameInput')
+	#set($saveButtonId = 'SaveButton')
+
+	<fieldset class="field-list" id="${wrapperId}">
+		<legend class="field-list-description">
+			<span></span>
+		</legend>
+		<ul class="field-list">
+			<li class="field-item file">
+				<label class="field-item-header">$core_v2_language.GetResource('UploadModal_UploadHeader')</label>
+				<span class="field-item-description">$core_v2_language.GetResource('UploadModal_UploadDescription')</span>
+				<span class="field-item-input">
+					<div id="${uploaderId}" style="display:inline-block; position: relative; width: 500px;">
+						<input type="file" />
+					</div>
+				</span>
+				<span class="field-item-validation" style="display: none;">
+					$core_v2_language.GetResource('UploadModal_NoFile')
+				</span>
+			</li>
+			<li class="field-item overwrite">
+				<label class="field-item-header">$core_v2_language.GetResource('UploadModal_OverwriteHeader')</label>
+				<span class="field-item-description">$core_v2_language.GetResource('UploadModal_OverwriteDescription')</span>
+				<span class="field-item-input">
+					<input id="${overwriteCheckBoxId}" type="checkbox" />
+				</span>
+				<span class="field-item-validation" style="display: none;"></span>
+			</li>
+			<li class="field-item destination-file-name" style="display: none;">
+				<label class="field-item-header">$core_v2_language.GetResource('UploadModal_DestinationFileName')</label>
+				<span class="field-item-description">$core_v2_language.GetResource('UploadModal_DestinationFileNameDescription')</span>
+				<span class="field-item-input">
+					<input id="${fileNameInputId}" type="text" />
+				</span>
+				<span class="field-item-validation" style="display: none;"></span>
+			</li>
+			<li class="field-item">
+				<span class="field-item-input">
+					<a id="${saveButtonId}" class="internal-link upload-file disabled" href="#">
+						<span></span>
+						$core_v2_language.GetResource('UploadModal_Save')
+					</a>
+				</span>
+			</li>
+		</ul>
+	</fieldset>
+
+	#registerEndOfPageHtml('telligent.sharepoint.widgets.documentLibrary.upload')
+		<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('upload-document.js'))"></script>
+	#end
+	#registerEndOfPageHtml()
+		<script type="text/javascript">
+			#set($libraryId = false)
+			#set($libraryId = $core_v2_page.GetQueryStringValue("libraryId"))
+			#set($folderPath = false)
+			#set($folderPath = $core_v2_page.GetQueryStringValue('folderPath'))
+			#set($uploadContextId = false)
+			#set($uploadContextId = $core_v2_page.GetQueryStringValue('contextId'))
+			jQuery(function(j){
+				j.telligent.sharepoint.widgets.documentLibrary.upload.register({
+					wrapper           : "#${wrapperId}",
+					uploader          : "#${uploaderId}",
+					uploadUrl         : "$core_v2_page.GetQueryStringValue('fileUploadUrl')",
+					#set($uploadDocumentUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('upload-document.vm'), "libraryId=${libraryId}&folderPath=${folderPath}&contextId=${uploadContextId}"))
+					createDocumentUrl : "$core_v2_encoding.JavascriptEncode($uploadDocumentUrl)",
+					overwriteCheckBox : "#${overwriteCheckBoxId}",
+					fileNameInput     : "#${fileNameInputId}",
+					fileNameItem      : ".destination-file-name",
+					saveButton        : "#${saveButtonId}",
+					invalidCharactersInFileNameMsg: "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('UploadModal_InvalidCharacters'))"
+				});
+			});
+		</script>
+	#end
+
+</body>
+</html>

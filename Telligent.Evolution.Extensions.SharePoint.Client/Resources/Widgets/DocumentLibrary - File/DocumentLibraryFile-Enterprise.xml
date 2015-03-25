@@ -1,0 +1,224 @@
+﻿<scriptedContentFragments>
+	<scriptedContentFragment name="${resource:DocumentLibrary_File_WidgetName}" description="${resource:DocumentLibrary_File_WidgetDescription}" instanceIdentifier="cf6e80c020fd482bb4956008f8fe2e28" theme="424eb7d9138d417b994b64bff44bf274" cssClass="document-library-file" isCacheable="true" varyCacheByUser="true" showHeaderByDefault="false">
+		<contentScript>
+			<![CDATA[
+#set($file = false)
+#set($file = $sharepoint_v2_file.Current)
+#if(!$file || $file.HasErrors() || $file.Id < 1)
+	$core_v2_page.Redirect($core_v2_urls.Message(9)))
+#end
+
+#set($fileType = $core_v2_ui.GetMediaType($file.Path))
+
+<div class="full-post-header"></div>
+<div class="full-post $core_v2_encoding.HtmlAttributeEncode($fileType)">
+	<div class="post-moderate">
+		#if ($core_v2_user.IsRegistered($core_v2_user.Accessing.Id))
+
+			#set($DQ = '"')
+
+			#set($menuItems = $core_v2_utility.MakeList())
+
+			#set($hasCreatePermission = $sharepoint_v2_list.CanEdit("${file.Library.Id}"))
+			#if ($hasCreatePermission)
+				#set($createUrl = $sharepoint_v1_urls.Create($file.Library.Id, $file.Library.ApplicationTypeId))
+				#if ($createUrl && $createUrl.Length > 0)
+					#set ($index = $menuItems.Add("{${DQ}text${DQ}:${DQ}${core_v2_language.GetResource('DocumentLibrary_File_ModerationMenu_Create')}${DQ}, ${DQ}href${DQ}:${DQ}${createUrl}${DQ}}"))
+				#end
+			#end
+
+			#set($hasEditPermission = false)
+			#set($hasEditPermission = $sharepoint_v2_listItem.CanEdit($file.Library.SPWebUrl, ${file.Library.Id}, "${file.Id}"))
+			#if ($hasEditPermission)
+				#set($editUrl = $sharepoint_v1_urls.Edit($file.ContentId, $file.ContentTypeId))
+				#if ($editUrl && $editUrl.Length > 0)
+					#set ($index = $menuItems.Add("{${DQ}text${DQ}:${DQ}${core_v2_language.GetResource('DocumentLibrary_File_ModerationMenu_Edit')}${DQ}, ${DQ}href${DQ}:${DQ}${editUrl}${DQ}}"))
+				#end
+				#set($index = $menuItems.Add("{${DQ}text${DQ}:${DQ}${core_v2_language.GetResource('DocumentLibrary_File_ModerationMenu_Delete')}${DQ}, ${DQ}href${DQ}:${DQ}#${DQ}, ${DQ}className${DQ}:${DQ}delete-post${DQ}}"))
+			#end
+
+			#set($moderateOptions = "%{}")
+			$moderateOptions.Add('CssClass','expanded')
+			$moderateOptions.Add('AdditionalLinks', "[${core_v2_utility.Join(',', $menuItems)}]")
+			$core_v2_ui.Moderate($file.ContentId, $file.ContentTypeId, $moderateOptions)
+		#end
+	</div>
+
+	<h3 class="post-name">
+		<span></span>
+		#if ($file.Title)
+			$file.Title
+		#else
+			$!{file.DisplayName}
+		#end
+	</h3>
+
+	<div class="post-attributes meta">
+		<ul class="attribute-list">
+
+			## like count
+			<li class="attribute-item like-count">
+				<span class="attribute-name">$core_v2_language.GetResource('DocumentLibrary_File_Likes')</span>
+				<span class="attribute-value">$core_v2_ui.Like($file.ContentId, $file.ContentTypeId, "%{ Format = '{count}' }")</span>
+			</li>
+
+			## comment count
+			 <li class="attribute-item post-reply-count">
+				<span class="attribute-name">$core_v2_language.GetResource('DocumentLibrary_File_Comments')</span>
+				<span class="attribute-value">
+					#set($pagedCommentsList = $core_v2_comments.List("%{ContentId = $file.ContentId, ContentTypeId = $file.ContentTypeId, PageIndex = 0, PageSize = 1}"))
+					<a href="#comments" class="internal-link view-replies"><span></span>$pagedCommentsList.TotalCount</a>
+				</span>
+			 </li>
+
+			## author
+			#set($displayName = $!{file.Author.DisplayName})
+
+			#if ($file.Author.Email)
+				#set($user = $core_v2_user.Get("%{Email = $file.Author.Email}"))
+
+				#if ($user.DisplayName)
+					#set($displayName = $user.DisplayName)
+				#else
+					#set($displayName = $user.Username)
+				#end
+			#end
+
+			 <li class="attribute-item author">
+				<span class="attribute-name media">
+					#if($file.Author.AvatarUrl)
+						$core_v2_ui.GetResizedImageHtml($file.Author.AvatarUrl, 20, 20, "%{border='0', alt=$file.Author.DisplayName, ResizeMethod = 'ZoomAndCrop'}")
+					#end
+				</span>
+				<span class="attribute-value">
+					<span></span>$displayName
+				</span>
+			</li>
+
+			## date
+			<li class="attribute-item date">
+				<span class="attribute-name"></span>
+				<span class="attribute-value">
+					$core_v2_language.FormatDateAndTime($file.Modified)
+				</span>
+			 </li>
+		</ul>
+		<div class="attribute-list-footer"></div>
+	</div>
+
+	<div class="post-attachment-viewer">
+		<a href="$!{file.Library.SPWebUrl}$!{file.Path}" class="internal-link download-attachment">
+			<img src='$core_v2_ui.GetFileTypeImageUrl($file.Path, "%{Width = 64, Height = 64}")' border="0" />
+		</a>
+		<a href="$!{file.Library.SPWebUrl}$!{file.Path}" class="internal-link download-attachment">
+			<span></span>$!{file.Name}
+		</a>
+	</div>
+
+	<div class="post-content user-defined-markup">
+		##$!{file.MetaInfo}
+	</div>
+
+	<div class="post-attributes">
+		<div class="attribute-list-header"></div>
+		<ul class="attribute-list">
+
+			## liking
+			<li class="attribute-item post-liking">
+				<span class="attribute-name"><span></span>
+				</span>
+				<span class="attribute-value">
+					#set($accessingUserIsRegistered = $core_v2_user.IsRegistered($core_v2_user.Accessing.Id))
+					#if ($accessingUserIsRegistered)
+						$core_v2_ui.Like($file.ContentId, $file.ContentTypeId, "%{ Format = '{toggle} &nbsp; {message}' }")
+					#else
+						$core_v2_ui.Like($file.ContentId, $file.ContentTypeId, "%{ Format = '{message}' }")
+					#end
+				</span>
+			</li>
+
+			## tags
+			<li class="attribute-item post-tags">
+				<span class="attribute-name"><span></span>$core_v2_language.GetResource('DocumentLibrary_File_Tags')</span>
+				<span class="attribute-value">
+					#set($tagUrlFormat = $core_v2_page.AbsoluteUrl($core_v2_groupUrls.Tags($core_v2_group.Current.Id, $core_v2_utility.MakeList('TAGNAME')).Replace('TAGNAME','{tag}')))
+					$core_v2_ui.Tag($file.ContentId, $file.ContentTypeId, "%{UrlFormat=$tagUrlFormat}")
+				</span>
+			</li>
+
+			## ratings
+			#set($canCreateRating = false)
+			#set($canCreateRating = $core_v2_rating.CanCreate($file.ContentId, $file.ContentTypeId))
+			#if($canCreateRating)
+				<li class="attribute-item post-rating">
+					<span class="attribute-name">
+						$core_v2_language.GetResource("DocumentLibrary_File_RateThis")
+					</span>
+					<span class="attribute-value">
+						$core_v2_ui.Rate($file.ContentId, $file.ContentTypeId)
+					</span>
+				</li>
+			#end
+
+		</ul>
+		<div class="attribute-list-footer"></div>
+	</div>
+
+</div>
+<div class="full-post-footer"></div>
+
+#registerEndOfPageHtml('telligent.sharepoint.widgets.documentLibrary.file')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			j.telligent.sharepoint.widgets.documentLibrary.file.register({
+				wrapper               :j("#${core_v2_widget.WrapperElementId}"),
+				deleteVerificationText:"$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('DocumentLibrary_File_DeleteConfirmation'))",
+				deleteDocumentUrl     : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('delete.vm'))",
+				documentId            : "${file.ContentId}"
+			});
+		});
+	</script>
+#end
+		]]>
+		</contentScript>
+		<headerScript>
+			<![CDATA[
+$core_v2_widget.ApplyTokens($core_v2_widget.GetStringValue('fragmentHeader', '${resource:DocumentLibrary_File_WidgetTitle}'))
+		]]>
+		</headerScript>
+		<configuration>
+			<![CDATA[
+<propertyGroup id="options" resourceName="Options">
+	<property id="fragmentHeader" resourceName="CF_Title" dataType="string" defaultValue="${resource:DocumentLibrary_File_WidgetTitle}" controlType="Telligent.Evolution.Controls.ContentFragmentTokenStringControl, Telligent.Evolution.Controls" />
+</propertyGroup>
+			]]>
+		</configuration>
+		<languageResources>
+			<language key="en-us">
+				<resource name="Options">Options</resource>
+				<resource name="CF_Title">Widget Title</resource>
+				<resource name="DocumentLibrary_File_WidgetName">SharePoint - Document Library - File</resource>
+				<resource name="DocumentLibrary_File_WidgetTitle">Document Library - File</resource>
+				<resource name="DocumentLibrary_File_WidgetDescription">Displays a file from the SharePoint document library.</resource>
+				<resource name="DocumentLibrary_File_Posted">Posted</resource>
+				<resource name="DocumentLibrary_File_Button_Download">Download</resource>
+				<resource name="DocumentLibrary_File_RateThis">Rate This</resource>
+				<resource name="DocumentLibrary_File_Likes">Likes</resource>
+				<resource name="DocumentLibrary_File_Comments">Comments</resource>
+				<resource name="DocumentLibrary_File_Tags">Tags</resource>
+				<resource name="DocumentLibrary_File_ModerationMenu_Create">Create</resource>
+				<resource name="DocumentLibrary_File_ModerationMenu_Edit">Edit</resource>
+				<resource name="DocumentLibrary_File_ModerationMenu_Delete">Delete</resource>
+				<resource name="DocumentLibrary_File_Delete_NoPermissions">You have no permissions to edit this document.</resource>
+				<resource name="DocumentLibrary_File_DeleteConfirmation">Are you sure you want to delete this Document?</resource>
+				<resource name="DocumentLibrary_File_Deleted">SharePoint Document was deleted successfully.</resource>
+				<resource name="DocumentLibrary_File_Delete_EmptyWebUrl">SharePoint Web Url was not specified.</resource>
+				<resource name="DocumentLibrary_File_Delete_EmptyLibraryId">SharePoint Library Id was not specified.</resource>
+				<resource name="DocumentLibrary_File_Delete_EmptyDocumentId">SharePoint Document Id was not specified.</resource>
+			</language>
+		</languageResources>
+	</scriptedContentFragment>
+</scriptedContentFragments>

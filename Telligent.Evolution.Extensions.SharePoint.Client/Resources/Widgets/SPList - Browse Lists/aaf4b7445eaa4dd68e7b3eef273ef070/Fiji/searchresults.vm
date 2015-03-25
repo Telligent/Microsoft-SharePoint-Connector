@@ -1,0 +1,32 @@
+﻿#set($pageSize = 5)
+#set($pageSize = $core_v2_widget.GetIntValue('pageSize', 5))
+
+#set($showItemCount = $core_v2_widget.GetBoolValue('showItemCountColumn', true))
+#set($showCreatedDate = $core_v2_widget.GetBoolValue('showCreatedDateColumn', true))
+#set($showModifiedDate = $core_v2_widget.GetBoolValue('showModifiedDateColumn', true))
+#set($showVersioning = $core_v2_widget.GetBoolValue('showVersioningColumn', true))
+#set($showSortOptions = false)
+
+#set($sortBy = 'Name')
+#set($sortBy = $core_v2_page.GetQueryStringValue('w_sortBy'))
+#set($sortOrder = 'Ascending')
+#set($sortOrder = $core_v2_page.GetQueryStringValue('w_sortOrder'))
+
+#set($lists = false)
+#set($searchText = '')
+#set($searchText = $core_v2_page.GetQueryStringValue('w_searchText'))
+#set($lists = $sharepoint_v2_list.List($core_v2_group.Current.Id, "%{SortBy = $sortBy, SortOrder = $sortOrder, PageIndex=0, PageSize=$pageSize, SearchText = $searchText}"))
+
+#if($lists && $lists.TotalCount == 0)
+	<div class="message norecords">$core_v2_language.GetResource('BrowseSharePointLists_NoRecords')</div>
+#else
+	<div class="table-list-header">
+	</div>
+	<table class="table-list">
+		$core_v2_widget.ExecuteFile('header.vm')
+		<tbody class="table-content">
+			$core_v2_widget.ExecuteFile('content.vm')
+		</tbody>
+	</table>
+	<div class="sharepoint-lists-footer"></div>
+#end

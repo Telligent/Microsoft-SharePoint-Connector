@@ -1,0 +1,44 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($listItem = false)
+#set($listItem = $sharepoint_v2_listItem.Current)
+#if ($listItem)
+	#set($canEdit = false)
+	#set($canEdit = $sharepoint_v2_listItem.CanEdit($listItem.ContentId))
+	#if(!$canEdit)
+		$core_v2_page.SendJsonError($core_v2_language.GetResource('SharePointLists_NoEditPermissions'))
+	#end
+
+	#set($currentList = $sharepoint_v2_list.Get($listItem.ListId))
+	#foreach($field in $currentList.Fields)
+		#if(!$field.ReadOnlyField)
+			$core_v2_widget.ExecuteFile('render-field-value.vm')
+		#end
+	#end
+
+	#set($updatedItem = $sharepoint_v2_listItem.Update($listItem.ContentId, "%{Fields = $listItem.Fields}"))
+	#if ($updatedItem.Errors.Count > 0)
+		$core_v2_page.SendJsonError($updatedItem.Errors)
+	#end
+{
+	"valid"     : true,
+	"statusMsg" : "$core_v2_language.GetResource('SharePointCreateEditListItem_Updated')",
+	"listItem"  : {
+		"Id"        : "$!{listItem.Id}",
+		"ContentId" : "$!{listItem.ContentId}",
+		"Name"      : "$!{core_v2_encoding.JavascriptEncode($listItem.DisplayName)}",
+		"UrlRedirect" : "$sharepoint_v1_urls.SPListItem($listItem.ContentId)"
+	},
+	"list" : {
+		"Id"          : "$!{currentList.Id}",
+		"Title"       : "$!core_v2_encoding.JavascriptEncode($currentList.Title)",
+		"Description" : "$!core_v2_encoding.JavascriptEncode($currentList.Description)",
+		"GroupId"     : ${currentList.GroupId},
+		"Url"         : "$!core_v2_encoding.JavascriptEncode($currentList.SPWebUrl)",
+		"SPViewUrl"   : "$!core_v2_encoding.JavascriptEncode($currentList.SPViewUrl)",
+		"UrlRedirect" : "$!sharepoint_v1_urls.SPList($currentList.Id)"
+	}
+}
+#else
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('SharePointCreateEditListItem_NoListItemException'))
+#end

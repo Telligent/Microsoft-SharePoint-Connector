@@ -1,0 +1,112 @@
+﻿<scriptedContentFragments>
+	<scriptedContentFragment name="${resource:ListItem_CommentCreate_Name}" description="${resource:ListItem_CommentCreate_Description}" instanceIdentifier="2f6f257448574e2e8ca2805a03fd0c86" theme="424eb7d9138d417b994b64bff44bf274" cssClass="sharepoint-listItem-comment-create" isCacheable="true" varyCacheByUser="true" showHeaderByDefault="false">
+		<contentScript>
+			<![CDATA[
+#set($listItem = false)
+#set($listItem = $sharepoint_v2_listItem.Current)
+#if(!$listItem || $listItem.HasErrors())
+	$core_v2_widget.Hide()
+#end
+
+## hide if no permission
+#set($canCreateComment = $core_v2_comments.CanCreateComment($listItem.ContentId, $listItem.ContentTypeId))
+#if(!$canCreateComment)
+	$core_v2_widget.Hide()
+#end
+
+<div id="$core_v2_widget.UniqueId('successMessage')" class="message success">
+	$core_v2_language.GetResource('CF_Comment_SuccessMessage') &nbsp;
+	<a href="#" class="internal-link close-message" title="$core_v2_language.GetResource('Close')"><span></span>$core_v2_language.GetResource('Close')</a>
+</div>
+
+<div id="$core_v2_widget.UniqueId('moderateMessage')" class="message warning">
+	$core_v2_language.GetResource('CF_Comment_ModeratedMessaage') &nbsp;
+	<a href="#" class="internal-link close-message" title="$core_v2_language.GetResource('Close')"><span></span>$core_v2_language.GetResource('Close')</a>
+</div>
+
+<div id="$core_v2_widget.UniqueId('errorMessage')" class="message error" style="display: none;"></div>
+
+<div id="$core_v2_widget.UniqueId('form')">
+	<div class="field-list-header"></div>
+	<fieldset class="field-list">
+		<ul class="field-list">
+			<li class="field-item post-body">
+				<span class="field-item-input">
+					<textarea id="$core_v2_widget.UniqueId('body')" rows="3" name="$core_v2_widget.UniqueId('body')" style="resize: none; overflow-y: hidden;" placeholder="$core_v2_encoding.HtmlAttributeEncode($core_v2_language.GetResource('ListItem_CommentCreate_LeaveComment'))"></textarea>
+				</span>
+				<span class="field-item-validation" style="display: none;"></span>
+			</li>
+			<li class="field-item post-submit">
+				<span class="field-item-input">
+					<a href="#" onclick="return false;" class="internal-link add-reply submit-button" id="$core_v2_widget.UniqueId('save')">
+						<span></span>$core_v2_language.GetResource('ListItem_CommentCreate_PostComment')
+					</a>
+					<span class="processing" style="visibility: hidden;"></span>
+				</span>
+			</li>
+		</ul>
+	</fieldset>
+	<div class="field-list-footer"></div>
+</div>
+
+#registerEndOfPageHtml('autoresize.jquery.min.js')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('autoresize.jquery.min.js'))"></script>
+#end
+
+#registerEndOfPageHtml('telligent.evolution.sharepoint.widgets.listItem.commentCreate')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+#end
+
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+	jQuery(function(j){
+		j.telligent.evolution.sharepoint.widgets.listItem.commentCreate.register({
+			contentId: '$listItem.ContentId',
+			contentTypeId: '$listItem.ContentTypeId',
+			wrapper: j("#$core_v2_widget.WrapperElementId"),
+			body: j("#$core_v2_widget.UniqueId('body')"),
+			save: j("#$core_v2_widget.UniqueId('save')"),
+			successMessage: j('#$core_v2_widget.UniqueId('successMessage')'),
+			moderateMessage: j('#$core_v2_widget.UniqueId('moderateMessage')'),
+			errorMessage: j('#$core_v2_widget.UniqueId('errorMessage')'),
+			publishingText: '$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('ListItem_CommentCreate_Posting'))',
+			publishErrorText: '$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('ListItem_CommentCreate_PublishError'))',
+			publishText: '$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('ListItem_CommentCreate_PostComment'))',
+			bodyRequiredText: '$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('ListItem_CommentCreate_EnterCommentWarning'))',
+			addCommentURL: '$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl("addCommentForm.vm"))'
+		});
+	});
+	</script>
+#end
+		]]>
+		</contentScript>
+		<headerScript>
+			<![CDATA[
+$core_v2_widget.ApplyTokens($core_v2_widget.GetStringValue('fragmentHeader', '${resource:ListItem_CommentCreate_Name}'))
+		]]>
+		</headerScript>
+		<configuration>
+			<![CDATA[
+				<propertyGroup id="options" resourceName="Options">
+					<property id="fragmentHeader" resourceName="CF_Title" dataType="string" defaultValue="${resource:ListItem_CommentCreate_Name}" controlType="Telligent.Evolution.Controls.ContentFragmentTokenStringControl, Telligent.Evolution.Controls" />
+				</propertyGroup>
+			]]>
+		</configuration>
+		<languageResources>
+			<language key="en-us">
+				<resource name="ListItem_CommentCreate_Name">SharePoint - List Item Add Comment Form</resource>
+				<resource name="ListItem_CommentCreate_Description">Displays a form used to add comments to a SharePoint List Item.</resource>
+				<resource name="Options">Options</resource>
+				<resource name="CF_Title">Widget Title</resource>
+				<resource name="CF_Comment_SuccessMessage">Your comment has been posted.</resource>
+				<resource name="Close">Close</resource>
+				<resource name="CF_Comment_ModeratedMessaage">Thank you, your comment requires moderation so it may take a while to appear.</resource>
+				<resource name="ListItem_CommentCreate_LeaveComment">Leave a Comment</resource>
+				<resource name="ListItem_CommentCreate_PostComment">Post</resource>
+				<resource name="ListItem_CommentCreate_PublishError">There was an error saving your comment.</resource>
+				<resource name="ListItem_CommentCreate_Posting">Publishing</resource>
+				<resource name="ListItem_CommentCreate_EnterCommentWarning">Please enter a comment</resource>
+			</language>
+		</languageResources>
+	</scriptedContentFragment>
+</scriptedContentFragments>

@@ -1,0 +1,266 @@
+//#dev
+/*@import "../../Images/Social/sharepoint-variables.less";
+@import "../../Images/Social/sharepoint-mixins.less";*/
+//#enddev
+//#build
+@import "../s-fd-3fc3f82483d14ec485ef92e206116d49-files/sharepoint_2D00_variables.less";
+@import "../s-fd-3fc3f82483d14ec485ef92e206116d49-files/sharepoint_2D00_mixins.less";
+//#endbuild
+
+.sharepoint {
+
+    // SharePoint Fields Rendering for a view page
+    fieldset.show {
+        .field-list {
+            .field-item {padding: 0;}
+            .field-item-header {font-weight: bold; .text-overflow-ellipsis(50%);}
+            .field-item-content {width: 100%;
+                .field-type-kind.user {
+                    .user-icon {padding-left: 1.2 * @field-icon-width; position: relative; display: inline; margin-right: 5px;}
+                    .user-icon::before {.content-icon(@user-icon, @field-icon-width, @field-icon-height); line-height: inherit}
+                }
+                .field-type-kind.choice {
+                    .choice-list {
+                        .choice-item {display: none;}
+                        .choice-item.selected {display: block;}
+                    }
+                }
+                .field-type-kind.invalid {
+                    .taxonomy-term-list {
+                        .taxonomy-term-item {margin-right: 5px; padding-left: 1.2 * @field-icon-width; position: relative; display: inline;}
+                        .taxonomy-term-item::before {.content-icon(@taxonomy-icon, @field-icon-width, @field-icon-height); line-height: inherit}
+                    }
+                }
+                .field-type-kind.attachments {
+                    .attachment-list{
+                        .attachment-item {padding-left: 1.2 * @field-icon-width; position: relative;}
+                        .attachment-item::before {.content-icon(@attachment-icon, @field-icon-width, @field-icon-height); line-height: inherit}
+                    }
+                }
+            }
+        }
+    }
+    // SharePoint Fields Rendering for create and edit pages
+    fieldset.create,
+    fieldset.edit{
+        .field-list {
+            .field-item{
+                .field-required {color: red; font-family: verdana; font-size: 8pt; }
+                .invalid-msg {color: red; font-family: verdana; font-size: 8pt; }
+                .single-line-of-text-editor { width: 100%; 
+                    input {width: 50%;
+                        &.invalid {color: @invalid-text-color; background-color: @invalid-background-color;}
+                    }
+                }
+                .date-and-time-editor {width:100%;
+                    input { width: 25%; }
+                    img {border: 0px solid rgb(204, 204, 204) !important; padding: 4px !important; margin: 2px; vertical-align: top !important; background-color: transparent !important; cursor: pointer;}
+                }
+                .hyperlink-or-picture-editor { width: 100%;
+                    input {width: 25%;
+                        &.invalid {color: @invalid-text-color; background-color: @invalid-background-color;}
+                    }
+                }
+                .currency-editor {width: 100%;
+                    input {width: 25%;
+                        &.invalid {color: @invalid-text-color; background-color: @invalid-background-color;}
+                    }
+                }
+                .file-editor {width: 100%;
+                    .name{width: 50%;}
+                    .extension{padding-left: 5px;}
+                    input { width: 100%;
+                        &.invalid {color: @invalid-text-color; background-color: @invalid-background-color;}
+                    }
+                }
+                .multiple-lines-of-text-editor {width: 100%;
+                    &.simple {width: 100%; border-collapse: collapse; overflow: hidden; table-layout: fixed;
+                        td {padding-right: 10px;}
+                        textarea { width: 100%;
+                            &.invalid {color: @invalid-text-color; background-color: @invalid-background-color;}
+                        }
+                    }
+                }
+                .choice-editor {width: 100%; border-collapse: collapse; font-size: inherit;
+                    td {padding: 0;}
+                    .fill-in {width: 20px;}
+                    select {width: 25%;}
+                    .own-value {padding-right: 5px;
+                        input { width: 25%; }
+                    }
+                }
+                .number-editor {border-collapse: collapse; width: 100%;
+                    .percentage { width: 10%; padding-left: 5px; }
+                    input {width: 25%;
+                        &.percentage {width: 25%;}
+                        &.invalid {color: @invalid-text-color; background-color: @invalid-background-color;}
+                    }
+                }
+
+                .taxonomies:hover {border-color: @taxonomies-hover-border-color;}
+                .taxonomies {
+                    overflow-y: auto;
+                    border: 1px solid @taxonomies-border-color;
+                    border-radius: 3px;
+                    padding: 3px;
+                    width: 50%;
+                    max-height: @taxonomies-max-height;
+                    -webkit-transition: border-color 0.1s;
+                    -moz-transition: border-color 0.1s;
+                    -o-transition: border-color 0.1s;
+                    transition: border-color 0.1s;
+                    .termset {
+                        position: relative;
+                        padding-left: @taxonomies-termset-childs-padding-left;
+                        margin: 0px;
+                        .term-item {
+                            a {
+                                display: block;
+                                padding: 0 4px 4px 4px;
+                                color: @taxonomies-termset-term-color;
+                                font-size: @taxonomies-termset-term-font-size;
+                                .border-radius(3px);
+                                .text-overflow-ellipsis(100%);
+                            }
+                            a:hover {background-color: @taxonomies-termset-term-hover-color;}
+                            a.selected {background-color: @taxonomies-termset-term-selected-background-color; color: @taxonomies-termset-term-selected-color;}
+                            a.selected:hover {background-color: @taxonomies-termset-term-selected-background-color * 1.1;}
+
+                            .expand-collapse {
+                                position: relative;
+                                width: @taxonomies-termset-term-icon-width;
+                                height: @taxonomies-termset-term-icon-height;
+                                overflow: hidden;
+                                display: inline-block;
+                                top: 4px;
+                                left: 0;
+                            }
+                            .expand-collapse.haschilds::before {.content-icon(@expand-icon, @taxonomies-termset-term-icon-width, @taxonomies-termset-term-icon-height);}
+                            .expand-collapse.haschilds.expanded::before {.content-icon(@collapse-icon, @taxonomies-termset-term-icon-width, @taxonomies-termset-term-icon-height);}
+                            .taxonomy-icon {
+                                position: relative;
+                                width: @taxonomies-termset-term-icon-width + 4;
+                                height: @taxonomies-termset-term-icon-height;
+                                overflow: hidden;
+                                display: inline-block;
+                                top: 4px;
+                                left: 0;
+                            }
+                            .taxonomy-icon::before {.content-icon(@taxonomy-icon, @taxonomies-termset-term-icon-width, @taxonomies-termset-term-icon-height);}
+                        }
+                    }
+                }
+                .taxonomies>.termset {padding-left: 0;}
+                .taxonomies.loading {border: 0;}
+                .taxonomies-editor, .taxonomies-keywords {
+                    width: 50%;
+                }
+                .taxonomies-editor {
+                    .select {
+                        float: right;
+                        margin: 0;
+                    }
+                    .selected-terms {
+                        margin-top: 10px;
+                        min-height: 34px;
+                        .term-item {display: inline-block; height: 34px;}
+                        .term-item-inner {
+                            &:hover {border-color: #11b6ff;}
+                            border: 1px solid #d9dcde;
+                            -webkit-transition: border-color 0.1s;
+                            -moz-transition: border-color 0.1s;
+                            -o-transition: border-color 0.1s;
+                            transition: border-color 0.1s;
+                            border-radius: 3px;
+                            padding: 5px 8px;
+                            line-height: normal;
+                            white-space: nowrap;
+                            cursor: default;
+                            font-size: 13px;
+                            a.remove {
+                                text-decoration: none;
+                                color: rgb(255, 0, 0);
+                                font-weight: bold;
+                                line-height: normal;
+                                margin-left: 4px;
+                                margin-right: 4px;
+                            }
+                            .taxonomy-icon {
+                                position: relative;
+                                width: @taxonomies-termset-term-icon-width + 4;
+                                height: @taxonomies-termset-term-icon-height;
+                                overflow: hidden;
+                                display: inline-block;
+                                top: 4px;
+                                left: 0;
+                            }
+                            .taxonomy-icon::before {.content-icon(@taxonomy-icon, @taxonomies-termset-term-icon-width, @taxonomies-termset-term-icon-height);}
+                        }
+                    }
+                }
+
+                @attachment-item-border-color: #e6e9ea;
+                .attachment-editor {width: 100%; border-collapse: collapse; font-size: inherit;
+                    .attachment-list {list-style-type: none;
+                        .attachment-item {position: relative; padding: 15px 0 15px 0; border-bottom: 1px solid @attachment-item-border-color;
+                            .attachment {}
+                            .attachment::before {}
+                            .remove {float: right; width: 0px; overflow: hidden; padding-left: 2em; position: relative;}
+                            .remove::before {.content-icon(@remove-icon, 0, 2em); line-height: inherit;}
+                        }
+                    }
+                    .add-attachment {text-transform: uppercase; padding: 15px 0 15px 0;}
+                }
+                .person-group-editor {
+                }
+                .lookup-editor {width: 100%; table-layout: fixed;
+                    td.select{min-width: 200px;}
+                    td.select select{width: 100%;}
+                    td.buttons{text-align: center; max-width: 250px;}
+                }
+            }
+        }
+    }
+
+    // SharePoint Horizontal Navigation menu
+    nav.horizontal {
+        ul>li {float:left;}
+        .button {
+            color: @horizontal-navigation-color;
+            background-color:@horizontal-navigation-background-color;
+            font-family: @font-family;
+            line-height: @horizontal-navigation-height;
+            height: @horizontal-navigation-height;
+            font-size: @horizontal-navigation-font-size;
+            padding: 0 (@horizontal-navigation-height - 10);
+            margin: 0px 10px 0px 0px;
+            border: 0px;
+            border-radius: 3px;
+            display: inline-block;
+            .transition-background-color(0.15s);
+            &.disabled {color: @horizontal-navigation-color-disabled; background-color: @horizontal-navigation-background-color-disabled; cursor: default;}
+        }
+        .back-button {
+            position: relative;
+            display: inline-block;
+            padding-left: @horizontal-navigation-height;
+            width: @horizontal-navigation-height;
+            height: @horizontal-navigation-height;
+            line-height: 44px;
+            overflow: hidden;
+            width: 100%;
+        }
+        .back-button::before {.content-icon(@back-icon, @horizontal-navigation-height, @horizontal-navigation-height);}
+    }
+}
+
+@media only screen and (max-width: 570px) {
+    .sharepoint fieldset.create .field-list .field-item .lookup-editor,
+    .sharepoint fieldset.edit .field-list .field-item .lookup-editor {width: 25%;
+        td {display: block;}
+        td.buttons { min-width: 200px;
+            .add,.remove {width: 40%;}
+            .remove {float: right;}
+        }
+    }
+}

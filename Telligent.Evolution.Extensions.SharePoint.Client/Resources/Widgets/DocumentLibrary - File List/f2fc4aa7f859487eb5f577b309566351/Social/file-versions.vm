@@ -1,0 +1,134 @@
+#set($contentId = false)
+#set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue('contentId')))
+
+#set($document = false)
+#set($document = $sharepoint_v2_file.Get($contentId))
+#if (!$document) $core_v2_widget.Hide() #end
+
+#set($isModal = true)
+$core_v2_page.RenderThemeHeaders("%{ IsModal = $isModal}")
+$core_v2_page.SetTitle($document.Name, false, false)
+
+$core_v2_widget.ExecuteFile('check-user-permissions.vm')
+#set($hasEditPermissions = $isAdmin || $isOwner || $isManager)
+
+#set($isCheckedOut = false)
+#set($isCheckedOut = $sharepoint_v2_file.IsCheckedOut($contentId))
+
+#set($showRestoreBtn = false)
+#set($showRestoreBtn = $userHasEditPermissions && !$isCheckedOut)
+
+#set($pageSize = 20)
+#set($pageIndex = $core_v2_ui.GetCurrentPageIndex())
+#set($authorNameLength = 10)
+
+#set($versions = $sharepoint_v2_file.GetVersions($contentId, "%{PageIndex = $pageIndex, PageSize = $pageSize}"))
+#if ($versions.Errors.Count() > 0)
+	<div class="message">$versions.Errors.get_Item(0).Message</div>
+#else
+
+	#set($versionsHolderId = "versionsHolder")
+	#set($confirmationHolderId = "confirmationHolder")
+
+	<fieldset id="$versionsHolderId">
+		<ul class="field-list">
+			<li class="field-item">
+				<span class="field-item-input">
+					#foreach($fileVersion in $versions)
+					#beforeall
+						<table class="form">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>$core_v2_language.GetResource('FileVersions_Date')</th>
+									<th>$core_v2_language.GetResource('FileVersions_EditedBy')</th>
+									<th>$core_v2_language.GetResource('FileVersions_Size')</th>
+									<th>$core_v2_language.GetResource('FileVersions_Comment')</th>
+									#if($hasEditPermissions)
+										<th></th>
+									#end
+								</tr>
+							</thead>
+							<tbody>
+					#each
+						<tr>
+							<td class="version">
+								$!{fileVersion.VersionLabel}
+							</td>
+							<td class="date">
+								<a href="$!{fileVersion.Url}" target="_top">$!core_v2_language.FormatDateAndTime($fileVersion.Created.ToLocalTime())</a>
+							</td>
+							<td class="author">
+								#set($author = false)
+								#set($author = $core_v2_user.Get("%{Email = $fileVersion.Profile.Email}"))
+								#if($author && $author.ProfileUrl)
+									<a href="$core_v2_encoding.HtmlAttributeEncode($author.ProfileUrl)" class="internal-link view-user-profile">$!{author.DisplayName}</a>
+								#elseif($author)
+									<span title="$!author.DisplayName">$core_v2_language.Truncate($author.DisplayName, $authorNameLength, "...")</span>
+								#else
+									<span title="$!fileVersion.Profile.LoginName">$core_v2_language.Truncate($fileVersion.Profile.LoginName, $authorNameLength, "...")</span>
+								#end
+							</td>
+							<td class="size">
+								#set($size = $fileVersion.Size / 1024)
+								#if($size == 0)
+									$core_v2_language.GetResource('FileVersions_ZeroSize')
+								#else
+									$core_v2_language.FormatString($core_v2_language.GetResource('FileVersions_SizeInKB'), "$size")
+								#end
+							</td>
+							<td class="comment">
+								<div class="text #if($showRestoreBtn)right-indent#end">
+									$!{fileVersion.CheckInComment}
+								</div>
+							</td>
+							#if($hasEditPermissions)
+								<td class="restore">
+									#if(!$fileVersion.IsCurrentVersion)
+										<a class="restore-link button" file-version="${fileVersion.VersionLabel}" fileName="${fileVersion.FileName}" href="#">
+											<span></span>$core_v2_language.GetResource('FileVersions_Restore')
+										</a>
+									#end
+								</td>
+							#end
+						</tr>
+					#afterall
+							</tbody>
+						</table>
+						$core_v2_ui.Pager($pageIndex, $pageSize, $versions.TotalCount, "%{ PagedContentFile = 'file-versions.vm', Transition = 'none' }")
+					#nodata
+						<div class="message norecords">
+							$core_v2_language.GetResource('NoVersions')
+						</div>
+					#end
+				</span>
+			</li>
+		</ul>
+	</fieldset>
+
+	<fieldset id="$confirmationHolderId" class="confirm-restore" style="display: none;">
+		<legend>$core_v2_language.GetResource('FileVersions_ConfirmRestore')</legend>
+		<ul class="field-list">
+			<li class="field-item">
+				<a class="do-restore internal-link button" href="#"><span></span>$core_v2_language.GetResource('FileVersions_Ok')</a>
+				<a class="cancel-restore internal-link button" href="#"><span></span>$core_v2_language.GetResource('FileVersions_Cancel')</a>
+			</li>
+		</ul>
+	</fieldset>
+
+	#registerEndOfPageHtml('telligent.sharepoint.widgets.versioning')
+		<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('versioning.js'))"></script>
+	#end
+	#registerEndOfPageHtml()
+		<script type="text/javascript">
+			jQuery(function(j){
+				j.telligent.sharepoint.widgets.versioning.register({
+					#set($restoreFileUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('restore-file.vm'), "contentId=${contentId}"))
+					restoreFileUrl:  "$core_v2_encoding.JavascriptEncode($restoreFileUrl)",
+					contentHolderId: "#${versionsHolderId}",
+					confirmHolderId: "#${confirmationHolderId}"
+				})
+			})
+		</script>
+	#end
+#end

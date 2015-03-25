@@ -1,0 +1,76 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($empty = $core_v2_utility.ParseGuid('00000000-0000-0000-0000-000000000000'))
+#set($libraryId = $sharepoint_v2_library.Current.Id)
+
+#set($folderPath = '')
+#set($folderPath = $core_v2_page.GetQueryStringValue('folderPath'))
+
+#set($uploadContextId = false)
+#set($uploadContextId = $core_v2_page.GetQueryStringValue('contextId'))
+
+#set($fileName = false)
+#set($fileName = $core_v2_page.GetFormValue('fileName'))
+
+#set($overwrite = false)
+#set($overwrite = $core_v2_utility.ParseBool($core_v2_page.GetFormValue('overwrite')))
+
+#set($destinationFileName = false)
+#set($destinationFileName = $core_v2_page.GetFormValue('destinationFileName'))
+
+#set($file = false)
+#set($file = $core_v2_uploadedFile.Get($uploadContextId, $fileName))
+
+#if($libraryId != $empty && $fileName && $file)
+
+	#set($createdDocument = false)
+	#set($createdDocument = $sharepoint_v2_file.Create($libraryId, $destinationFileName, "%{Url = $file.Url, FolderPath = $folderPath, Overwrite = $overwrite}"))
+	#if ($createdDocument && $createdDocument.Errors.Count == 0 && $createdDocument.Warnings.Count == 0)
+	{
+		"valid"    : true,
+		"document" : {
+			"author" : {
+				"avatarUrl"   : "$!core_v2_encoding.JavascriptEncode($createdDocument.Author.AvatarUrl)",
+				"displayName" : "$!core_v2_encoding.JavascriptEncode($createdDocument.Author.DisplayName)",
+				"email"       : "$!core_v2_encoding.JavascriptEncode($createdDocument.Author.Email)",
+				"id"          : "$!{createdDocument.Author.Id}",
+				"lookupId"    :  $!{createdDocument.Author.LookupId},
+				"name"        : "$!core_v2_encoding.JavascriptEncode($createdDocument.Author.Name)"
+			},
+			"contentId"      : "$!{createdDocument.ContentId}",
+			"id"             :  $!{createdDocument.Id},
+			"contentTypeId"  : "$!{createdDocument.ContentTypeId}",
+			"createdDate"    : "$!{createdDocument.CreatedDate}",
+			"docIcon"        : "$!{createdDocument.DocIcon}",
+			"library"        : {
+				"id"                : "$!{createdDocument.Library.Id}",
+				"applicationTypeId" : "$!{createdDocument.Library.ApplicationTypeId}",
+				"created"           : "$!{createdDocument.Library.Created}",
+				"description"       : "$!core_v2_encoding.JavascriptEncode($createdDocument.Library.Description)",
+				"groupId"           : "$!{createdDocument.Library.GroupId}",
+				"itemCount"         : "$!{createdDocument.Library.ItemCount}",
+				"name"              : "$!core_v2_encoding.JavascriptEncode($createdDocument.Library.Name)",
+				"root"              : "$!core_v2_encoding.JavascriptEncode($createdDocument.Library.Root)",
+				"spviewUrl"         : "$!core_v2_encoding.JavascriptEncode($createdDocument.Library.SPViewUrl)",
+				"spwebUrl"          : "$!core_v2_encoding.JavascriptEncode($createdDocument.Library.SPWebUrl)",
+				"url"               : "$!core_v2_encoding.JavascriptEncode($createdDocument.Library.Url)"
+			},
+			"name"           : "$!core_v2_encoding.JavascriptEncode($createdDocument.Name)",
+			"path"           : "$!core_v2_encoding.JavascriptEncode($createdDocument.Path)",
+			"title"          : "$!core_v2_encoding.JavascriptEncode($createdDocument.Title)",
+			"url"            : "$!core_v2_encoding.JavascriptEncode($createdDocument.Url)"
+		}
+	}
+	#elseif($createdDocument && $createdDocument.Errors.Count > 0)
+		$core_v2_page.SendJsonError($createdDocument.Errors)
+	#elseif($createdDocument && $createdDocument.Warnings.Count > 0)
+	{
+		"valid" : false,
+		"warningMsg": "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('UploadModal_TheFileExists'))"
+	}
+	#else
+		$core_v2_page.SendJsonError($core_v2_language.GetResource('NoPermissions'))
+	#end
+#else
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('NoPermissions'))
+#end

@@ -1,0 +1,42 @@
+#if($recurrenceRule.Type == 'Daily')
+	#set($weekDay = false)
+	#set($weekDay = $recurrenceRule.WeekDay)
+	#if($weekDay)
+		#set($weekdayText = $core_v2_language.GetResource("SharePoint_ListItem_RecurrenceDayOfWeek_${weekDay}"))
+		$core_v2_language.FormatString($core_v2_language.GetResource('SharePoint_ListItem_Recurrence_Daily_Weekday'), $weekdayText)
+	#else
+		$core_v2_language.FormatString($core_v2_language.GetResource('SharePoint_ListItem_Recurrence_Daily'), "$!{recurrenceRule.Frequency}")
+	#end
+#elseif($recurrenceRule.Type == 'Weekly')
+	$core_v2_language.FormatString($core_v2_language.GetResource('SharePoint_ListItem_Recurrence_Weekly'), "$!{recurrenceRule.Frequency}")
+	#foreach($day in $recurrenceRule.DaysOfWeek)
+	#each
+		$core_v2_language.GetResource("SharePoint_ListItem_RecurrenceDayOfWeek_${day}")
+	#between
+		,
+	#end
+#elseif($recurrenceRule.Type == 'Monthly')
+	#if($recurrenceRule.MonthlyByDay)
+		#set($weekdayOrder = false)
+		#set($weekdayOrder = $recurrenceRule.WeekDayOrder)
+		#if($weekdayOrder)
+			#set($weekdayText = $core_v2_language.GetResource("SharePoint_ListItem_RecurrenceDayOfWeek_${recurrenceRule.WeekDay}"))
+			#set($weekdayOrderResourceText = $core_v2_language.GetResource("SharePoint_ListItem_RecurrenceOrder_${weekdayOrder}"))
+			$core_v2_language.FormatString($core_v2_language.GetResource('SharePoint_ListItem_Recurrence_MonthlyByDay'), "$!{recurrenceRule.Frequency}", $weekdayOrderResourceText, $weekdayText)
+		#end
+	#else
+		$core_v2_language.FormatString($core_v2_language.GetResource('SharePoint_ListItem_Recurrence_Monthly'), "$!{recurrenceRule.Frequency}", "$!{recurrenceRule.Day}")
+	#end
+#elseif($recurrenceRule.Type == 'Yearly')
+	#if($recurrenceRule.YearlyByDay)
+		#set($weekdayText = $core_v2_language.GetResource("SharePoint_ListItem_RecurrenceDayOfWeek_${recurrenceRule.WeekDay}"))
+		#set($weekdayOrderResourceText = $core_v2_language.GetResource("SharePoint_ListItem_RecurrenceOrder_${recurrenceRule.WeekDayOrder}"))
+		#set($date = $core_v2_utility.ParseDate("1", "$recurrenceRule.Month", "1"))
+		#set($monthString = $date.ToString($core_v2_language.GetResource('SharePoint_ListItem_Recurrence_YearlyByDay_MonthFormat')))
+		$core_v2_language.FormatString($core_v2_language.GetResource('SharePoint_ListItem_Recurrence_YearlyByDay'), $monthString, $weekdayOrderResourceText, $weekdayText)
+	#else
+		#set($date = $core_v2_utility.ParseDate("1", "$recurrenceRule.Month", "$recurrenceRule.Day"))
+		#set($monthDayString = $date.ToString($core_v2_language.GetResource('SharePoint_ListItem_Recurrence_Yearly_MonthDayFormat')))
+		$core_v2_language.FormatString($core_v2_language.GetResource('SharePoint_ListItem_Recurrence_Yearly'), $monthDayString)
+	#end
+#end

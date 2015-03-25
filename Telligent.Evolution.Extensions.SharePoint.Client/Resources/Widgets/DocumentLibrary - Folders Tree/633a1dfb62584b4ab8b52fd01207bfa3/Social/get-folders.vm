@@ -1,0 +1,43 @@
+﻿$core_v2_page.SetContentType('application/json')
+
+#set($library = false)
+#set($library = $sharepoint_v2_library.Current)
+#if ($library)
+
+	#set($folderPath = false)
+	#set($folderPath = $core_v2_page.GetQueryStringValue("w_folder"))
+	#if(!$folderPath || $folderPath == "" || $folderPath == "/")
+		#set($folderPath = $core_v2_utility.Replace("$library.Root", '(^/|/$)', ''))
+	#end
+
+	#set($selectedFolderPath = $core_v2_utility.Trim($folderPath))
+	#set($selectedFolderPath = $core_v2_utility.Replace($selectedFolderPath, '(^/|/$)', ''))
+	#set($selectedFolderPath = "/$selectedFolderPath")
+
+	#set($currentFolder = $selectedFolderPath)
+
+	{
+		#set($folders = false)
+		#set($folders = $sharepoint_v1_folder.List("$library.Id", "%{FolderPath = $currentFolder}"))
+		#foreach($folder in $folders)
+		#beforeall
+			"path"  : "$currentFolder",
+			"folders": [
+		#between
+			,
+		#each
+			{   ## folder
+				"name" : "$!folder.Name",
+				"path" : "$!folder.Path",
+				"count": $core_v2_utility.ParseInt("$folder.ItemCount"),
+				"selected": #if($selectedFolderPath == $folder.Path) true #else false #end,
+				"expanded": #if($selectedFolderPath != $folder.Path && $selectedFolderPath.StartsWith($folder.Path)) true #else false #end,
+				#set($childs = false)
+				#set($childs = $sharepoint_v1_folder.List("$library.Id", "%{FolderPath = $folder.Path, PageSize = 1}"))
+				"haschilds": #if($childs && $childs.TotalCount > 0) true #else false #end
+			}
+		#afterall
+			]
+		#end
+	}
+#end

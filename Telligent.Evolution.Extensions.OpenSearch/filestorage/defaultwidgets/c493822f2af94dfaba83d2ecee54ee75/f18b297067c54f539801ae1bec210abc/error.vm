@@ -1,0 +1,5 @@
+##Timeout Error
+<div class="open-search-detail">
+	<div class="os-no-results">$core_v2_language.GetResource('Search_No_Results')</div>
+</div>
+<div style="clear:both"></div>

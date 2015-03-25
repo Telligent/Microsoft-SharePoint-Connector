@@ -1,0 +1,35 @@
+﻿$core_v2_page.SetContentType('application/json')
+
+#set($empty = $core_v2_utility.ParseGuid('00000000-0000-0000-0000-000000000000'))
+#set($listId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue('listId')))
+#if ($listId == $empty)
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('SharePointLists_ListIdIsEmpty'))
+#end
+
+#set($list = $sharepoint_v2_list.Get($listId))
+
+#set($itemIds = $core_v2_page.GetFormValue('itemIds'))
+#if(!$itemIds || $itemIds.Length == 0)
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('SharePointLists_ItemIdsAreEmpty'))
+#end
+
+#set($ids = $core_v2_utility.Split(',', $itemIds))
+#foreach($id in $ids)
+	#set($canEdit = $sharepoint_v2_listItem.CanEdit($list.SPWebUrl, $list.Id, "$id"))
+	#if(!$canEdit)
+		$core_v2_page.SendJsonError($core_v2_language.GetResource('SharePointLists_DeleteFailedMsg'))
+	#end
+#end
+
+#set($deleteInfo = $sharepoint_v2_listItem.Delete($list.SPWebUrl, $list.Id, $itemIds))
+#if ($deleteInfo.Errors.Count == 0)
+	{
+		"valid" : true, 
+		"list"  : {
+			"id"         : "$!{list.Id}",
+			"itemIds"    : "$!{itemIds}"
+		}
+	}
+#else
+	$core_v2_page.SendJsonError($deleteInfo.Errors)
+#end

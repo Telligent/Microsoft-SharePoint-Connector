@@ -1,0 +1,82 @@
+﻿<scriptedContentFragments>
+	<scriptedContentFragment name="${resource:SharePoint_SyncStatus_Widget_Name}" description="${resource:SharePoint_SyncStatus_Widget_Description}" instanceIdentifier="044fd503b82048e69737c808c830bf41" cssClass="sharepoint-syncStatus-widget" isCacheable="false" varyCacheByUser="true" showHeaderByDefault="true">
+		<contentScript>
+			<![CDATA[
+#set($file = false)
+#set($file = $sharepoint_v2_file.Current)
+#if(!$file)
+	$core_v2_widget.Hide()
+#end
+
+#set($fileInfo = false)
+#set($fileInfo = $sharepoint_v2_file.GetInfo($file.ContentId))
+#if(!$fileInfo)
+	$core_v2_widget.Hide()
+#end
+
+<ul id="$core_v2_widget.UniqueId('SyncStatusWidget')" class='navigation-list'>
+	<li class='navigation-item'>
+		<a href='$!{file.Library.SPViewUrl}' class='media-gallery-post-sync'>
+			<span></span>$!{file.Library.Name}
+		</a>
+	</li>
+
+	#if($fileInfo.EnableVersioning)
+		<li class='navigation-item'>
+			<a href='#' class='versioning'>
+				<span></span>$core_v2_language.GetResource('SharePoint_SyncStatus_VersionHistory')
+			</a>
+		</li>
+
+		#registerEndOfPageHtml('telligent.sharepoint.widgets.syncStatus')
+			<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+		#end
+		#registerEndOfPageHtml()
+			<script type="text/javascript">
+			jQuery(function(j){
+				j.telligent.sharepoint.widgets.syncStatus.register({
+					#set($fileVersionsUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('file-versions.vm'), "contentId=${file.ContentId}"))
+					versioningUrl: "$core_v2_encoding.JavascriptEncode($fileVersionsUrl)",
+					contentHolderId: "#$core_v2_widget.UniqueId('SyncStatusWidget')"
+				});
+			});
+			</script>
+		#end
+
+	#end
+</ul>
+		]]>
+		</contentScript>
+		<headerScript>
+			<![CDATA[
+				$core_v2_widget.ApplyTokens($core_v2_widget.GetStringValue('WidgetTitle', '${resource:SharePoint_SyncStatus_Widget_Title}'))
+			]]>
+		</headerScript>
+		<configuration>
+			<![CDATA[
+				<propertyGroup id="Options">
+					<property id="WidgetTitle" resourceName="CF_Title" dataType="string" defaultValue="${resource:SharePoint_SyncStatus_Widget_Title}" controlType="Telligent.Evolution.Controls.ContentFragmentTokenStringControl, Telligent.Evolution.Controls" />
+				</propertyGroup>
+			]]>
+		</configuration>
+		<languageResources>
+			<language key="en-us">
+				<resource name="SharePoint_SyncStatus_Widget_Name">SharePoint - File Sync Status</resource>
+				<resource name="SharePoint_SyncStatus_Widget_Description">Indicates the sync status of the current media gallery item with its synced SharePoint document library.</resource>
+				<resource name="CF_Title">Widget Title</resource>
+				<resource name="SharePoint_SyncStatus_Widget_Title">SharePoint - File Sync Status</resource>
+				<resource name="SharePoint_SyncStatus_VersionHistory">Version History</resource>
+				<resource name="SharePoint_SyncStatus_FileVersions_Date">Date</resource>
+				<resource name="SharePoint_SyncStatus_FileVersions_EditedBy">Edited By</resource>
+				<resource name="SharePoint_SyncStatus_FileVersions_Size">Size</resource>
+				<resource name="SharePoint_SyncStatus_FileVersions_Comment">Check in comment</resource>
+				<resource name="SharePoint_SyncStatus_FileVersions_ZeroSize">&lt; 1 KB</resource>
+				<resource name="SharePoint_SyncStatus_FileVersions_SizeInKB">{0} KB</resource>
+				<resource name="SharePoint_SyncStatus_FileVersions_Restore">Restore</resource>
+				<resource name="SharePoint_SyncStatus_FileVersions_ConfirmRestore">You are about to replace the current version with the selected version.</resource>
+				<resource name="SharePoint_SyncStatus_FileVersions_Ok">Ok</resource>
+				<resource name="SharePoint_SyncStatus_FileVersions_Cancel">Cancel</resource>
+			</language>
+		</languageResources>
+	</scriptedContentFragment>
+</scriptedContentFragments>

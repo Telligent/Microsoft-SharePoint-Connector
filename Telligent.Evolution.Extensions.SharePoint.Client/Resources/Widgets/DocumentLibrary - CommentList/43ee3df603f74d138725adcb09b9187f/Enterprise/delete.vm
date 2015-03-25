@@ -1,0 +1,5 @@
+﻿#set($commentId = false)
+#set($commentId = $core_v2_utility.ParseGuid($core_v2_page.GetFormValue("CommentId")))
+#if($commentId)
+	#set($additionalInfoResponse = $core_v2_comments.Delete($commentId))
+#end

@@ -1,0 +1,52 @@
+﻿/* SPManager Plugin Table
+*************************/
+.field-item{ line-height:normal !important; }
+.sp-object-manager {font-family:  Arial, Helvetica; font-size: 13px; min-width: 400px;}
+	.sp-object-manager .header {width:100%; height:14px; table-layout:fixed; border-collapse:collapse; background-color: #E3E3E3; word-wrap: break-word;}
+		.sp-object-manager .header td{padding-left: 10px;}
+	.sp-object-manager .scrollable-content { width: 100%; max-height: 400px; overflow-y: auto; word-wrap: break-word;}
+		.sp-object-manager .scrollable-content .content{width: 100%; table-layout:fixed; border-collapse:collapse;}
+			.sp-object-manager .header input.plugin-filter {font-family: Arial,Helvetica; width: 100%; height: 14px; border: 1px solid #888; vertical-align: middle; padding: 5px 2px; margin: 8px 0;}
+				.sp-object-manager .header input.plugin-filter.plugin-filter.empty{color: #999;}
+			.sp-object-manager .header .header-controls {padding-right: 10px;}
+			.sp-object-manager .scrollable-content .content td{padding-left: 10px;}
+			.sp-object-manager .scrollable-content .content .buttons-col{ width: 50px; max-width:50px; min-width:50px; padding: 0px; text-align: right;}
+			.sp-object-manager .scrollable-content .content td.hover-buttons-column {width: 120px;}
+			.sp-object-manager .scrollable-content .content tr.alt {background-color: #F0F0F0;}
+			.sp-object-manager .scrollable-content .content tr.hover {background-color: #FFFCD2;}
+				.sp-object-manager .scrollable-content .content td.flags {max-width:150px; width: 150px; padding: 0px; vertical-align: top;}
+				.sp-object-manager .scrollable-content .content div.flags { min-width : 90px; background: #CCC; color: white; top: 0px; right: 0px; font-family: Verdana, sans-serif; font-size: 7pt; text-transform: uppercase; padding: 2px 2px 2px 4px; display: block; margin-bottom: 1px; float:right; top:0px; vertical-align: top; text-align: center;}
+			.sp-object-manager .scrollable-content .content .description {font-weight: normal; cursor: text; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; font-size: 11px; color: #777;}
+				.sp-object-manager .scrollable-content .content tr {height: 36px;}
+				.sp-object-manager .scrollable-content .content td.icons {width: 150px; padding-right: 10px}
+	.sp-object-manager .footer {height: 40px;}
+		.sp-object-manager .footer .separator {width: 100%; height:5px; }
+		.sp-object-manager .CommonTextButton{ float:right; width: 80px; font-family: Arial, Helvetica; font-size: 10px; font-weight: normal; text-align: center; line-height: 14px;}
+		.sp-object-manager .hover-button.CommonTextButton{ width: 40px;}
+	.PanelSaveButton .CommonTextButton{ width: 80px; font-family: Arial, Helvetica; font-size: 10px; font-weight: normal; text-align: center; line-height: 14px;}
+/* ObjectManager Add/Edit page
+*************************/
+html { background-color: #FFFFFF;}
+.sp-object-manager-editpage { padding: 10px; background-color: #FFFFFF;}
+.sp-object-manager-page {min-width: 300px; font-family: Calibri, Verdana; font-size: 14px;}
+	.sp-object-manager-page .content { padding:0; margin: 0px; background-color: #FFFFFF; min-width: 500px;}
+		.sp-object-manager-page .content p { display:inline; margin: 0px; padding:0px;}
+		.sp-object-manager-page .content .CommonFormField.tegroup > div {margin-left: 20px !important;}
+		.sp-object-manager-page .content .control { margin-left:20px; margin-bottom:10px;}
+			.sp-object-manager-page .content .control .authentication {display:inline-block;}
+				.sp-object-manager-page .content .control .authentication .parameters {margin-left:20px; padding: 5px 0px;}
+		.sp-object-manager-page .content .sp-site-creation {padding-top: 10px;}
+			.sp-object-manager-page .content .sp-site-creation .control input {vertical-align: bottom;}
+	.sp-object-manager-page .button { float:right; width:100px;}
+	.sp-object-manager-page .authentication div {padding: 3px 0;}
+#validationSummary ul{list-style-type: none; padding: 0;}
+.save-button { float: right; width: 50px; height: 10px; padding: 6px 5px; font-family: Arial, Helvetica; font-size: 10px; font-weight: normal; text-align: center; margin-top: 10px;}
+/* Partnership Add/Edit page
+*************************/
+.sp-partnership-editpage { padding: 10px; background-color: #FFFFFF; min-height: 300px;}
+.sp-partnership-manager-page {min-width: 400px; font-family: Calibri, Verdana; font-size: 14px;}
+	.sp-partnership-manager-page .media-gallery-list { padding:10px; margin: 2px; width: 100%; border: 1px solid silver;}
+		.sp-partnership-manager-page .media-gallery-list .media-gallery-item{ text-align:left; width: 30%;}
+		.sp-partnership-manager-page .media-gallery-list .sharepoint-site{ text-align:center; color:silver;}
+		.sp-partnership-manager-page .media-gallery-list .sharepoint-doclib{ text-align:right; width: 30%;}
+.message.error {color: #600; background-color: #ECC; border-color: #600; padding: 5px;}

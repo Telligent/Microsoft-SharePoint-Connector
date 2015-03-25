@@ -1,0 +1,462 @@
+﻿<scriptedContentFragments>
+  <scriptedContentFragment name="${resource:SharePoint_LoginAndCreateUser_Name}" cssClass="login-and-create-user" description="${resource:SharePoint_LoginAndCreateUser_Description}" instanceIdentifier="1102ee60e8c24da7a3de28e4d4e6b7dc" isCacheable="true" varyCacheByUser="true" showHeaderByDefault="false">
+	<contentScript>
+		<![CDATA[
+#if (!$core_v2_widget.IsInWidgetPreviewMode)
+	$core_v2_page.EnsureSecureConnection("%{ IsAuthenticatingUser = 'true' }")
+#end
+
+#set ($mode = $core_v2_widget.GetStringValue('mode', 'login'))
+#set ($loginTypeSetting = $core_v2_widget.GetStringValue('loginType', 'username'))
+#set ($oAuthDataTokenKey = "oauth_data_token_key")
+#set ($oAuthDataTokenValue = $core_v2_page.GetQueryStringValue($oAuthDataTokenKey))
+
+#set($loginAsAnotherUser = false)
+#set($isSAMLSignIn = false)
+#set($wa = $core_v2_page.GetQueryStringValue("wa"))
+#if ($wa == "wsignin1.0")
+	#set($isSAMLSignIn = true)
+#end
+
+#set ($returnUrl = $core_v2_page.GetQueryStringValue('ReturnUrl'))
+## if there was no return url, or it was redirecting to create or logout, then instead direct to home
+## it's not ideal that this simply checks the URL for certain paths, but it's also what the non-scripted login did.
+#if (!$returnUrl || $returnUrl.Contains('createuser.aspx') || $returnUrl.Contains('logout.aspx') )
+	#set ($returnUrl = $core_v2_urls.Home())
+#end
+
+#set ($siteInfo =  $core_v2_infoResult.Get())
+#set ($selectedProfileFields = $core_v2_page.ParseQueryString($core_v2_widget.GetCustomValue('profileFields','')).Values('SelectedField'))
+#set ($requiredProfileFields = $core_v2_page.ParseQueryString($core_v2_widget.GetCustomValue('profileFields','')).Values('RequiredField'))
+#set ($termsOfServiceUrl = $core_v2_urls.TermsOfService())
+#set ($requiredFields = "")
+
+## grab round-tripped time zone offset from cookie initially written by JavaScript for use
+## by the various in and out of line creation/linking mechanisms.
+#set ($timeZoneOffset = $core_v2_page.GetCookieValue("tzoffset", "%{ CookieName = 'tzoffset' }"))
+
+## requiresJoinDetails dictates whether a new user joining via oauth is required to fill out any form
+#set ($requiresJoinDetails = false)
+#if ($termsOfServiceUrl || $core_v2_configuration.ShowContactCheckboxes || $selectedProfileFields.Count > 0)
+	#set ($requiresJoinDetails = true)
+#end
+
+## define unique form input names
+#set ($actionInput = $core_v2_widget.UniqueId('action'))
+#set ($providerInput = $core_v2_widget.UniqueId('provider'))
+#set ($profileFieldsInput = $core_v2_widget.UniqueId('profileFields'))
+#set ($loginTypeInput = $core_v2_widget.UniqueId('loginType'))
+#set ($usernameInput = $core_v2_widget.UniqueId('username'))
+#set ($passwordInput = $core_v2_widget.UniqueId('password'))
+#set ($password2Input = $core_v2_widget.UniqueId('password2'))
+#set ($emailInput = $core_v2_widget.UniqueId('email'))
+#set ($rememberMeInput = $core_v2_widget.UniqueId('rememberMe'))
+#set ($acceptAgreementInput = $core_v2_widget.UniqueId('acceptAgreement'))
+#set ($allowSiteToContactInput = $core_v2_widget.UniqueId('allowSiteToContact'))
+#set ($allowSitePartnersToContactInput = $core_v2_widget.UniqueId('allowSitePartnersToContact'))
+#set ($dynamicFieldsForm = $core_v2_widget.UniqueId('profileFields'))
+#set ($captchaHiddenInput = $core_v2_widget.UniqueId('cp_Id'))
+#set($captchaEnabled = $core_v2_widget.GetBoolValue("captcha",false))
+
+## GET or PREVIEWING
+#if (!$core_v2_page.IsPost || $core_v2_widget.IsInWidgetPreviewMode)
+	## login mode or any sort of oauth connect redirect handling (whether from login or join)
+	#if ($mode == 'login' || $oAuthDataTokenValue)
+		## implies page was loaded as the result of handling an oauth login request
+		#if ($oAuthDataTokenValue)
+			#if ($oAuthDataTokenValue.Length > 0)
+				## attempt to login and redirect using an already-oauth-linked user account
+				#if (!$core_v2_authentication.LoginAndRedirect($oAuthDataTokenValue, true, $returnUrl))
+					## there wasn't currently a linked account
+					#set ($oAuthData = $core_v2_authentication.GetOAuthData($oAuthDataTokenValue))
+					#if ($oAuthData.Email)
+						## get any existing evolution user which has an email returned from provider
+						#set ($user = false)
+						#set ($user = $core_v2_user.Get("%{ Email = $oAuthData.Email }"))
+						#if ($user)
+							$core_v2_widget.ExecuteFile('form_link_accounts.vm')
+						#else
+							## it's determined that there is no linkable current evo account
+							## for this oauth user, so a new account will be created.
+
+							#if ($requiresJoinDetails)
+								## it's possible we first need more information from the user to create this account
+								$core_v2_widget.ExecuteFile('form_join_oauth.vm')
+							#else
+
+								## otherwise, try auto-creating the account purely from oauth data
+								#if (!$core_v2_authentication.CreateLoginAndRedirect($oAuthDataTokenValue, true, $returnUrl, "%{ TimeZone = $timeZoneOffset }"))
+									$core_v2_widget.ExecuteFile('form_join_oauth.vm')
+								#end
+							#end
+						#end
+					#else
+						$core_v2_widget.ExecuteFile('form_collect_email_address.vm')
+					#end
+				#end
+			## if the oauth data token value was empty, access was denied by the user in oauth
+			#else
+				$core_v2_widget.ExecuteFile('form_login.vm')
+			#end
+		## not the result of oauth redirection, so is a standard login form
+		#elseif($isSAMLSignIn)
+				#set($wctx = $core_v2_page.GetQueryStringValue("wctx"))
+				#set($loginAsAnotherUser = $sharepoint_v1_saml.LoginAsAnotherUser($wctx))
+				#if(!$core_v2_user.IsRegistered($core_v2_user.Accessing.Id) || $loginAsAnotherUser || !$sharepoint_v1_saml.SignIn())
+					$core_v2_widget.ExecuteFile('form_login.vm')
+				#end
+		#else
+			$core_v2_widget.ExecuteFile('form_login.vm')
+		#end
+	## Create Mode
+	#else
+		$core_v2_widget.ExecuteFile('form_join_manual.vm')
+	#end
+
+
+## POST
+#else
+	#set ($action = $core_v2_page.GetFormValue($actionInput))
+
+	## handles an explicit login-via-credentials request
+	#if ($action == 'login')
+		## gather credentials from form post
+
+		#if ($loginTypeSetting == "both")
+			#set ($loginType = $core_v2_page.GetFormValue($loginTypeInput))
+		#else
+			#set ($loginType = $loginTypeSetting)
+		#end
+
+		##if email login is selected, look up user to retrieve username
+		#if ($loginType == "email")
+			#set ($email = $core_v2_page.GetFormValue($usernameInput))
+
+			#set($emailUser = $core_v2_user.Get("%{Email = $email}"))
+			#if ($emailUser)
+				#set ($username = $emailUser.Username)
+			#else
+				#set ($username = '')
+			#end
+		#else
+			#set ($username = $core_v2_page.GetFormValue($usernameInput))
+		#end
+
+		#set ($password = $core_v2_page.GetFormValue($passwordInput))
+		#set ($rememberMe = false)
+		#if ($core_v2_page.GetFormValue($rememberMeInput))
+			#set ($rememberMe = true)
+		#end
+
+		## try to login and redirect
+		#if($isSAMLSignIn)
+			#set($returnUrl = $sharepoint_v1_saml.Url())
+		#end
+
+		#if (!$core_v2_authentication.LoginAndRedirect($username, $password, $rememberMe, $returnUrl))
+			## if not authenticated, re-show login options
+			$core_v2_widget.ExecuteFile('form_login.vm')
+		#end
+	## handles a request to use a given oauth provider for authentication
+	#elseif ($action == 'oauth_connect')
+		## redirect browser to the user's chosen oauth provider
+		$core_v2_authentication.RedirectToAuthenticationLink($core_v2_page.GetFormValue($providerInput), $core_v2_page.Url, $oAuthDataTokenKey)
+	## handles a request for email address when one was not provided by the oauth provider
+	## and subsequently links a matching existing account, auto-creates a new account,
+	## or asks for more details before creating a new account
+	#elseif ($action == 'collect_email_address')
+		#set ($email = $core_v2_page.GetFormValue($emailInput))
+		## get any existing evolution user which has an email returned from provider
+		#set ($user = false)
+		#set ($user = $core_v2_user.Get("%{ Email = $email }"))
+
+		#if ($user)
+			$core_v2_widget.ExecuteFile('form_link_accounts.vm')
+		#else
+			## it's determined that there is no linkable current evo account
+			## for this oauth user, so a new account will be created.
+
+			#if ($requiresJoinDetails)
+				## it's possible we first need more information from the user to create this account
+				$core_v2_widget.ExecuteFile('form_join_oauth.vm')
+			#else
+				## otherwise, try auto-creating the account purely from oauth data
+				## since this path was reached via explicitly providing an email address
+				## let's also pass that email address to the create, which will need it
+				#if (!$core_v2_authentication.CreateLoginAndRedirect($oAuthDataTokenValue, true, $returnUrl, "%{ Email = $email, TimeZone = $timeZoneOffset }"))
+					$core_v2_widget.ExecuteFile('form_join_oauth.vm')
+				#end
+			#end
+		#end
+	## handles a standard fully-manual join/creation request not from oauth
+	#elseif ($action == 'join_manual')
+		## process posted fields
+		#set ($username = $core_v2_page.GetFormValue($usernameInput))
+		#set ($password = $core_v2_page.GetFormValue($passwordInput))
+		#set ($password2 = $core_v2_page.GetFormValue($password2Input))
+		#set ($email = $core_v2_page.GetFormValue($emailInput))
+		#set($captcha = $core_v2_page.GetFormValue($captchaHiddenInput))
+
+		#set($captchaPass = false)
+		#if( $core_v2_recaptcha && $captchaEnabled)
+			#set($captchaPass = $core_v2_recaptcha.Validate($captcha))
+		#else
+			#set($captchaPass = true)
+		#end
+
+		#set ($allowSiteToContact = false)
+		#if ($core_v2_page.GetFormValue($allowSiteToContactInput))
+			#set ($allowSiteToContact = true)
+		#end
+
+		#set ($allowSitePartnersToContact = false)
+		#if ($core_v2_page.GetFormValue($allowSitePartnersToContactInput))
+			#set ($allowSitePartnersToContact = true)
+		#end
+
+		#set ($acceptAgreement = false)
+		#if ($core_v2_page.GetFormValue($acceptAgreementInput))
+			#set ($acceptAgreement = true)
+		#end
+
+		#set ($options = "%{ TimeZone = $timeZoneOffset, AllowSiteToContact = $allowSiteToContact, AllowSitePartnersToContact = $allowSitePartnersToContact}")
+
+		## process posted profile fields
+		#set ($profileFieldsQueryString = $core_v2_page.GetFormValue($profileFieldsInput))
+		#if ($profileFieldsQueryString)
+			## loop through any posted profile fields, adding them to the $options set
+			#set($profileFields = $core_v2_page.ParseQueryString($profileFieldsQueryString))
+			#foreach ($key in $profileFields.Keys)
+				$options.Add($key, $profileFields.Value($key))
+			#end
+		#end
+
+		## passwords must match, or activation must be email based
+		#set ($passwordsMatch = $core_v2_configuration.AccountActivation == "Email" || ($password == $password2))
+		## to be accepted, either there is no terms of service url or they have accepted
+		#set ($acceptsTerms = !$core_v2_urls.TermsOfService() || $acceptAgreement)
+
+		#if ($passwordsMatch && $acceptsTerms && $captchaPass)
+			#if (!$core_v2_authentication.CreateLoginAndRedirect($username, $password, $email, true, $returnUrl, $options))
+				$core_v2_widget.ExecuteFile('form_join_manual.vm')
+			#end
+		#else
+			$core_v2_widget.ExecuteFile('form_join_manual.vm')
+		#end
+	## handles a semi-manual join/creation request where
+	## part of the join was provided by an oauth provider, but further details
+	## (Terms of service, profile fields, etc) were manually collected
+	#elseif ($action == 'join_oauth')
+		## process posted fields
+		#set ($email = $core_v2_page.GetFormValue($emailInput))
+
+		#set ($allowSiteToContact = false)
+		#if ($core_v2_page.GetFormValue($allowSiteToContactInput))
+			#set ($allowSiteToContact = true)
+		#end
+
+		#set ($allowSitePartnersToContact = false)
+		#if ($core_v2_page.GetFormValue($allowSitePartnersToContactInput))
+			#set ($allowSitePartnersToContact = true)
+		#end
+
+		#set ($acceptAgreement = false)
+		#if ($core_v2_page.GetFormValue($acceptAgreementInput))
+			#set ($acceptAgreement = true)
+		#end
+
+		#set ($options = "%{ TimeZone = $timeZoneOffset, AllowSiteToContact = $allowSiteToContact, AllowSitePartnersToContact = $allowSitePartnersToContact }")
+		## if there was an explicitly-collected email address in scope, add this to
+		## the set of options to use when creating.
+		#if ($email && $email.length > 0)
+			$options.Add('Email', $email)
+		#end
+
+		## process posted profile fields
+		#set ($profileFieldsQueryString = $core_v2_page.GetFormValue($profileFieldsInput))
+		#if ($profileFieldsQueryString)
+			## loop through any posted profile fields, adding them to the $options set
+			#set($profileFields = $core_v2_page.ParseQueryString($profileFieldsQueryString))
+			#foreach ($key in $profileFields.Keys)
+				$options.Add($key, $profileFields.Value($key))
+			#end
+		#end
+
+		## to be accepted, either there is no terms of service url or they have accepted
+		#set ($acceptsTerms = !$core_v2_urls.TermsOfService() || $acceptAgreement)
+
+		#if ($acceptsTerms)
+			#if (!$core_v2_authentication.CreateLoginAndRedirect($oAuthDataTokenValue, true, $returnUrl, $options))
+				$core_v2_widget.ExecuteFile('form_join_oauth.vm')
+			#end
+		#else
+			$core_v2_widget.ExecuteFile('form_join_oauth.vm')
+		#end
+	## handles an attempt to link an oauth provider to a pre-existing
+	## evo account, where the user also provides credentials to authorize the linking
+	#elseif ($action == 'link_accounts')
+		## gather credentials from form post
+		#set ($username = $core_v2_page.GetFormValue($usernameInput))
+		#set ($password = $core_v2_page.GetFormValue($passwordInput))
+		#set ($rememberMe = false)
+		#if ($core_v2_page.GetFormValue($rememberMeInput))
+			#set ($rememberMe = true)
+		#end
+		## try to login, link oauth, and redirect
+		#if (!$core_v2_authentication.LinkLoginAndRedirect($oAuthDataTokenValue, $username, $password, $rememberMe, $returnUrl))
+			## if not authenticated, re-show login options
+			$core_v2_widget.ExecuteFile('form_link_accounts.vm')
+		#end
+	#end
+#end
+
+#registerEndOfPageHtml('telligent.evolution.widgets.UserLoginAndCreate')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+	jQuery(function(j){
+
+		j.telligent.evolution.widgets.userLoginAndCreate.register({
+			wrapper: '#$core_v2_encoding.JavascriptEncode(${core_v2_widget.WrapperElementId})',
+			mode: '$mode',
+			inputs: {
+				action: "#$core_v2_encoding.JavascriptEncode($actionInput)",
+				provider: "#$core_v2_encoding.JavascriptEncode($providerInput)",
+				profileFields: "#$core_v2_encoding.JavascriptEncode($profileFieldsInput)",
+				username: "#$core_v2_encoding.JavascriptEncode($usernameInput)",
+				password: "#$core_v2_encoding.JavascriptEncode($passwordInput)",
+				password2: "#$core_v2_encoding.JavascriptEncode($password2Input)",
+				email: "#$core_v2_encoding.JavascriptEncode($emailInput)",
+				acceptAgreement: "#$core_v2_encoding.JavascriptEncode($acceptAgreementInput)",
+				captcha: "#$core_v2_encoding.JavascriptEncode($captchaHiddenInput)",
+				loginType: '#$core_v2_encoding.JavascriptEncode($loginTypeInput)'
+			},
+			resources: {
+				usernameInvalidUserName: "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('CreateNewAccount_CreateUserStatus_InvalidUserName'))",
+				usernameDuplicateUserName: "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('CreateNewAccount_CreateUserStatus_DuplicateUsername'))",
+				passwordError: "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('CreateNewAccount_PasswordRegExValidator'))",
+				passwordLimits: "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('CreateNewAccount_PasswordLimits'))",
+				passwordMatch: "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('CreateNewAccount_PasswordNoMatch'))",
+				emailInvalid: "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('CreateNewAccount_CreateUserStatus_InvalidEmail'))",
+				emailDuplicate: "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('CreateNewAccount_CreateUserStatus_DuplicateEmailAddress'))",
+				tosMustAgree: "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('CreateNewAccount_TermsOfService_MustAgree'))",
+				fieldRequired: "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('Validate_Field_Required'))",
+				captchaFailure: "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('CR_LoginAndCreate_CaptchaError'))"
+			},
+			captchaEnabled: #if($captchaEnabled)true#else false#end,
+			usernameMinLength: $core_v2_configuration.UsernameMinLength,
+			usernameMaxLength: $core_v2_configuration.UsernameMaxLength,
+			passwordMinLength: $core_v2_configuration.PasswordMinLength,
+			getDynamicValues: function() {
+				return $core_v2_dynamicForm.GetValuesScript($dynamicFieldsForm);
+			},
+			getHasValue: function(profileField) {
+				return ${core_v2_dynamicForm.GetHasValueScript($dynamicFieldsForm)}(profileField);
+			},
+			dynamicFieldsForm: "$core_v2_encoding.JavascriptEncode($dynamicFieldsForm)",
+			requiredDynamicfields: '$core_v2_encoding.JavascriptEncode($requiredFields)'
+		});
+	});
+	</script>
+#end
+
+		]]>
+	</contentScript>
+	<headerScript>
+		<![CDATA[
+$core_v2_widget.ApplyTokens($core_v2_widget.GetStringValue('fragmentHeader', '${resource:SharePoint_LoginAndCreateUser_Name}'))
+		]]>
+	</headerScript>
+	<configuration>
+		<![CDATA[
+<propertyGroup id="options" resourceName="Options">
+	<property id="fragmentHeader" resourceName="CF_LoginAndCreateUser_Mode" dataType="string" defaultValue="${resource:SharePoint_LoginAndCreateUser_Name}" controlType="Telligent.Evolution.Controls.ContentFragmentTokenStringControl, Telligent.Evolution.Controls" />
+	<property id="mode" resourceName="CF_LoginAndCreateUser_Mode" dataType="string" defaultValue="login" controlType="Telligent.Evolution.Controls.PropertyVisibilityValueSelectionControl, Telligent.Evolution.Controls">
+		<propertyValue value="login" resourceName="login" propertiesToHide="captcha" propertiesToShow="loginType" />
+		<propertyValue value="create" resourceName="Create" propertiesToHide="loginType" propertiesToShow="captcha" />
+	</property>
+	<property id="loginType" resourceName="CF_LoginAndCreateUser_LoginType" dataType="string" defaultValue="usdfddfdername">
+		<propertyValue value="username" resourceName="Login_SignInName" />
+		<propertyValue value="email" resourceName="Login_Email_Address" />
+	  <propertyValue value="both" resourceName="Login_Both" />
+	</property>
+	<property id="captcha" resourceName="CF_LoginAndCreate_Captcha" dataType="bool" defaultValue="false" />
+	<property id="profileFields"
+		resourceName="CF_Core_CreateUser_UserProfileFields_Description"
+		descriptionResourceName="CF_Core_CreateUser_UserProfileFields_Description"
+		dataType="custom" defaultValue="" height="250" scope="site"
+		controlType="Telligent.Evolution.Controls.UserProfileSettings, Telligent.Evolution.Controls" />
+</propertyGroup>
+		]]>
+	</configuration>
+		<languageResources>
+<language key="en-us">
+	<resource name="SharePoint_LoginAndCreateUser_Name">SharePoint - Login And Create</resource>
+	<resource name="SharePoint_LoginAndCreateUser_Description">Displays a form to allow a user to login or join a SharePoint site.</resource>
+	<resource name="Options">Options</resource>
+	<resource name="CF_LoginAndCreateUser_Mode">Mode</resource>
+	<resource name="login">Sign in</resource>
+	<resource name="Create">Create</resource>
+	<resource name="CF_Core_CreateUser_UserProfileFields_Description">Select which user profile fields you would also like to appear on the Create User form.</resource>
+	<resource name="CreateNewAccount_CreateUserStatus_InvalidUserName">Your sign in name does not meet the requirements for this site.</resource>
+	<resource name="CreateNewAccount_CreateUserStatus_DuplicateUsername">That sign in name is not available.</resource>
+	<resource name="CreateNewAccount_PasswordRegExValidator">Password contains invalid chars ...</resource>
+	<resource name="CreateNewAccount_PasswordLimits">Password must be at least {0} characters</resource>
+	<resource name="CreateNewAccount_PasswordNoMatch">Passwords do not match</resource>
+	<resource name="CreateNewAccount_CreateUserStatus_InvalidEmail">Your email address is invalid.</resource>
+	<resource name="CreateNewAccount_CreateUserStatus_DuplicateEmailAddress">A user with this email address already exists.</resource>
+	<resource name="CreateNewAccount_TermsOfService_MustAgree">Please accept the service agreement before joining the site.</resource>
+	<resource name="Login_Title">Sign in</resource>
+	<resource name="Login_Email_Required">Please enter your e-mail address:</resource>
+	<resource name="Login_Email_Button">Continue</resource>
+	<resource name="CreateNewAccount_Register">Register</resource>
+	<resource name="CreateNewAccount_CreateAccount">Join now</resource>
+	<resource name="CreateNewAccount_UserName">Sign in name:</resource>
+	<resource name="CreateNewAccount_Email">Email Address:</resource>
+	<resource name="CreateNewAccount_EmailDescription">Your e-mail address will not be published.</resource>
+	<resource name="CreateNewAccount_PasswordDescription">Password:</resource>
+	<resource name="CreateNewAccount_PasswordLimits_Join">Your password must be at least {0} characters</resource>
+	<resource name="CreateNewAccount_ReEnterPassword">Confirm Password:</resource>
+	<resource name="CreateNewAccount_AlreadyJoined">Already a member?</resource>
+	<resource name="CreateNewAccount_SignIn">Sign in here</resource>
+	<resource name="CreateNewAccount_Welcome">Welcome</resource>
+	<resource name="CreateNewAccount_Join_Provider_Text">Please help us customize your experience. Complete the fields below.</resource>
+	<resource name="Login_ExistingAccount">Please enter your {0} sign in name and password. Once youвЂ™ve signed in, your {1} account will be used from now on.</resource>
+	<resource name="Login_LinkProvider_Welcome">Welcome back, {0}.</resource>
+	<resource name="LoginSmall_Button">Sign in</resource>
+	<resource name="Login_Reset_Password_Message">Forgot your password or username? </resource>
+	<resource name="Login_Reset_Password_Link">Reset here.</resource>
+	<resource name="Login_LinkProvider_Message">You can manage your sign in methods at any time in the Settings panel.</resource>
+	<resource name="Login_Connect_With">Connect with {0}</resource>
+	<resource name="Login_Description">Sign in now with your {0} user name.</resource>
+	<resource name="LoginSmall_AutoLogin">Remember me</resource>
+	<resource name="Login_Join_Message">Not yet a member?</resource>
+	<resource name="Login_Join_Link">Join here.</resource>
+	<resource name="Login_AlreadyLoggedIn">You are already logged into the site.</resource>
+	<resource name="Login_Community_UserName">{0} sign in name</resource>
+	<resource name="Login_SignInName">Sign in name</resource>
+	<resource name="Login_Community_Password">{0} password</resource>
+	<resource name="Login_Password">Password</resource>
+	<resource name="CreateNewAccount_AllowSiteToContact">Allow this site to contact me:</resource>
+	<resource name="CreateNewAccount_AllowSitePartnersToContact">Allow this site's partners to contact me:</resource>
+	<resource name="CreateNewAccount_ForumRules_AgreeText">I agree to the</resource>
+	<resource name="CreateNewAccount_ForumRulesDescLink">Terms of Service.</resource>
+	<resource name="Core_Login_Name">User - Login</resource>
+	<resource name="Core_Login_Title_AlreadyAMemberLogInHere">Already a member? Log-in here.</resource>
+	<resource name="Core_CreateUser_Title_SignUpToday">Sign-up today!</resource>
+	<resource name="Core_CreateUser_Name">Create User</resource>
+	<resource name="Validate_Field_Required">This field is required.</resource>
+	<resource name="CF_LoginAndCreate_Captcha">Enable Captcha on Create User</resource>
+	<resource name="CR_LoginAndCreate_CaptchaError">The captcha response was not correct</resource>
+	<resource name="Login_Email_Address">Email address</resource>
+	<resource name="CF_LoginAndCreateUser_LoginType">Login Type</resource>
+	<resource name="Login_Description_Email">Sign in now with your email address.</resource>
+	<resource name="Login_Description_Both">Sign in now with your email address or {0} user name.</resource>
+	<resource name="Login_Email">Email Address</resource>
+	<resource name="Login_Both">Username or Email Address</resource>
+	<resource name="OrSignInWith">Or Sign in With</resource>
+</language>
+		</languageResources>
+	</scriptedContentFragment>
+</scriptedContentFragments>

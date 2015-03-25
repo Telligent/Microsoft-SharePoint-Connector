@@ -1,0 +1,167 @@
+#set($list = $sharepoint_v2_list.Get($listItem.ListId))
+
+<div class="full-view">
+	<div class="post-moderate">
+		#if ($core_v2_user.IsRegistered($core_v2_user.Accessing.Id))
+
+			#set($DQ = '"')
+
+			#set($menuItems = $core_v2_utility.MakeList())
+
+			#set($hasEditPermission = $sharepoint_v2_listItem.CanEdit($list.SPWebUrl, $list.Id, "$listItem.Id"))
+			#if ($hasEditPermission)
+				#set($editUrl = $sharepoint_v1_urls.Edit($listItem.ContentId, $listItem.ContentTypeId))
+				#if ($editUrl && $editUrl.Length > 0)
+					#set ($index = $menuItems.Add("{${DQ}text${DQ}:${DQ}${core_v2_language.GetResource('SharePoint_ListItem_ModerationMenu_Edit')}${DQ}, ${DQ}href${DQ}:${DQ}${editUrl}${DQ}}"))
+				#end
+				#set($index = $menuItems.Add("{${DQ}text${DQ}:${DQ}${core_v2_language.GetResource('SharePoint_ListItem_ModerationMenu_Delete')}${DQ}, ${DQ}href${DQ}:${DQ}#${DQ}, ${DQ}className${DQ}:${DQ}delete-post${DQ}}"))
+			#end
+
+			#set($moderateOptions = "%{}")
+			$moderateOptions.Add('CssClass','expanded')
+			$moderateOptions.Add('AdditionalLinks', "[${core_v2_utility.Join(',', $menuItems)}]")
+			$core_v2_ui.Moderate($listItem.ContentId, $listItem.ContentTypeId, $moderateOptions)
+
+		#end
+	</div>
+
+	<h3 class="list-item-name">
+		<span></span>$!{listItem.DisplayName}
+	</h3>
+
+	<div class="post-attributes meta">
+		<ul class="attribute-list">
+
+			## like count
+			<li class="attribute-item like-count">
+				<span class="attribute-name">$core_v2_language.GetResource('SharePoint_ListItem_Likes')</span>
+				<span class="attribute-value">$core_v2_ui.Like($listItem.ContentId, $listItem.ContentTypeId, "%{ Format = '{count}' }")</span>
+			</li>
+
+			## comment count
+			 <li class="attribute-item post-reply-count">
+				<span class="attribute-name">$core_v2_language.GetResource('SharePoint_ListItem_Comments')</span>
+				<span class="attribute-value">
+					#set($pagedCommentsList = $core_v2_comments.List("%{ContentId = $listItem.ContentId, ContentTypeId = $listItem.ContentTypeId, PageIndex = 0, PageSize = 1}"))
+					<a href="#comments" class="internal-link view-replies"><span></span>$pagedCommentsList.TotalCount</a>
+				</span>
+			 </li>
+
+			## author
+			#set($displayName = $!{listItem.Author.DisplayName})
+      
+			#if ($listItem.Author.Email)
+				#set($user = $core_v2_user.Get("%{Email = $listItem.Author.Email}"))
+
+				#if ($user.DisplayName)
+					#set($displayName = $user.DisplayName)
+				#else
+					#set($displayName = $user.Username)
+				#end
+			#end
+
+			 <li class="attribute-item author">
+				<span class="attribute-name media">
+					#if($listItem.Author.AvatarUrl)
+						$core_v2_ui.GetResizedImageHtml($listItem.Author.AvatarUrl, 20, 20, "%{border='0', alt=$listItem.Author.DisplayName, ResizeMethod = 'ZoomAndCrop'}")
+					#end
+				</span>
+				<span class="attribute-value">
+					<span></span>$displayName
+				</span>
+			</li>
+
+			## date
+			<li class="attribute-item date">
+				<span class="attribute-name"></span>
+				<span class="attribute-value">
+					$core_v2_language.FormatDateAndTime($listItem.Modified)
+				</span>
+			 </li>
+		</ul>
+		<div class="attribute-list-footer"></div>
+	</div>
+
+	#set($attachments = false)
+
+	<div class="item-fields">
+		#foreach($field in $list.Fields)			
+			#if(!$field.ReadOnlyField && !$field.Hidden && $field.FieldTypeKind != "Attachments")
+				#set($value = false)
+				#set($value = $listItem.get_item($field.InternalName))
+				#set($listField = $list.GetField($field.InternalName))
+				#if ($listField.FieldTypeKind == 'Number' && $sharepoint_v1_fieldnumber.ShowAsPercentage($listField))
+					#set($value = 100 * $core_v2_utility.ParseDouble($value))
+					#set($value = "${value} %")
+				#end
+				#if($value && $value != '')
+					<div class="field-item">
+						<div class="field-item-header">$!{field.Title}</div>
+						<div class="field-item-content">$!{value}</div>
+					</div>
+				#end
+			#end
+			#if($field.FieldTypeKind == "Attachments")
+				#set($attachments = $sharepoint_v1_attachments.Attachments($listItem, $list, $listItem.Value($field.InternalName)))
+			#end
+		#end
+
+		#if($attachments)
+			<div class="field-item">
+				<div class="field-item-header">$core_v2_language.GetResource('SharePoint_ListItem_Attachments')</div>
+				<div class="field-item-content">		
+				#foreach($attach in $attachments)
+					<div><a href="$!{list.SPWebUrl}$!{attach.ServerRelativeUrl}">$!{attach.Name}</a></div>
+				#end
+				</div>
+			</div>
+		#end
+	</div>
+
+	<div class="post-attributes">
+		<div class="attribute-list-header"></div>
+		<ul class="attribute-list">
+
+			## liking
+			<li class="attribute-item post-liking">
+				<span class="attribute-name"><span></span>
+				</span>
+				<span class="attribute-value">
+					#set($accessingUserIsRegistered = $core_v2_user.IsRegistered($core_v2_user.Accessing.Id))
+					#if ($accessingUserIsRegistered)
+						$core_v2_ui.Like($listItem.ContentId, $listItem.ContentTypeId, "%{ Format = '{toggle} &nbsp; {message}' }")
+					#else
+						$core_v2_ui.Like($listItem.ContentId, $listItem.ContentTypeId, "%{ Format = '{message}' }")
+					#end
+				</span>
+			</li>
+
+			## tags
+			<li class="attribute-item post-tags">
+				<span class="attribute-name"><span></span>$core_v2_language.GetResource('SharePoint_ListItem_Tags')</span>
+				<span class="attribute-value">
+					#set($tagUrlFormat = $core_v2_page.AbsoluteUrl($core_v2_groupUrls.Tags($core_v2_group.Current.Id, $core_v2_utility.MakeList('TAGNAME')).Replace('TAGNAME','{tag}')))
+					$core_v2_ui.Tag($listItem.ContentId, $listItem.ContentTypeId, "%{UrlFormat=$tagUrlFormat}")
+				</span>
+			</li>
+
+			## ratings
+			#set($canCreateRating = false)
+			#set($canCreateRating = $core_v2_rating.CanCreate($listItem.ContentId, $listItem.ContentTypeId))
+			#if($canCreateRating)
+				<li class="attribute-item post-rating">
+					<span class="attribute-name">
+						$core_v2_language.GetResource("SharePoint_ListItem_RateThis")
+					</span>
+					<span class="attribute-value">
+						$core_v2_ui.Rate($listItem.ContentId, $listItem.ContentTypeId)
+					</span>
+				</li>
+			#end
+
+		</ul>
+		<div class="attribute-list-footer"></div>
+	</div>
+
+	<div style="clear:both;"></div>
+</div>

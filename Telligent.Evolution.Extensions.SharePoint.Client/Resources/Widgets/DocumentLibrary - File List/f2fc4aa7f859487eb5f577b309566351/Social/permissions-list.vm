@@ -1,0 +1,54 @@
+#if(!$contentId) #set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue("contentId"))) #end
+
+#set($pageSize = 10)
+#set($pageIndex = 0)
+#set($pageIndex = $core_v2_utility.ParseInt($core_v2_page.GetQueryStringValue("page")))
+
+#set($inheritance = $sharepoint_v2_permissions.Inherited($contentId))
+#set($inherited = $inheritance.Enabled)
+
+#set($permissionsList = $sharepoint_v2_permissions.List($contentId, "%{PageSize = $pageSize, PageIndex = $pageIndex}"))
+#foreach($permissions in $permissionsList)
+#beforeall
+	<table class="form">
+		<thead>
+			<tr>
+				#if(!$inherited)<th>#</th>#end
+				<th>Member</th>
+				<th>Type</th>
+				<th>Levels</th>
+			</tr>
+		</thead>
+		<tbody>
+#each
+	<tr class="table-item">
+		#set($principalType = $permissions.Member.PrincipalType)
+		#if(!$inherited)
+			<td class="item-checker">
+				<input type="checkbox" 
+					data-id="$!{permissions.Member.Id}" 
+					data-loginname="$!{permissions.Member.LoginName}" 
+					data-type="$!permissions.Member.PrincipalType.ToString().ToLower()"/>
+				<label></label>
+			</td>
+		#end
+		<td class="member-title">$!{permissions.Member.Title}</td>
+		<td class="principal-type">$core_v2_widget.ExecuteFile('permissions-principals.vm')</td>
+		<td class="level-list">
+			#foreach($level in $permissions.Level)
+			#between
+				,
+			#each
+				<span class="level-item" title="$!{level.Description}" data-id="$!{level.Id}">$!{level.Name}</span>
+			#end
+		</td>
+	</tr>
+#afterall
+		</tbody>
+	</table>
+	$core_v2_ui.Pager($pageIndex, $pageSize, $permissionsList.TotalCount, "%{QueryStringProperty = 'page'}")
+#nodata
+	<div class="message norecords">
+		$core_v2_language.GetResource('Permissions_NoItems')
+	</div>
+#end

@@ -1,0 +1,58 @@
+#set($inherited = false)
+#set($inherited = $sharepoint_v1_permissions.IsInherited($list, $listItem))
+
+<div id="$core_v2_widget.UniqueId('PermissionsListHolder')">
+	<div class="header">
+		<div class="menu inherited" #if(!$inherited) style="display:none;" #end>
+			<a href="#" class="menu-item stop-inheriting" title="$core_v2_language.GetResource('Permissions_Stop_Inheriting_Description')">
+				<span></span>
+				$core_v2_language.GetResource('Permissions_Stop_Inheriting')
+			</a>
+		</div>
+		<div class="menu non-inherited" #if($inherited) style="display:none;" #end>
+			<a href="#" class="menu-item start-inheriting" title="$core_v2_language.GetResource('Permissions_Start_Inheriting_Description')">
+				<span></span>
+				$core_v2_language.GetResource('Permissions_Start_Inheriting')
+			</a>
+			<a href="#" class="menu-item grant-permissions" title="$core_v2_language.GetResource('Permissions_Grant_Description')">
+				<span></span>
+				$core_v2_language.GetResource('Permissions_Grant')
+			</a>
+			<a href="#" class="menu-item edit-permissions" title="$core_v2_language.GetResource('Permissions_Edit_Description')">
+				<span></span>
+				$core_v2_language.GetResource('Permissions_Edit')
+			</a>
+			<a href="#" class="menu-item remove-permissions" title="$core_v2_language.GetResource('Permissions_Remove_Description')">
+				<span></span>
+				$core_v2_language.GetResource('Permissions_Remove')
+			</a>
+		</div>
+	</div>
+
+	<div id="$core_v2_widget.UniqueId('PagedListHolder')" class="content" >
+		<div class="loading"></div>
+	</div>
+
+	<div class="footer" style="clear:both;">
+		<a href="javascript:window.parent.jQuery.glowModal.opener(window).jQuery.glowModal.close();" class="internal-link submit-button"><span></span>Done</a>
+	</div>
+
+</div>
+
+#registerEndOfPageHtml('telligent.sharepoint.widgets.documentLibrary.listPermissions')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl("permissions.js"))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			j.telligent.sharepoint.widgets.documentLibrary.listPermissions.register({
+				pagedListHolderId        : "#$core_v2_widget.UniqueId('PagedListHolder')",
+				#set($permissionsListUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('permissions-list.vm'), "contentId=$contentId"))
+				permissionsListUrl       : "$core_v2_encoding.JavascriptEncode($permissionsListUrl)",
+				#set($updatePermissionsUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('permissions-update.vm'), "contentId=$contentId"))
+				updatePermissionsUrl     : "$core_v2_encoding.JavascriptEncode($updatePermissionsUrl)",
+				stopInheritingConfirmMsg : "$core_v2_language.GetResource('Permissions_Stop_Inheriting_Confirm')"
+			});
+		})
+	</script>
+#end

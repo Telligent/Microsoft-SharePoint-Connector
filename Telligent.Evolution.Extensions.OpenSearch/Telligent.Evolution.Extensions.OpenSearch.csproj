@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{51D0420E-FDAF-4BAD-A714-60D155250728}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Telligent.Evolution.Extensions.OpenSearch</RootNamespace>
+    <AssemblyName>Telligent.Evolution.Extensions.OpenSearch</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Telligent.DynamicConfiguration, Version=1.0.133.22115, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.DynamicConfiguration.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Api">
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Components, Version=7.0.1539.24262, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Components.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Controls, Version=7.0.1539.24262, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.ScriptedContentFragments, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.ScriptedContentFragments.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.SecurityModules">
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.SecurityModules.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="AuthenticationUtil\AuthenticationBuilder.cs" />
+    <Compile Include="AuthenticationUtil\Authentication.cs" />
+    <Compile Include="AuthenticationUtil\AuthenticationParam.cs" />
+    <Compile Include="AuthenticationUtil\Interfaces\IEncrypted.cs" />
+    <Compile Include="AuthenticationUtil\Methods\Anonymous.cs" />
+    <Compile Include="AuthenticationUtil\Methods\SAML.cs" />
+    <Compile Include="AuthenticationUtil\Methods\ServiceAccount.cs" />
+    <Compile Include="AuthenticationUtil\Methods\Windows.cs" />
+    <Compile Include="AuthenticationUtil\AuthenticationHelper.cs" />
+    <Compile Include="Controls\ItemCollectionAttribute.cs" />
+    <Compile Include="Controls\ItemCollectionControl.cs" />
+    <Compile Include="Controls\Layout\HoverButtonsLayout.cs" />
+    <Compile Include="Controls\Layout\IconsLayout.cs" />
+    <Compile Include="Controls\Layout\LayoutAttribute.cs" />
+    <Compile Include="Controls\Layout\LayoutFactory.cs" />
+    <Compile Include="Controls\Layout\Region.cs" />
+    <Compile Include="Controls\Layout\SubTitleLayout.cs" />
+    <Compile Include="Controls\Layout\TitleLayout.cs" />
+    <Compile Include="Controls\ResourceControl.cs" />
+    <Compile Include="Model\OpenSearchSpecification.cs" />
+    <Compile Include="Model\Specification\IOpenSearchSpecification.cs" />
+    <Compile Include="Model\Specification\OpenSearchV1.1.cs" />
+    <Compile Include="Model\SearchProvider.cs" />
+    <Compile Include="Model\SearchProvidersList.cs" />
+    <Compile Include="Model\SearchResult.cs" />
+    <Compile Include="Model\SearchResultsList.cs" />
+    <Compile Include="Model\SearchWidgetConfiguration.cs" />
+    <Compile Include="OpenSearchPlugin.cs" />
+    <Compile Include="ScriptedExtension\OpenSearchExtension.cs" />
+    <Compile Include="Web\SharePoint\OpenSearch\OpenSearchProviderPage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyControls\ConfigureProviderControl.cs" />
+    <Compile Include="PropertyControls\ResultsConfigurationControl.cs" />
+    <Compile Include="PropertyControls\SearchProviderPresenter.cs" />
+    <Compile Include="PropertyControls\SearchProvidersListControl.cs" />
+    <Compile Include="ServiceLocator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\ItemCollection.js" />
+    <EmbeddedResource Include="filestorage\defaultwidgets\c493822f2af94dfaba83d2ecee54ee75\d46acf5065814042ba4b6392f88b5057\search-summary.css" />
+    <EmbeddedResource Include="filestorage\defaultwidgets\c493822f2af94dfaba83d2ecee54ee75\d46acf5065814042ba4b6392f88b5057\ui.js" />
+    <EmbeddedResource Include="filestorage\defaultwidgets\c493822f2af94dfaba83d2ecee54ee75\d46acf5065814042ba4b6392f88b5057\utility.js" />
+    <EmbeddedResource Include="filestorage\defaultwidgets\c493822f2af94dfaba83d2ecee54ee75\ExternalSearchDetailResultsWidget.xml" />
+    <EmbeddedResource Include="filestorage\defaultwidgets\c493822f2af94dfaba83d2ecee54ee75\ExternalSearchSummaryResultsWidget.xml" />
+    <EmbeddedResource Include="filestorage\defaultwidgets\c493822f2af94dfaba83d2ecee54ee75\f18b297067c54f539801ae1bec210abc\narrow.png" />
+    <EmbeddedResource Include="filestorage\defaultwidgets\c493822f2af94dfaba83d2ecee54ee75\f18b297067c54f539801ae1bec210abc\search-detail.css" />
+    <EmbeddedResource Include="filestorage\defaultwidgets\c493822f2af94dfaba83d2ecee54ee75\f18b297067c54f539801ae1bec210abc\serp-hover-faux-column.png" />
+    <EmbeddedResource Include="filestorage\defaultwidgets\c493822f2af94dfaba83d2ecee54ee75\f18b297067c54f539801ae1bec210abc\ui.js" />
+    <EmbeddedResource Include="filestorage\defaultwidgets\c493822f2af94dfaba83d2ecee54ee75\f18b297067c54f539801ae1bec210abc\utility.js" />
+    <Content Include="Web\SharePoint\OpenSearch\OpenSearchProviderPage.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Content Include="Web\SharePoint\OpenSearch\Style\OpenSearch.css" />
+    <EmbeddedResource Include="PropertyControls\ConfigureProviderControl.js" />
+    <EmbeddedResource Include="PropertyControls\SearchProvidersListControl.js" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="filestorage\defaultwidgets\c493822f2af94dfaba83d2ecee54ee75\d46acf5065814042ba4b6392f88b5057\error.vm" />
+    <EmbeddedResource Include="filestorage\defaultwidgets\c493822f2af94dfaba83d2ecee54ee75\d46acf5065814042ba4b6392f88b5057\search.vm" />
+    <EmbeddedResource Include="filestorage\defaultwidgets\c493822f2af94dfaba83d2ecee54ee75\f18b297067c54f539801ae1bec210abc\error.vm" />
+    <EmbeddedResource Include="filestorage\defaultwidgets\c493822f2af94dfaba83d2ecee54ee75\f18b297067c54f539801ae1bec210abc\search.vm" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

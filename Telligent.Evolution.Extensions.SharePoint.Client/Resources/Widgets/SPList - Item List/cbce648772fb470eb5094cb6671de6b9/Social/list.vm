@@ -1,0 +1,125 @@
+$core_v2_widget.ExecuteFile('current.vm')
+$core_v2_widget.ExecuteFile('list-options.vm')
+#set($listItems = $sharepoint_v2_listItem.List($list.Id, $listItemsOptions))
+#foreach($item in $listItems)
+#beforeall
+	<div class='sharepoint-list'>
+	<table class="table-list">
+		<thead>
+			<tr class="table-header">
+				<th class="table-header-column item-checker">
+					<input type="checkbox" class="select-all"/>
+				</th>
+				#set ($titleRelatedFieldsCount = 0)
+				#foreach($field in $view.Fields)
+				#each
+					#if ($field == 'Title' || $field == 'LinkTitle' || $field == 'LinkTitleNoMenu')
+						#set($titleRelatedFieldsCount = $titleRelatedFieldsCount + 1)
+						#if ($titleRelatedFieldsCount == 1)
+							<th class="table-header-column $field.toLower()">
+								<div class="field-name">$!{view.get_item($field)}</div>
+							</th>
+						#end
+					#else
+						<th class="table-header-column $field.toLower()">
+							<div class="field-name">$!{view.get_item($field)}</div>
+						</th>
+					#end
+				#end
+				<th class="table-header-column moderation-cell" width="0"></th>
+			</tr>
+		</thead>
+		<tbody>
+#each
+	<tr class="table-item">
+		<td class="table-column item-checker">
+			<input type="checkbox" data-id="$!{item.ContentId}" />
+		</td>
+		#set ($titleRelatedFieldsCount = 0)
+		#foreach ($field in $view.Fields)
+			#if ($field == 'Title' || $field == 'LinkTitle' || $field == 'LinkTitleNoMenu')
+				#set ($titleRelatedFieldsCount = $titleRelatedFieldsCount + 1)
+				#if ($titleRelatedFieldsCount == 1)
+					<td class="table-column">
+						<span class="small-device-width field-name">$!{view.get_item($field)}</span>
+						<div class="title">$!{item.get_item('Title')}</div>
+					</td>
+				#end
+			#else
+				#set($fieldValue = false)
+				#set($fieldValue = $item.ValueAsText($field))
+				<td class="table-column">
+					<span class="small-device-width field-name">$!{view.get_item($field)}</span>
+					#if($fieldValue)
+						#set($listField = $list.GetField($field))
+						#if ($listField.FieldTypeKind == 'Attachments')
+							<div class="show-attachment-list $!{field.toLower()} $item.Value($listField.InternalName).toString().toLower()">
+								#set($attachmentList = false)
+								#set($attachmentList = $sharepoint_v2_attachments.List($item.ContentId, $field))
+								<div class="only-large-device-width attacment-list-holder">
+									<div class="arrow"></div>
+									<div class="outer-wrapper">
+										<div class="inner-wrapper">
+											<div class="attacment-list">
+												#foreach($attachment in $attachmentList)
+													<div class="attacment-item">
+														<a href="$attachment.Uri">$!{attachment.Name}</a>
+													</div>
+												#end
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="only-small-device-width">
+								$!item.get_item($listField.InternalName)
+							</div>
+						#else
+							<div class="$!{field.toLower()}">
+								<span></span>$!{fieldValue}
+							</div>
+						#end
+					#else
+						&nbsp;
+					#end
+				</td>
+			#end
+		#end
+		<td class="table-column moderation-cell" width="0">
+			<div class="moderation-menu">
+				<ul class="moderation-item-list">
+					#set($viewUrl = false)
+					#set($viewUrl = $sharepoint_v2_listItemUrls.Show($item.ContentId, "%{ApplicationId = $list.Id, ItemId = $item.Id}"))
+					#if ($viewUrl && $viewUrl.Length > 0)
+						<li class="moderation-item view">
+							<a href="$viewUrl" class="moderation-link" title="$core_v2_language.GetResource('Menu_View')">$core_v2_language.GetResource('Menu_View')</a>
+						</li>
+					#end
+					#if ($core_v2_user.IsRegistered($core_v2_user.Accessing.Id))
+						#set($hasEditPermission = false)
+						#set($hasEditPermission = $sharepoint_v2_listItem.CanEdit($item.ContentId))
+						#if ($hasEditPermission)
+							#set($editUrl = false)
+							#set($editUrl = $sharepoint_v2_listItemUrls.Edit($item.ContentId, "%{ApplicationId = $list.Id, ItemId = $item.Id}"))
+							#if ($editUrl && $editUrl.Length > 0)
+								<li class="moderation-item edit">
+									<a href="$editUrl" class="moderation-link" title="$core_v2_language.GetResource('Menu_Edit')">$core_v2_language.GetResource('Menu_Edit')</a>
+								</li>
+							#end
+							<li class="moderation-item delete" data-id="$!item.ContentId">
+								<a href="#" class="moderation-link" title="$core_v2_language.GetResource('Menu_Delete')">$core_v2_language.GetResource('Menu_Delete')</a>
+							</li>
+						#end
+					#end
+				</ul>
+			</div>
+		</td>
+	</tr>
+#afterall
+		</tbody>
+	</table>
+	</div>
+	$core_v2_ui.Pager($pageIndex, $pageSize, $listItems.TotalCount)
+#nodata
+	<div class="message norecords">$core_v2_language.GetResource('NoRecords')</div>
+#end

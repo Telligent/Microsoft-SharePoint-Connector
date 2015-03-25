@@ -1,0 +1,85 @@
+<theme name="3fc3f82483d14ec485ef92e206116d49" version="7.0.0.1">
+  <contentFragmentPages>
+    <contentFragmentPage pageName="sharepoint-listItem-add" isCustom="false" layout="Content" themeType="c6108064-af65-11dd-b074-de1a56d89593" title="SharePoint - Create ListItem">
+      <regions>
+        <region regionName="Content">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::e6ba8d0e2ea74f2eb5f2c68e8803533d" showHeader="False" cssClassAddition="no-wrapper-with-spacing responsive-1" isLocked="False" configuration="" />
+          </contentFragments>
+        </region>
+      </regions>
+      <contentFragmentTabs />
+    </contentFragmentPage>
+    <contentFragmentPage pageName="sharepoint-listItem-edit" isCustom="false" layout="Content" themeType="c6108064-af65-11dd-b074-de1a56d89593" title="SharePoint - Edit ListItem">
+      <regions>
+        <region regionName="Content">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::e6ba8d0e2ea74f2eb5f2c68e8803533d" showHeader="False" cssClassAddition="no-wrapper-with-spacing responsive-1" isLocked="False" configuration="" />
+          </contentFragments>
+        </region>
+      </regions>
+      <contentFragmentTabs />
+    </contentFragmentPage>
+    <contentFragmentPage pageName="sharepoint-listItem-show" isCustom="false" layout="Content" themeType="c6108064-af65-11dd-b074-de1a56d89593" title="SharePoint - ListItem">
+      <regions>
+        <region regionName="Content">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::35dac46143634f27b0374c68313e87ab" showHeader="False" cssClassAddition="no-wrapper with-spacing responsive-1" isLocked="False" configuration="" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::f2a2ded1f5044948a6d1c8ccd0918ebb" showHeader="False" cssClassAddition="no-wrapper with-spacing responsive-3" isLocked="False" configuration="" />
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::e4e96f3241434dc7bc4a04d39c30192f" showHeader="False" cssClassAddition="no-wrapper with-spacing responsive-3" isLocked="False" configuration="" />
+          </contentFragments>
+        </region>
+      </regions>
+      <contentFragmentTabs />
+    </contentFragmentPage>
+    <contentFragmentPage pageName="sharepoint-listItem-list" isCustom="false" layout="Content" themeType="c6108064-af65-11dd-b074-de1a56d89593" title="SharePoint - ListItems">
+      <regions>
+        <region regionName="Content">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::cbce648772fb470eb5094cb6671de6b9" showHeader="False" cssClassAddition="no-wrapper with-spacing responsive-1" isLocked="False" configuration="" />
+          </contentFragments>
+        </region>
+      </regions>
+      <contentFragmentTabs />
+    </contentFragmentPage>
+    <contentFragmentPage pageName="sharepoint-list-add" isCustom="false" layout="Content" themeType="c6108064-af65-11dd-b074-de1a56d89593" title="SharePoint - Import List">
+      <regions>
+        <region regionName="Content">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::956082803a89415f89b95f5ae0fdc58a" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+          </contentFragments>
+        </region>
+      </regions>
+      <contentFragmentTabs />
+    </contentFragmentPage>
+    <contentFragmentPage pageName="sharepoint-list-edit" isCustom="false" layout="Content" themeType="c6108064-af65-11dd-b074-de1a56d89593" title="SharePoint - Edit List">
+      <regions>
+        <region regionName="Content">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::956082803a89415f89b95f5ae0fdc58a" showHeader="False" cssClassAddition="no-wrapper" isLocked="False" configuration="" />
+          </contentFragments>
+        </region>
+      </regions>
+      <contentFragmentTabs />
+    </contentFragmentPage>
+    <contentFragmentPage pageName="sharepoint-list-show" isCustom="false" layout="Content" themeType="c6108064-af65-11dd-b074-de1a56d89593" title="SharePoint - List">
+      <regions>
+        <region regionName="Content">
+          <contentFragments>
+          </contentFragments>
+        </region>
+      </regions>
+      <contentFragmentTabs />
+    </contentFragmentPage>
+    <contentFragmentPage pageName="sharepoint-list-list" isCustom="false" layout="Content" themeType="c6108064-af65-11dd-b074-de1a56d89593" title="SharePoint - Lists">
+      <regions>
+        <region regionName="Content">
+          <contentFragments>
+            <contentFragment type="Telligent.Evolution.ScriptedContentFragments.ScriptedContentFragment, Telligent.Evolution.ScriptedContentFragments::aaf4b7445eaa4dd68e7b3eef273ef070" showHeader="False" cssClassAddition="no-wrapper with-spacing responsive-1" isLocked="False" configuration="" />
+          </contentFragments>
+        </region>
+      </regions>
+      <contentFragmentTabs />
+    </contentFragmentPage>
+  </contentFragmentPages>
+</theme>

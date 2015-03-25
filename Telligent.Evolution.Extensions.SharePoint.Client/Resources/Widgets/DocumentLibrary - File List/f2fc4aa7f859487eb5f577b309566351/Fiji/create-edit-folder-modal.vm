@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	#set($editMode = false)
+
+	#set($empty = $core_v2_utility.ParseGuid('00000000-0000-0000-0000-000000000000'))
+	#set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue("contentId")))
+	#if ($contentId != $empty)
+		#set($editMode = true)
+	#end
+
+	#set($folderPath = '')
+	#set($folderPath = $core_v2_page.GetQueryStringValue('folderPath'))
+
+	#set($folder = false)
+	#if($editMode)
+		#set($folder = $sharepoint_v2_listItem.Get($contentId))
+		#set($library = $sharepoint_v2_library.Get($folder.ListId))
+	#else
+		#set($libraryId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue('libraryId')))
+		#set($library = $sharepoint_v2_library.Get($libraryId))
+	#end
+
+	#set($FolderNameMaxLength = 123)
+	
+	$core_v2_page.SetTitle($library.Title, false, false)
+
+	#set($isMode = true)
+	$core_v2_page.RenderThemeHeaders("%{ IsModal = $isMode}")
+	
+</head>
+<body class="document-library-create-edit-folder">
+
+	#set($wrapperId    = 'CreateEditFolderId')
+	#set($folderNameId = 'FolderNameId')
+	#set($saveButtonId = 'SaveButton')
+
+	<fieldset class="field-list" id="${wrapperId}">
+		<legend class="field-list-description">
+			<span></span>
+		</legend>
+		<ul class="field-list">
+			<li class="field-item folder">
+				<label class="field-item-header">$core_v2_language.GetResource('New_Folder_Name')</label>
+				<span class="field-item-description">$core_v2_language.GetResource('New_Folder_Description')</span>
+				<span class="field-item-input">
+					#set($value = "")
+					#if($editMode)
+						#set($value = $folder.ValueAsText('FileLeafRef'))
+					#end
+					<input type="text" id="${folderNameId}" value='$value' maxlength="$!{FolderNameMaxLength}"/>
+				</span>
+				<div class="field-item-validation" style="display: none; ">
+					$core_v2_language.GetResource('New_Folder_InvalidCharacters')
+				</div>
+			</li>
+			<li class="field-item">
+				<span class="field-item-input">
+					<a id="${saveButtonId}" class="internal-link upload-file disabled" href="#">
+						<span></span>
+						$core_v2_language.GetResource('New_Folder_Save')
+					</a>
+				</span>
+			</li>
+		</ul>
+
+		#if($editMode)
+			<table class="table-edit-footer" cellpadding="0" cellspacing="0">
+				<tr>
+					<td class="description">
+						$core_v2_language.FormatString("$core_v2_language.GetResource('New_Folder_Created')", $folder.get_item("Created"), $folder.get_item("Author"))
+					</td>
+				</tr>
+				<tr>
+					<td class="description">
+						$core_v2_language.FormatString("$core_v2_language.GetResource('New_Folder_Modified')", $folder.get_item("Modified"), $folder.get_item("Editor"))
+					</td>
+				</tr>
+			</table>
+		#end
+
+	</fieldset>
+
+	#registerEndOfPageHtml('telligent.sharepoint.widgets.documentLibrary.folder')
+		<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('create-edit-folder.js'))"></script>
+	#end
+	#registerEndOfPageHtml()
+		<script type="text/javascript">
+			#set($createEditFolderUrl = false)
+			#if($editMode)
+				#set($createEditFolderUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('edit-folder.vm'), "applicationId=${library.Id}&contentId=${contentId}&folderPath=${folderPath}"))
+			#else
+				#set($createEditFolderUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('create-folder.vm'), "applicationId=${library.Id}&folderPath=${folderPath}"))
+			#end
+			jQuery(function(j){
+				j.telligent.sharepoint.widgets.documentLibrary.folder.register({
+					wrapper             : "#${wrapperId}",
+					folderNameTextBox   : "#${folderNameId}",
+					createEditFolderUrl : "$core_v2_encoding.JavascriptEncode($createEditFolderUrl)",
+					saveButton          : "#${saveButtonId}",
+					onloadValidationEnabled : #if($editMode) true #else false #end
+				});
+			});
+		</script>
+	#end
+
+</body>
+</html>

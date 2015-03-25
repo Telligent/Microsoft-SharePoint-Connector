@@ -1,0 +1,219 @@
+﻿<scriptedContentFragments>
+	<scriptedContentFragment name="${resource:Widget_Name}" description="${resource:Widget_Description}" instanceIdentifier="35dac46143634f27b0374c68313e87ab" theme="3fc3f82483d14ec485ef92e206116d49" cssClass="sharepoint sharepoint-listItem-widget" isCacheable="false" varyCacheByUser="true" showHeaderByDefault="true">
+		<contentScript>
+			<![CDATA[
+#set($listItem = false)
+#set($listItem = $sharepoint_v2_listItem.Current)
+#if(!$listItem || $listItem.Id < 1)
+	$core_v2_page.Redirect($core_v2_urls.Message(9))
+#end
+
+#set($list = false)
+#set($list = $sharepoint_v2_list.Get($listItem.ListId))
+#if(!$list)
+	$core_v2_page.Redirect($core_v2_urls.Message(9))
+#end
+
+#set($authorNameLength = 10)
+#set($accessingUserIsRegistered = $core_v2_user.IsRegistered($core_v2_user.Accessing.Id))
+
+<div class="content full">
+	<h3 class="name">
+		$!{listItem.DisplayName}
+	</h3>
+
+	#set($fieldsOfTypeAttachment = [])
+	#foreach($field in $list.Fields)
+	#beforeall
+		<fieldset class="show">
+			<ul class="field-list">
+	#each
+		#if(!$field.ReadOnlyField && !$field.Hidden && $field.FieldTypeKind != "Attachments")
+			#if ($listItem.HasValue($field.InternalName))
+				<li class="field-item">
+					<div class="field-item-header">$!{field.Title}</div>
+					<div class="field-item-content">$!listItem.get_item($field.InternalName)</div>
+				</li>
+			#end
+		#elseif($field.FieldTypeKind == "Attachments")
+			#set($index = $fieldsOfTypeAttachment.Add($field))
+		#end
+	#afterall
+			</ul>
+		</fieldset>
+	#end
+
+	#foreach($field in $fieldsOfTypeAttachment)
+		#set($hasItems = $listItem.Value($field.InternalName))
+		#if ($hasItems)
+			#set($attachments = false)
+			#set($attachments = $sharepoint_v2_attachments.List($listItem.ContentId, $field.InternalName))
+			#foreach($attachment in $attachments)
+			#beforeall
+				<h3 class="name">
+					$!field.Title
+				</h3>
+				<fieldset>
+					<ul class="field-list attachments">
+			#each
+				<li class="field-item">
+					<div class="attachment-list">
+						<a class="attachment-item" href="$!attachment.Uri">$!{attachment.Name}</a>
+					</div>
+				</li>
+			#afterall
+					</ul>
+				</fieldset>
+			#end
+		#end
+	#end
+
+	<div style="clear:both;"></div>
+
+	#set($tags = $core_v2_tags.Get($listItem.ContentId, $listItem.ContentTypeId))
+	#if ($tags.Count > 0)
+		#foreach ($tag in $tags)
+		#beforeall
+			<div class="content-tags">
+				<ul class="tag-list">
+		#each
+			#set($tagUrl = false)
+			#set($tagUrl = $core_v2_groupUrls.Tags($core_v2_group.Current.Id, $core_v2_utility.MakeList($tag)))
+			#if ($tagUrl)
+				<li class="tag-item">
+					<a href="$core_v2_encoding.HtmlAttributeEncode($tagUrl)">$!{tag.TagName}</a>
+				</li>
+			#end
+		#afterall
+				</ul>
+			</div>
+		#end
+	#end
+	#set($author = false)
+	#if ($listItem.Author && $listItem.Author.Email)
+		#set($author = $core_v2_user.Get("%{Email = $listItem.Author.Email}"))
+	#end
+	<div class="author">
+		<span class="user-name">
+		#if($author && $author.ProfileUrl && $author.DisplayName)
+				<a href="$core_v2_encoding.HtmlAttributeEncode($author.ProfileUrl)" class="internal-link view-user-profile">
+					$!{author.DisplayName}
+				</a>
+			#elseif($author && $author.DisplayName)
+				$core_v2_language.Truncate($author.DisplayName, $authorNameLength, "...")
+			#elseif($listItem.Author && $listItem.Author.DisplayName)
+				$core_v2_language.Truncate($listItem.Author.DisplayName, $authorNameLength, "...")
+			#end
+		</span>
+		<div class="avatar">
+			#if($author && $author.ProfileUrl && $author.AvatarUrl && $author.DisplayName)
+				<a href="$core_v2_encoding.HtmlAttributeEncode($author.ProfileUrl)">
+					$core_v2_ui.GetResizedImageHtml($author.AvatarUrl, 32, 32, "%{border = '0', alt = $author.DisplayName, ResizeMethod = 'ZoomAndCrop'}")
+				</a>
+			#elseif($author && $author.AvatarUrl && $author.DisplayName)
+				$core_v2_ui.GetResizedImageHtml($author.AvatarUrl, 32, 32, "%{border = '0', alt = $author.DisplayName, ResizeMethod = 'ZoomAndCrop'}")
+			#elseif($listItem.Author && $listItem.Author.AvatarUrl && $listItem.Author.DisplayName)
+				$core_v2_ui.GetResizedImageHtml($listItem.Author.AvatarUrl, 32, 32, "%{border = '0', alt = $listItem.Author.DisplayName, ResizeMethod = 'ZoomAndCrop'}")
+			#end
+		</div>
+	</div>
+	<div class="actions">
+		#set($maxLinks = 3)
+		<div class="ui-links navigation-list" data-minlinks="$maxLinks" data-maxlinks="$maxLinks" data-direction="horizontal">
+			<ul class="navigation-list">
+				## 1
+				<li class="navigation-list-item date">
+					<span class="attribute-value">$core_v2_language.FormatDate($listItem.Modified)</span>
+				</li>
+				## 2
+				<li class="navigation-list-item like">
+					#if($accessingUserIsRegistered)
+						#set ($likeFormat = '{toggle} <span class="count"><span class="icon"></span>{count}</span>')
+					#else
+						#set ($likeFormat = '<span class="count"><span class="icon"></span>{count}</span>')
+					#end
+					$core_v2_ui.Like($listItem.ContentId, $listItem.ContentTypeId, "%{ Format = $likeFormat, IncludeTip = 'true'}")
+				</li>
+				## 3
+				<li class="navigation-list-item rating">
+					#set($canCreateRating = false)
+					#set($canCreateRating = $core_v2_rating.CanCreate($listItem.ContentId, $listItem.ContentTypeId))
+					#if($canCreateRating)
+						$core_v2_ui.Rate($listItem.ContentId, $listItem.ContentTypeId)
+					#else
+						$core_v2_ui.Rate($listItem.ContentId, $listItem.ContentTypeId, "%{ReadOnly = 'true', CssClass = 'small'}")
+					#end
+				</li>
+				## More
+				#if($accessingUserIsRegistered)
+					$core_v2_widget.ExecuteFile("check-user-permissions.vm")
+					#if($isAdmin || $isOwner || $isManager || $isMember)
+						#set($canEditListItem = false)
+						#set($canEditListItem = $sharepoint_v2_listItem.CanEdit($listItem.ContentId))
+						#if ($canEditListItem)
+							<li class="navigation-list-item">
+								<a href="$sharepoint_v1_urls.Edit($listItem.ContentId, $listItem.ContentTypeId)">$core_v2_language.GetResource('Edit')</a>
+							</li>
+							<li class="navigation-list-item">
+								<a href="#" data-messagename="delete-listItem" data-contentid="$listItem.ContentId">$core_v2_language.GetResource('Delete')</a>
+							</li>
+						#end
+					#end
+				#end
+				<li class="navigation-list-item">
+					<a href="#" data-more>$core_v2_language.GetResource('More')</a>
+				</li>
+				<li class="navigation-list-item">
+					<a href="#" data-cancel>$core_v2_language.GetResource('Cancel')</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+#registerEndOfPageHtml('telligent.sharepoint.widgets.listItemProperties')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			j.telligent.sharepoint.widgets.listItemProperties.register({
+				wrapper                : j("#${core_v2_widget.WrapperElementId}"),
+				deleteVerificationText : "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('DeleteConfirmation'))",
+				deleteListItemUrl      : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('delete.vm'))"
+			});
+		});
+	</script>
+#end
+			]]>
+		</contentScript>
+		<headerScript>
+			<![CDATA[
+				$core_v2_widget.ApplyTokens($core_v2_widget.GetStringValue('fragmentHeader', '${resource:SharePoint_ListItem_Widget_Title}'))
+			]]>
+		</headerScript>
+		<configuration>
+			<![CDATA[
+				<propertyGroup id="Options">
+					<property id="fragmentHeader" resourceName="CF_Title" dataType="string" defaultValue="${resource:Widget_Name}" controlType="Telligent.Evolution.Controls.ContentFragmentTokenStringControl, Telligent.Evolution.Controls" />
+				</propertyGroup>
+			]]>
+		</configuration>
+		<languageResources>
+			<language key="en-us">
+				<resource name="Widget_Name">SharePoint - List Item</resource>
+				<resource name="Widget_Description">Allows users to manage SharePoint List Item properties.</resource>
+				<resource name="CF_Title">Widget Title</resource>
+				<resource name="CF_ShowEditUrl">Show edit in SharePoint link</resource>
+				<resource name="DeleteConfirmation">Are you sure you want to delete this ListItem?</resource>
+				<resource name="NoAttachments">no attachments</resource>
+				<resource name="Edit">Edit</resource>
+				<resource name="Delete">Delete</resource>
+				<resource name="More">More</resource>
+				<resource name="Cancel">Cancel</resource>
+				<resource name="Deleted">List Item was removed successfully.</resource>
+				<resource name="NoPermissions">You have no permissions to edit this List Item.</resource>
+			</language>
+		</languageResources>
+	</scriptedContentFragment>
+</scriptedContentFragments>

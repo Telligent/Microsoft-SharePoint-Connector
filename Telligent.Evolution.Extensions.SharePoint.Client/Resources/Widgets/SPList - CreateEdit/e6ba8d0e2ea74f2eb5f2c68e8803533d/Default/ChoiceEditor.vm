@@ -1,0 +1,191 @@
+﻿#if(!$core_v2_page.IsPost || $isInPreviewMode)
+	#set($fillin = "_fillin")
+	#set($ownValue = "_OwnValue")
+	#set($msg = "_msg")
+	#set($delimiter = "_")
+	#set($errorMsgId = "${field.InternalName}${msg}")
+
+	#if($field.EditFormat == "Dropdown")
+		<script type="text/javascript">
+			jQuery(function(j) {
+				var select = j(".choice-editor.${field.InternalName} select");
+				#if($field.FillInChoice)
+					var input = j(".choice-editor.${field.InternalName} .own-value input");
+					var rbtns = j(".choice-editor.${field.InternalName} .fill-in input");
+					select.focus(function() { 
+						j(this).closest("tr").find("input")[0].checked = true; 
+						j("#${errorMsgId}").hide(); 
+					});
+					input.focus(function() { 
+						j(this).closest("tr").prev().find("input")[0].checked = true; 
+						j("#${errorMsgId}").hide(); 
+					});
+
+					j.telligent.sharepoint.widgets.listItem.registerBeforeSaveEventHandler(function() {
+						if (rbtns[1].checked) {
+							select[0].name = "";
+							input[0].name = "${field.InternalName}";
+						}
+					});
+				#end
+
+				#if ($field.Required)
+					var validationFunction = function (){
+						var msg = j("#${errorMsgId}");
+						if ((typeof(rbtns) != "undefined" && rbtns[1].checked) ? input.val() != "" : select.val() != "") {
+							msg.hide();
+							return true;
+						}
+						msg.show();
+						return false;
+					},
+					attachHandlers = function(){
+
+						j("#${field.InternalName}${fillin}").bind('change', function(e){
+							j("#${errorMsgId}").hide();
+						});
+
+						j("#${field.InternalName}").bind('change', function(e){
+							j("#${errorMsgId}").hide();
+						});
+
+						j("#${field.InternalName}${ownValue}").bind('change', function(e){
+							j("#${errorMsgId}").hide();
+						});
+
+						j(".choice-editor.${field.InternalName} .own-value input").bind('change', function(e){
+							validationFunction();
+						}).bind('keyup', function(e){
+							validationFunction();
+						});
+
+					};
+
+					attachHandlers();
+					j.telligent.sharepoint.widgets.listItem.registerValidation(validationFunction);
+				#end
+
+			});
+		</script>
+		#set($IsOwnValue = $sharepoint_v1_choice.IsOwnValue($field, $listItem.ValueAsText("$field.InternalName")))
+		<table class="choice-editor ${field.InternalName}" cellSpacing="0" cellPadding="0" border="0">
+			<tr>
+				#if($field.FillInChoice)
+					<td class="fill-in">
+						<input id="${field.InternalName}${fillin}" type="radio" name="${field.InternalName}${fillin}" #if(!$IsOwnValue)checked#end />
+					</td>
+				#end
+				<td>
+					<select id="${field.InternalName}" name="$field.InternalName">
+						#foreach($item in $sharepoint_v1_choice.GetChoices($field))
+							<option value="$item.Key" #if($listItem.ValueAsText("$field.InternalName") == $item.Key)selected#end>$item.Value</option>
+						#end
+					</select>
+				</td>
+			</tr>
+			#if($field.FillInChoice)
+				<tr>
+					<td class="fill-in">
+						<input type="radio" id="${field.InternalName}${ownValue}" name="$field.InternalName$fillin" #if($IsOwnValue)checked#end />
+					</td>
+					<td>
+						<label for="${field.InternalName}${ownValue}">$core_v2_language.GetResource('SPListWidget_ListItem_SpecifyYourOwnValue')</label>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td class="own-value">
+						<input type="text" value="#if($IsOwnValue)$listItem.ValueAsText("$field.InternalName")#end" />
+					</td>
+				</tr>
+			#end
+		</table>
+	#else
+		<script type="text/javascript">
+			jQuery(function(j) {
+				var rbtns = j(".choice-editor.$field.InternalName .fill-in input");
+				rbtns.click(function() { 
+					j('#${errorMsgId}').hide(); 
+				});
+
+				#if($field.FillInChoice)
+					var input = jQuery(".choice-editor.$field.InternalName .own-value input");
+					input.focus(function() { 
+						j(this).closest("tr").prev().find("input")[0].checked = true;
+						j("#${errorMsgId}").hide();
+					});
+
+					j.telligent.sharepoint.widgets.listItem.registerBeforeSaveEventHandler(function() {
+						if (rbtns[rbtns.length - 1].checked) {
+							rbtns.attr("name", "");
+							input[0].name = "$field.InternalName";
+						}
+					});
+				#end
+
+				#if($field.Required)
+					var validationFunction = function (){
+						var msg = j("#${errorMsgId}");
+						var anyCheck = false;
+						for (var i = 0; i < rbtns.length; i++) {
+							if (rbtns[i].checked) {
+								anyCheck = true;
+								break;
+							}
+						}
+						if ((typeof(input) != "undefined" && rbtns[rbtns.length - 1].checked) ? input.val() != "" : anyCheck) {
+							msg.hide();
+							return true;
+						}
+						msg.show();
+						return false;
+					},
+					attachHandlers = function(){
+						j(".choice-editor.${field.InternalName} .own-value input").bind('change', function(e){
+							validationFunction();
+						}).bind('keyup', function(e){
+							validationFunction();
+						});
+
+					};
+
+					attachHandlers();
+					j.telligent.sharepoint.widgets.listItem.registerValidation(validationFunction);
+				#end
+			});
+		</script>
+		<table class="choice-editor $field.InternalName" cellSpacing="0" cellPadding="0" border="0">
+			#foreach ($item in $sharepoint_v1_choice.GetChoices($field))
+			<tr>
+				<td class="fill-in">
+					<input type="radio" id="$field.InternalName$delimiter$item.Key" name="$field.InternalName" value="$item.Key" #if($listItem.ValueAsText("$field.InternalName")==$item.Key)checked#end />
+				</td>
+				<td>
+					<label for="$field.InternalName$delimiter$item.Key">$item.Value</label>
+				</td>
+			</tr>
+			#end
+			#if($field.FillInChoice)
+			#set($IsOwnValue = $sharepoint_v1_choice.IsOwnValue($field, $listItem.ValueAsText("$field.InternalName")))
+			<tr>
+				<td class="fill-in">
+					<input type="radio" id="$field.InternalName$ownValue" name="$field.InternalName" #if($IsOwnValue)checked#end/>
+				</td>
+				<td>
+					<label for="$field.InternalName$ownValue">$core_v2_language.GetResource('SPListWidget_ListItem_SpecifyYourOwnValue')</label>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td class="own-value">
+					<input type="text" value="#if($IsOwnValue)$listItem.ValueAsText("$field.InternalName")#end" />
+				</td>
+			</tr>
+			#end
+		</table>
+	#end
+	<div id="${errorMsgId}" class="invalid-msg" style="display: none;">$core_v2_language.GetResource('SharePoint_ListItem_FieldRequired')</div>
+#else
+	#set($value = $core_v2_page.GetFormValue($field.InternalName))
+	$listItem.Fields.Add($field.InternalName, "$value")
+#end

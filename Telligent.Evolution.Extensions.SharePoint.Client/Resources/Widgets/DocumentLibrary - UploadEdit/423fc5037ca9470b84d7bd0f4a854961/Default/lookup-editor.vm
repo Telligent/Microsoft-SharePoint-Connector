@@ -1,0 +1,126 @@
+﻿#if(!$core_v2_page.IsPost || $isInPreviewMode)
+	#set($errorMsgId = "${field.InternalName}_msg")
+	
+	<script type="text/javascript">
+		jQuery(function(j) {
+
+			var lookupEditor = {
+				all     : j(".lookup-editor.${field.InternalName} select.all")[0],
+				selected: j(".lookup-editor.${field.InternalName} select.selected")[0],
+				add     : j(".lookup-editor.${field.InternalName} input.add")[0],
+				remove  : j(".lookup-editor.${field.InternalName} input.remove")[0],
+				input   : j(".lookup-editor.${field.InternalName} input[type='hidden']")[0],
+				msg     : j("#${errorMsgId}")[0]
+			};
+
+			var init = function(){
+				attachHandlers();
+				lookupEditor_OnChange(lookupEditor);
+				#if ($field.Required)
+					j.telligent.sharepoint.widgets.validator.registerValidation(function() {
+						if (lookupEditor.selected.options.length > 0) {
+							lookupEditor.msg.hide();
+							return true;
+						}
+						lookupEditor.msg.show();
+						return false;
+					});
+				#end
+			},
+			attachHandlers = function(){
+				var w = j(".lookup-editor.${field.InternalName}");
+				j('.add', w).click(function(e){
+					listbox_MoveAcross(lookupEditor.all, lookupEditor.selected);
+					lookupEditor_OnChange(lookupEditor, true);
+				});
+
+				j('.remove',w).click(function(e){
+					listbox_MoveAcross(lookupEditor.selected, lookupEditor.all);
+					lookupEditor_OnChange(lookupEditor, true);
+				});
+
+				j('.no-multi').change(function(e){
+					lookupEditor_OnChange(lookupEditor, true);
+				});
+			},
+			lookupEditor_OnChange = function(vars, validationEnabled){
+				vars.add.disabled = vars.all.options.length == 0;
+				vars.remove.disabled = vars.selected.options.length == 0;
+				var arr = [];
+				for (var i = 0, len = vars.selected.options.length; i < len; i++){
+					arr.push(vars.selected.options[i].value);
+				}
+				vars.input.value = arr.join(',');
+			},
+			listbox_MoveAcross = function(src, dest){
+				for (var i = 0; i < src.options.length; i++){
+					if(src.options[i].selected){
+						var option = src.options[i];
+						var newOption = document.createElement("option");
+						newOption.value = option.value;
+						newOption.text = option.text;
+						newOption.selected = true;
+						try
+						{
+							dest.add(newOption, null);
+							src.remove(i, null);
+						}
+						catch(error)
+						{
+							dest.add(newOption);
+							src.remove(i);
+						}
+						i--;
+					}
+				}
+			};
+
+			init();
+		});
+	</script>
+
+	#if($field.AllowMultipleValues)
+		<table class="lookup-editor ${field.InternalName}">
+			<tr>
+				<td class="select">
+					<select class="all" multiple="multiple">
+						#foreach ($item in $sharepoint_v1_lookup.GetValues($currentList, $listItem, $field, true))
+							<option value="$item.Key">$item.Value</option>
+						#end
+					</select>
+				</td>
+				<td class="buttons">
+					<input type="button" class="add" value="$core_v2_language.GetResource('SharePoint_ListItem_FieldEditor_Add')" />
+					<input type="button" class="remove" value="$core_v2_language.GetResource('SharePoint_ListItem_FieldEditor_Remove')" />
+					<input name="${field.InternalName}" type="hidden" />
+				</td>
+				<td class="select">
+					<select class="selected" multiple="multiple">
+						#foreach ($item in $sharepoint_v1_lookup.GetSelectedValues($listItem, $field))
+							<option value="$!{item.LookupId}">$!{item.LookupValue}</option>
+						#end
+					</select>
+				</td>
+			</tr>
+		</table>
+		<div id="${errorMsgId}" class="invalid-msg" style="display:none;">$core_v2_language.GetResource('SharePoint_ListItem_FieldRequired')</div>
+	#else
+		<div class="lookup-editor ${field.InternalName}">
+			<select class="no-multi" name="${field.InternalName}">
+				#if (!$field.Required)
+					<option value="">$core_v2_language.GetResource('SharePoint_Lookup_None')</option>
+				#end
+				#foreach ($item in $sharepoint_v1_lookup.GetValues($currentList, $listItem, $field, false))
+					<option value="$!{item.Key}" #if($sharepoint_v1_lookup.IsSelected($listItem, $field, $item.Key))selected#end>$!{item.Value}</option>
+				#end
+			</select>
+		</div>
+	#end
+#else
+	#set($value = false)
+	#set($value = $core_v2_page.GetFormValue("$field.InternalName"))
+	#if($value)
+		#set($value = $sharepoint_v1_lookup.GetValueToSave($value))
+		$listItem.Fields.Add($field.InternalName, $value)
+	#end
+#end

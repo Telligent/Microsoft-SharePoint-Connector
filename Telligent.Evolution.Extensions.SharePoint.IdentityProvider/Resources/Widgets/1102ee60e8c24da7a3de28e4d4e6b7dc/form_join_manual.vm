@@ -1,0 +1,78 @@
+##
+## Form rendered when a new user is joining the site manually (with username/password/email)
+##
+
+<fieldset>
+	<h1>$core_v2_language.GetResource('CreateNewAccount_Register')</h1>
+	<ul class="field-list">
+		## Account Information
+		<li class="field-item required user-name">
+			<label for="$core_v2_encoding.HtmlAttributeEncode($usernameInput)" class="field-item-name">
+				$core_v2_language.GetResource('CreateNewAccount_UserName')
+			</label>
+			<span class="field-item-input">
+				<input type="text" name="$core_v2_encoding.HtmlAttributeEncode($usernameInput)" id="$core_v2_encoding.HtmlAttributeEncode($usernameInput)" MaxLength="64" size="31" value="$!core_v2_encoding.HtmlAttributeEncode($username)" />
+			</span>
+			<span class="field-item-validation" style="display: none;"></span>
+		</li>
+		<li class="field-item required email">
+			<label for="$core_v2_encoding.HtmlAttributeEncode($emailInput)" class="field-item-name">$core_v2_language.GetResource('CreateNewAccount_Email')</label>
+			<span class="field-item-description">$core_v2_language.GetResource('CreateNewAccount_EmailDescription')</span>
+			<span class="field-item-input">
+				<input type="text" name="$core_v2_encoding.HtmlAttributeEncode($emailInput)" id="$core_v2_encoding.HtmlAttributeEncode($emailInput)" MaxLength="128" size="31" value="$!core_v2_encoding.HtmlAttributeEncode($email)" />
+			</span>
+			<span class="field-item-validation" style="display: none;"></span>
+		</li>
+
+		## Passwords
+		#if ($core_v2_configuration.AccountActivation != "Email" || $core_v2_nodePermission.Get('Site_ManageMembership').IsAllowed)
+			<li class="field-item required password">
+				<label for="$core_v2_encoding.HtmlAttributeEncode($passwordInput)" class="field-item-name">$core_v2_language.GetResource('CreateNewAccount_PasswordDescription')</label>
+				<span class="field-item-description">$core_v2_language.FormatString($core_v2_language.GetResource('CreateNewAccount_PasswordLimits_Join'), $core_v2_configuration.PasswordMinLength.ToString())</span>
+				<span class="field-item-input">
+					<input name="$core_v2_encoding.HtmlAttributeEncode($passwordInput)" id="$core_v2_encoding.HtmlAttributeEncode($passwordInput)" MaxLength="64" type="password" autocomplete="off" size="31" value="$!core_v2_encoding.HtmlAttributeEncode($password)" />
+				</span>
+				<span class="field-item-validation" style="display: none;"></span>
+			</li>
+			<li class="field-item required password2">
+				<label for="$core_v2_encoding.HtmlAttributeEncode($password2Input)" class="field-item-name">$core_v2_language.GetResource('CreateNewAccount_ReEnterPassword')</label>
+				<span class="field-item-input">
+					<input name="$core_v2_encoding.HtmlAttributeEncode($password2Input)" id="$core_v2_encoding.HtmlAttributeEncode($password2Input)" MaxLength="64" type="password" autocomplete="off" size="31" value="$!core_v2_encoding.HtmlAttributeEncode($password2)" />
+				</span>
+				<span class="field-item-validation" style="display: none;"></span>
+			</li>
+			#if($core_v2_recaptcha && $captchaEnabled)
+		    <li class="field-item required captcha">
+		    	<span class="field-item-input">
+		    	   $core_v2_recaptcha.Render()
+		           <input type="hidden"  name="$core_v2_encoding.HtmlAttributeEncode($captchaHiddenInput)" id="$core_v2_encoding.HtmlAttributeEncode($captchaHiddenInput)"  />
+		    	</span>
+		    	<span class="field-item-validation" style="display: none;"></span>
+		    </li>
+		    #end
+		#end
+
+		## Details
+		#if ($requiresJoinDetails)
+			$core_v2_widget.ExecuteFile('sub_form_join_details.vm')
+		#end
+
+		<li class="field-item">
+			<span class="field-item-input">
+				<input type="hidden" name="$core_v2_encoding.HtmlAttributeEncode($actionInput)" id="$core_v2_encoding.HtmlAttributeEncode($actionInput)" value="join_manual" />
+				<a href="#" class="internal-link create-account submit-button button" >
+					$core_v2_language.GetResource('CreateNewAccount_CreateAccount')
+				</a>
+				<span class="processing" style="visibility: hidden;"></span>
+			</span>
+		</li>
+
+	</ul>
+</fieldset>
+
+#set ($loginUrl = $core_v2_urls.Login())
+#if ($loginUrl)
+	<p class="login-alternative">
+		$core_v2_language.GetResource('CreateNewAccount_AlreadyJoined') <a href="$core_v2_encoding.HtmlAttributeEncode($loginUrl)">$core_v2_language.GetResource('CreateNewAccount_SignIn')</a>
+	</p>
+#end

@@ -1,0 +1,288 @@
+﻿/* $SharePoint Libraries - Navigation
+/******************************/
+.group-application-navigation .navigation-list .navigation-item .sharepoint-libraries span {background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/sharepoint_2D00_icons.png'); background-position: 0px 0px;}
+.group-application-navigation .navigation-list .navigation-item.selected .sharepoint-libraries span {background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/sharepoint_2D00_icons.png'); background-position: 0px -16px;}
+.menu.group-application-navigation-content .navigation-list .sharepoint-library-app span {background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/sharepoint_2D00_icons.png'); background-position: 0px -32px;}
+
+/* $Browse Document Libraries Widget
+/******************************/
+.browse-document-libraries .document-libraries {list-style-type: none; padding: 0px; margin: 0px;}
+	.browse-document-libraries .document-libraries .library {position: relative; clear: both; padding: 9px; margin-bottom: 12px; min-height: 42px; background-color: red; border-radius: 0px 0px 8px 8px; border: 1px solid #b8bdc0; background-color: #dddddd; background-image: -moz-linear-gradient(center top , #f2f2f2, #dddddd); background-image: -webkit-linear-gradient(center top , #f2f2f2, #dddddd); background-image: -webkit-linear-gradient(top, #f2f2f2, #dddddd); background-image: -ms-linear-gradient(center top , #f2f2f2, #dddddd); background-image: -o-linear-gradient(center top , #f2f2f2, #dddddd); background-image: linear-gradient(center top , #f2f2f2, #dddddd); overflow: visible;}
+	.browse-document-libraries .document-libraries .library-header {background-color: #476879; height: 9px; width: 98%; margin-left: auto; margin-right: auto;}
+	.browse-document-libraries .document-libraries .library-indicator {width: 40px; height: 40px; background-color: #2e4a56; border: 1px solid #EEE; border-radius: 3px; float: left; margin-right: 12px; background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/browse_2D00_apps_2D00_indicator.png'); background-repeat: no-repeat; background-position: -1px -1px;}
+		.browse-document-libraries .document-libraries .library-indicator span {width: 26px; height: 26px; display: block; margin: 6px 0px 0px 7px; background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/browse_2D00_apps_2D00_library_2D00_icon.png'); background-repeat: no-repeat;}
+	.browse-document-libraries .library-identity {float: left; width: 35%; max-height: 40px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+		.browse-document-libraries .library-identity h3 {color: #263e4a; margin: 0px; font-size: 13px;}
+		.browse-document-libraries .library-identity h4 {display: block; font-size: 8px; text-transform: uppercase; font-family: Helvetica, Arial, sans-serif; margin: 0px; color: #d67145;}
+	.browse-document-libraries .attribute-item {float: left; padding: 6px; margin-right: 9px;}
+		.browse-document-libraries .attribute-item.latest-authors { padding: 6px 2px 0px 0px;}
+	.browse-document-libraries .attribute-item.tags {width: 25%;}
+	.browse-document-libraries .attribute-key {color: #80898e; text-transform: uppercase; display: block;}
+	.browse-document-libraries .attribute-value,
+	.browse-document-libraries .attribute-value a {display: block; color: #273d4a; font-weight: bold;}
+		.browse-document-libraries .tags .attribute-key,
+		.browse-document-libraries .latest-authors .attribute-key {display: none; }
+		.browse-document-libraries .latest-authors .attribute-value {margin-top: 2px; }
+			.browse-document-libraries .latest-authors .attribute-value a {float: left; margin-right: 3px; }
+	.browse-document-libraries .message {background-color: #FFFFFF; border: 1px solid #AAAAAA; border-radius: 2px 2px 2px 2px; font-size: 11px; font-weight: bold; margin: 1em 0; padding: 12px;}
+	.browse-document-libraries .message.norecords{background-color: #EEEEEE; border-color: #666666; color: #666666;}
+
+/* $Document Library - Administration Widget
+/******************************/
+.browse-document-libraries {}
+fieldset.save-cancel{ float: right; margin-top: 30px; }
+fieldset.save-cancel .internal-link { margin-left: 10px; }
+
+/* $Document Library Widget
+/******************************/
+.document-library-widget {}
+	.document-library-widget .loading {width: 100%; height: 128px; background: url("~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/loading.gif") no-repeat center center;}
+	.document-library-widget .header {text-align: right;}
+	.document-library-widget .filter {position: relative; margin-bottom: 18px; margin-top: 0px; width: 100%; border: 0px; border-bottom: 1px solid #DCDDDF; text-align: center;}
+		.document-library-widget .filter .query-filter {background-color: white; display: inline; position: relative; top: 2.2em; margin-left: -52px; padding: 4px 1px 7px 1px; border: 1px solid #DCDDDF; border-radius: 5px; border-image: initial;}
+				.document-library-widget .filter .query-filter .filter-option a {text-decoration: none; padding: 6px 10px 3px; font-size: 11px; color: #365768; text-transform: uppercase; border-radius: 3px; position: relative; top: 3px;}
+				.document-library-widget .filter .query-filter .filter-option.selected a {background-color: #44677A; color: white;}
+		.document-library-widget .filter .view-type {position: absolute; left: 0px; bottom: 10px; z-index: 99;}
+			.document-library-widget .filter .view-type .filter-option {display: inline-block; padding: 1px 2px 2px 2px; margin: 0px 5px 0px 0px; float: left;}
+				.document-library-widget .filter .view-type .filter-option a {text-decoration: none; overflow: hidden; width: 26px; height: 26px; display: inline-block;}
+					.document-library-widget .filter .view-type .filter-option a.explorer-view {background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/thumbnail_2D00_list_2D00_icon.png'); background-repeat: no-repeat; background-position: -26px -26px;}
+					.document-library-widget .filter .view-type .filter-option.selected a.explorer-view {background-color: #D87144; border-radius: 2px; background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/thumbnail_2D00_list_2D00_icon.png'); background-repeat: no-repeat; background-position: -26px 0px;}
+					.document-library-widget .filter .view-type .filter-option a.list-view {background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/thumbnail_2D00_list_2D00_icon.png'); background-repeat: no-repeat; background-position: 0px -26px;}
+					.document-library-widget .filter .view-type .filter-option.selected a.list-view {background-color: #D87144; border-radius: 2px; background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/thumbnail_2D00_list_2D00_icon.png'); background-repeat: no-repeat; background-position: 0px 0px;}
+				.document-library-widget .filter .view-type .new-folder-button {display: inline-block;  float: left; border-left: 0px solid silver;height: 32px; width: 32px; text-align: left; padding: 0px 0px;}
+					.document-library-widget .filter .view-type .new-folder-button a {position: absolute;  height: 26px;  width: 32px; background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/library_2D00_new_2D00_icon.png'); background-repeat: no-repeat; background-position: 1px 1px; margin-top: 1px;}
+					.document-library-widget .filter .view-type .new-folder-button span {}
+				.document-library-widget .filter .view-type .upload-document-button {display: inline-block;  float: left; border-left: 1px solid silver; height: 32px; width: 32px; text-align: left; padding: 0px 5px;}
+					.document-library-widget .filter .view-type .upload-document-button a {position: absolute; height: 28px;  width: 28px; background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/library_2D00_new_2D00_icon.png'); background-position: 1px 28px; margin-top: 1px;}
+					.document-library-widget .filter .view-type .upload-document-button span {}
+	.document-library-widget .file-list { margin: 0; padding: 0;}
+		.document-library-widget .file-list .file-info {float: left; margin: 0px; padding: 0px; width: 100%; border: 0px; cursor: default; position: relative; list-style: none;}
+	.document-library-widget .file-list.explorer-view {cursor: pointer; margin-top: 15px; position: static; width: 100%; overflow:hidden;}
+		.document-library-widget .file-list.explorer-view .file-info {overflow: hidden; float: left; padding: 20px 16px 0px 0px; width: 120px; display: inline;top: 1px;}
+			.document-library-widget .file-list.explorer-view .file-info .post-thumbnail {width: 110px; height: 100px; border: 1px solid #CCC; padding: 2px; text-align: center; overflow: hidden;}
+				.document-library-widget .file-list.explorer-view .file-info .folder-preview span {left: 20px; top: 40px; width: 80px; height: 80px; position: absolute; background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/library_2D00_folder_2D00_icon.png'); background-repeat: no-repeat; background-position: 0px 0px;}
+				.document-library-widget .file-list.explorer-view .file-info .folder-up span {left: 20px; top: 40px; width: 80px; height: 80px; position: absolute; background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/library_2D00_folder_2D00_icon.png'); background-repeat: no-repeat; background-position: -214px 0px;}
+			.document-library-widget .file-list.explorer-view .file-info .name {float: left;  font-size: 12px;  width: 100%; height: 30px;text-align: center;}
+				.document-library-widget .file-list.explorer-view .file-info .name h3 {margin:4px 4px; font-family: Helvetica, Arial, sans-serif; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+				.document-library-widget .file-list.explorer-view .file-info .file-preview a,
+				.document-library-widget .file-list.explorer-view .file-info .file-preview img {border: 0px;}
+				.document-library-widget .file-list.explorer-view .file-info .file-preview img {max-height: 118px; max-width: 118px; vertical-align: middle; padding: 15px;}
+				.document-library-widget .file-list.explorer-view .file-info .file-preview .checkout-icon {background: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/library_2D00_checkedout_2D00_icon.png') no-repeat left top; width: 16px; height: 16px; position: absolute; left: 95px; top: 105px;}
+		.document-library-widget .file-list.explorer-view .file-info.norecords {width: 100%;}
+	.document-library-widget .file-list.list-view {border-top: 1px dotted #F3CAB8;}
+		.document-library-widget .file-list.list-view .file-info {height: 50px; border-bottom: 1px dotted #F3CAB8; overflow: hidden;}
+		.document-library-widget .file-list.list-view .file-info:hover {background-color: #FAEDE7;}
+		.document-library-widget .file-list.list-view .file-info.norecords:hover {background-color: transparent;}
+			.document-library-widget .file-list.list-view .file-info .folder-preview span {left: 5px; top: 5px; width: 40px; height: 32px; position: absolute; background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/library_2D00_folder_2D00_icon.png'); background-repeat: no-repeat; background-position: -125px 0px;}
+			.document-library-widget .file-list.list-view .file-info .folder-up {left: 5px; top: 5px; width: 100%; height: 32px;  position: absolute; background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/library_2D00_folder_2D00_icon.png'); background-repeat: no-repeat; background-position: -339px 0px;}
+			.document-library-widget .file-list.list-view .file-info .file-preview {height: 100%; position: static; padding-right: 200px;}
+			.document-library-widget .file-list.list-view .file-info .name {float: left; padding: 2px 2px 2px 60px; font-size: 11px; width: 100%; left: 60px; min-height: 46px;}
+				.document-library-widget .file-list.list-view .file-info .name h3 {margin: 0px; padding: 0px; font-family: Helvetica, Arial, sans-serif; font-size: 12px;margin-top: 15px;white-space: nowrap; overflow: hidden; text-overflow: ellipsis;padding-right: 10px;}
+				.document-library-widget .file-list.list-view .file-info .file-preview a,
+				.document-library-widget .file-list.list-view .file-info .file-preview img {border: 0px;}
+				.document-library-widget .file-list.list-view .file-info .file-preview img {position: absolute; margin: 10px; left: 0;}
+				.document-library-widget .file-list.list-view .file-info .file-preview .checkout-icon{left: 40px; top: 30px; width: 16px; height: 16px; position: absolute; background: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/library_2D00_checkedout_2D00_icon.png') no-repeat left top; z-index: 1;}
+				.document-library-widget .file-list.list-view .file-info .file-attributes {float:right; margin: 10px 2px; padding: 0px; top: -50px; width: 150px; position: relative; color: #B3B3B3; font-family: Helvetica, Arial, sans-serif; }
+					.document-library-widget .file-list.list-view .file-info .file-attributes .attribute-item {list-style:none; margin: 0px; padding: 0px; font-size: 10px; color: #666; text-align: right; width: 100%; display: block;}
+				.document-library-widget .file-list.list-view .file-info .avatar {float: right; width: 34px; height: 34px; margin: 8px 5px; right: 0px; top: -50px; position: relative;}
+					.document-library-widget .file-list.list-view .file-info .avatar img {max-width: 32px; max-height: 32px; border-radius: 4px;}
+		.document-library-widget .file-list.list-view .file-info.norecords {height: 60px;}
+
+.document-library-widget .dropbox {position: absolute; text-align: center; border: 1px solid; border-color: #2a8dd4; z-index: 2; background-color: rgba( 255,255,255,0.85 ); margin-top: -2px; text-shadow: 1px 1px 1px silver; overflow: hidden; text-overflow: ellipsis;}
+	.document-library-widget .dropbox .dropbox-text {line-height: 100px; font-size: 1.46em;}
+		.document-library-widget .dropbox .dropped-files {list-style-type:none; font-size: 1.3em; text-align: left;}
+			.document-library-widget .dropbox .dropped-files .success {color: green;}
+			.document-library-widget .dropbox .dropped-files .error {color: red;}
+				.document-library-widget .dropbox .dropped-files .progress-bar {margin: 5px 40px 0px 0px; padding: 3px; border: 1px solid rgba(24, 19, 141, 0.28); clear: both; opacity: 0.5; -moz-transition: opacity 1s linear; -o-transition: opacity 1s linear; -webkit-transition: opacity 1s linear;}
+				.document-library-widget .dropbox .dropped-files .progress-bar.in-progress {opacity: 1.0;}
+					.document-library-widget .dropbox .dropped-files .progress-bar .percent {background-color: #99ccff; height: auto; text-align: center;}
+
+/* Context Menu */
+.file-menu { background: #FFFFFF; border:1px solid #A5A5A5; }
+	.file-menu .file-menu-item {padding: 7px 35px 5px 15px; height: 15px; cursor: pointer;}
+	.file-menu .file-menu-item-separator {margin: 2px 3px 2px 3px; height: 1px; background: #DEDEDE;}
+		.file-menu .file-menu-item {margin: 2px; border: 1px solid transparent;}
+		.file-menu .file-menu-item.hover {background: #E6EDF6; margin: 2px; border: 1px solid #AECFF7;}
+		/*Uncomment below to add custom icons*/
+		/***********************************************
+		.file-menu .file-menu-item {background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/library_2D00_context_2D00_menu_2D00_icon.png') !important; background-repeat: no-repeat !important;}
+		.file-menu .file-menu-item.check-out-file {background-position: 0px 4px;}
+		.file-menu .file-menu-item.check-out-file.hover {}
+		.file-menu .file-menu-item.check-in-file {background-position: 0px -36px;}
+		.file-menu .file-menu-item.check-in-file.hover {}
+		.file-menu .file-menu-item.discard-check-out {background-position: 0px -76px;}
+		.file-menu .file-menu-item.discard-check-out.hover {}
+		.file-menu .file-menu-item.see-file-version-history {background-position: 0px -236px;}
+		.file-menu .file-menu-item.see-file-version-history.hover {}
+		.file-menu .file-menu-item.open-file {background-position: 0px -156px;}
+		.file-menu .file-menu-item.open-file.hover {}
+		.file-menu .file-menu-item.edit-file,
+		.file-menu .file-menu-item.rename-file {background-position: 0px -116px;}
+		.file-menu .file-menu-item.edit-file.hover {}
+		.file-menu .file-menu-item.email-file {background-position: 0px -196px;}
+		.file-menu .file-menu-item.email-file.hover {}
+		.file-menu .file-menu-item.delete-file {background-position: 0px -276px;}
+		.file-menu .file-menu-item.delete-file.hover {}
+        ************************************************/
+/* $Document Library - Comment List Widget
+/******************************/
+.sharepoint-listItem-comment-list.comment.post .content-item.comment {position: relative; min-height: 99px; margin-bottom: 12px;}
+	.sharepoint-listItem-comment-list.comment.post .content-item.comment .post-author {background-color: #F5F5F5; color: #000; border-top: 1px solid #416F86; padding: 3px 3px 3px 6px;}
+		.sharepoint-listItem-comment-list.comment.post .content-item.comment .post-author a:link,
+		.sharepoint-listItem-comment-list.comment.post .content-item.comment .post-author a:visited,
+		.sharepoint-listItem-comment-list.comment.post .content-item.comment .post-author a:active {color: #1c2c46; text-decoration: none; font-size: 12px;}
+		.sharepoint-listItem-comment-list.comment.post .content-item.comment .post-author .avatar { position: absolute; top: 33px; left: 0px; }
+	.sharepoint-listItem-comment-list.comment.post .content-item.comment .post-date {color: #7B7F7F; font-size: 12px; position: absolute; right: 30px; top: 3px;}
+	.sharepoint-listItem-comment-list.comment.post .content-item.comment .post-content {padding: 0 0 0 60px; margin: 0px;}
+	.sharepoint-listItem-comment-list.comment.post .content-item.comment .post-moderate {margin: 3px 3px 0px 0px;}
+		.sharepoint-listItem-comment-list.comment.post .content-item.comment .post-moderate .ui-moderate a span {opacity: 0.7}
+		.sharepoint-listItem-comment-list.comment.post .content-item.comment .post-moderate .ui-moderate a:hover span {opacity: 1}
+	.sharepoint-listItem-comment-list.comment.post .content-item.comment .post-actions {background-color: #F5F5F5; margin-left: 60px; overflow: hidden; padding: 3px 3px 4px 5px;}
+	.sharepoint-listItem-comment-list.comment.post .content-item.comment .like-toggle {float: left; margin-right: 9px;}
+	.sharepoint-listItem-comment-list.comment.post .content-item.comment .count {float: left;}
+	.sharepoint-listItem-comment-list.comment.post .content-item.comment .like-indicator {background-image: url("~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/sprite_2D00_icon.png"); background-position: 0px 0px; background-repeat: no-repeat; border: 0 none; float: left; height: 16px; margin: 0 7px 0 0; width: 16px; position: relative; top: 1px;}
+	.sharepoint-listItem-comment-list.comment.post .content-item.comment .like-indicator.inline {background-image: url("~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/sprite_2D00_icon.png"); background-position: -18px 0; height: 14px; margin: 0 3px 0 0; width: 14px;}
+
+/* $Document Library - Post Comment Form Widget
+/******************************/
+.document-library-post-comment-form .message {display: none;}
+	.document-library-post-comment-form .field-list .field-item .field-item-input textarea {background-color: #f5f5f5; border-color: #dadedf; width: 99%; min-height: 5em;}
+	.document-library-post-comment-form .field-list .field-item .field-item-input textarea:focus {background-color: #fff; border-color: #da7048;}
+.document-library-post-comment-form .submit-button {float: right;}
+
+/* $Document Library File Widget
+/******************************/
+.content-fragment.document-library-file .post-attachment-viewer {clear: none; float: left; margin: 9px 18px 9px 0px; max-width: 100%;}
+.content-fragment.document-library-file .post-name {clear: none; margin-bottom: 9px;}
+.content-fragment.document-library-file .post-content {margin-top: 18px; clear: both;}
+	.content-fragment.document-library-file .post-content p {margin: 0px 0px 1em 0px;}
+.content-fragment.document-library-file .post-name span {background-color: transparent; background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/document_2D00_icon.png'); width: 24px; height: 24px;}
+.content-fragment.document-library-file .post-name span.tag {background-color: transparent; background-image: none; position: static;}
+
+/* $Document Library - Edit Widget
+*******************************************************/
+.document-library-edit-document {}
+
+/* $Document Library - Upload Widget
+*******************************************************/
+.document-library-upload .folder-paged-list .folder-list {padding-left: 0px;}
+.document-library-upload .folder-paged-list .folder-item {cursor: pointer; display: inline-block; height: 32px; width: 100%; margin:5px 0px;}
+.document-library-upload .folder-paged-list .folder-item .name {padding-left: 50px;}
+.document-library-upload .folder-paged-list .folder-item:hover {background-color: #fffde6;-webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px;}
+.document-library-upload .folder-paged-list .folder-item span {position: absolute; left: 0px; height: 32px; width: 40px; background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/library_2D00_folder_2D00_icon.png');}
+.document-library-upload .folder-paged-list .folder-item.folder span {background-position:  -125px 0; padding: 0px;}
+.document-library-upload .folder-paged-list .folder-item.folder-up span {background-position: -339px 0; padding: 0px;}
+	.document-library-upload .folder-paged-list .folder-item span {padding-left: 50px;}
+.document-library-upload .internal-link.upload-file {cursor: pointer;}
+.document-library-upload .error {background-color: #CADBEE; border: 1px solid #300; color: black; padding: 12px;}
+
+/* $Document Library - Check In/Out Widget
+*******************************************************/
+.document-library-checkInOut-widget .links {margin: 0px; padding: 0px;  border: 0px;  list-style: none; width: 100%;height: 40px;}
+	.document-library-checkInOut-widget .links .link-item {overflow: hidden; float: left;}
+	.document-library-checkInOut-widget .links .checked-out-status.link-item {display: inline; width: 100%;}
+		.document-library-checkInOut-widget .links .checked-out-status .profile {font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+		.document-library-checkInOut-widget .links .link-item .discard-check-out {margin: 5px; padding: 5px; border-left: solid 1px #c9c9c9;}
+.document-library-checkInOut-widget .check-in-form {}
+	.document-library-checkInOut-widget .check-in-form .radio-buttons {margin: 5px 0px; padding: 0px; border: 0px; list-style: none;}
+	.document-library-checkInOut-widget .check-in-form .check-in-version {margin: 5px 0px; padding: 0px;}
+	.document-library-checkInOut-widget .check-in-form .comment {position: relative; margin:0px; padding-right: 10px;}
+	.document-library-checkInOut-widget .check-in-form .footer {margin: 0px}
+		.document-library-checkInOut-widget .check-in-form .radio-button {}
+		.document-library-checkInOut-widget .check-in-form .check-in-version .version-list {margin: 0px; padding: 0px; border: 0px; list-style: none;}
+		.document-library-checkInOut-widget .check-in-form .check-in-comment {height: 50px; width: 100%;}
+		.document-library-checkInOut-widget .check-in-form .footer .post-check-in {width: 60px; font-size: 11px; float: left;}
+		.document-library-checkInOut-widget .check-in-form .footer .cancel-check-in {width: 60px; font-size: 11px; float: right; margin-right:8px;}
+			.document-library-checkInOut-widget .check-in-form .check-in-version .version-item {}
+.document-library-checkInOut-widget .error {color: #f00;}
+
+/* $DocumentLibrary - BreadCrumbs Widget
+*******************************************************/
+.document-library-breadcrumbs {white-space: nowrap; overflow-x: hidden; text-overflow: ellipsis; overflow: hidden; height: 65px; padding: 12px; background-color: #283E4B; background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#365768), to(#283E4B));background-image: -webkit-linear-gradient(top, #365768, #283E4B); background-image: -moz-linear-gradient(top, #365768, #283E4B); background-image: -ms-linear-gradient(top, #365768, #283E4B); background-image: -o-linear-gradient(top, #365768, #283E4B); background-image: linear-gradient(top, #365768, #283E4B); color: white;}
+	.document-library-breadcrumbs a { color: #fff; text-decoration: none; }
+	.document-library-breadcrumbs .title-avatar { float: left; height: 65px; margin: 0px 12px 0px 12px; width: 65px; background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/sharepoint_2D00_icon.png'); background-repeat: no-repeat; display: block; position: relative; top: -10px;}
+	.document-library-breadcrumbs .title-list-avatar { float: left; height: 65px; margin: 0px 12px 0px 12px; width: 65px; background-image: url('~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/sharepoint_2D00_list_2D00_icon.png'); background-repeat: no-repeat; display: block; position: relative; top: -10px;}
+	.document-library-breadcrumbs .title .breadcrumb-list { list-style: none; padding: 0; margin: 0 0 -6px 0; overflow: hidden; font-size: 10px; min-height: 22px; border: 1px solid transparent; border-radius: 3px;  }
+		.document-library-breadcrumbs .title .breadcrumb-list .breadcrumb-item {float: left; padding: 2px; font-size: 11px;}
+
+/* $File Versions Modal
+*******************************************************/
+.file-version-history {width: 100%; font-size:12px;}
+	.file-version-history .version {width: 50px;}
+	.file-version-history .date {width: 120px;}
+	.file-version-history .author {width: 200px;}
+	.file-version-history .size {width: 50px;}
+	.file-version-history .header {height:25px; list-style: none outside none; margin: 0; padding: 0; border-bottom:1px solid #666666; overflow:hidden;}
+		.file-version-history .header li {float:left; padding: 5px; overflow:hidden; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+	.file-version-history .content {}
+		.file-version-history .content .record {clear: both; height:25px; list-style: none outside none; margin: 0; padding: 0; border-bottom:1px dotted #999999;}
+			.file-version-history .content .record li {float:left; padding: 5px; overflow:hidden; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+			.file-version-history .content .record li.comment {position: relative; margin-top:-25px; width: 100%; }
+				.file-version-history .content .record li.comment .text{padding-left: 460px; padding-right: 5px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+				.file-version-history .content .record li.comment .text.right-indent {padding-right: 100px;}
+			.file-version-history .content .record li.date a {position: absolute; z-index: 1; width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+			.file-version-history .content .record li.restore {position: absolute; right: 0px; cursor: default; z-index: 1;}
+				.file-version-history .content .record li.restore a {padding: 3px 10px; text-transform: uppercase; font-size: 11px;}
+				.file-version-history .content .record li.restore a:hover {background-color: #F2F2F2;}
+				.file-version-history .content .record li.restore a:active {border-color: #999; color: #333;}
+	.file-version-history .confirm-restore {}
+		.file-version-history .confirm-restore .text { margin-bottom: 20px; font-size:12px; font-family:Arial;}
+		.file-version-history .confirm-restore .tbl-lnk-container {width: 100%;}
+			.file-version-history .confirm-restore .tbl-lnk-container td.l {text-align: right; padding-right: 40px;}
+			.file-version-history .confirm-restore .tbl-lnk-container td.r {text-align: left; padding-left: 40px;}
+
+/* $DocumentLibrary - Folder Create/Edit Modal
+*******************************************************/
+.document-library-create-edit-folder {}
+.document-library-create-edit-folder .table-edit-footer {width: 70%; margin-top: 100px;}
+.document-library-create-edit-folder .table-edit-footer .description {color: #4C4C4C; font-family: tahoma; font-size: 8pt; text-align: left; }
+
+
+/* $DocumentLibrary - Permissions Modal
+*******************************************************/
+.sharepoint-permissions {}
+	.sharepoint-permissions .header .menu {padding: 0px; height: 40px; border: 0px; border-bottom: 1px solid #CCC;}
+	.sharepoint-permissions .header .menu p {margin: 0px; padding: 15px 15px 5px 15px; color: #7F7F7F; font-weight: bold;}
+	.sharepoint-permissions .footer {float: right;}
+		.sharepoint-permissions .footer a {margin-right: 15px;}
+	/* Permissions List View */
+	.sharepoint-permissions .permissions-list-tab .header .menu {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 750px;}
+		.sharepoint-permissions .permissions-list-tab .header .menu .menu-item {float: left; padding: 15px 25px 5px 35px; height: 20px;}
+			.sharepoint-permissions .permissions-list-tab .header .menu .menu-item.disabled {color: #CCC; text-decoration:none;}
+			.sharepoint-permissions .permissions-list-tab .header .menu .menu-item.disabled span {opacity:0.4; filter:alpha(opacity=40);}
+			.sharepoint-permissions .permissions-list-tab .header .menu .menu-item span {position: absolute; width: 28px; height: 25px; margin-left: -28px; margin-top: -5px; background-image: url("~/cfs-filesystemfile.ashx/__key/themefiles/s-fd-424eb7d9138d417b994b64bff44bf274-files/permissions_2D00_icon.png");}
+			.sharepoint-permissions .permissions-list-tab .header .menu .menu-item.grant-permissions span  {background-position: 0px 0px;}
+			.sharepoint-permissions .permissions-list-tab .header .menu .menu-item.remove-permissions span {background-position: 0px 25px;}
+			.sharepoint-permissions .permissions-list-tab .header .menu .menu-item.start-inheriting span   {background-position: 0px 50px;}
+			.sharepoint-permissions .permissions-list-tab .header .menu .menu-item.stop-inheriting span	{background-position: 0px 75px;}
+			.sharepoint-permissions .permissions-list-tab .header .menu .menu-item.edit-permissions span   {background-position: 0px 100px;}
+	.sharepoint-permissions .permissions-list-tab .content.disabled {color: #CCC;}
+		.sharepoint-permissions .permissions-list-tab .content .no-items {padding-left: 16px; color: #7E7E7E}
+		.sharepoint-permissions .permissions-list-tab .content .table-list {width: 100%; border-collapse:collapse; margin-top:0px;}
+			.sharepoint-permissions .permissions-list-tab .content .table-list tr {border-bottom:1px dotted #CCC; height: 32px;}
+			.sharepoint-permissions .permissions-list-tab .content .table-list .table-item td {padding: 5px 12px 5px 12px; cursor: default;}
+			.sharepoint-permissions .permissions-list-tab .content .table-list .item-checker {width: 16px;}
+			.sharepoint-permissions .permissions-list-tab .content .table-list .item-checker .invisible {opacity: 0.4; filter: alpha(opacity=40); /* For IE8 and earlier */}
+			.sharepoint-permissions .permissions-list-tab .content .table-list .member-title {width:30%;}
+			.sharepoint-permissions .permissions-list-tab .content .table-list .principal-type {width:30%;}
+			.sharepoint-permissions .permissions-list-tab .content .table-list .permission-levels {}
+	/* Permissions Grant View */
+	.sharepoint-permissions .permissions-grant-tab .content {padding: 10px 15px;}
+	.sharepoint-permissions .permissions-grant-tab .content p {font-weight: bold;}
+	.sharepoint-permissions .permissions-grant-tab .content .users-groups-selector {border-bottom: 1px dotted #CCC; padding-bottom: 10px;}
+	.sharepoint-permissions .permissions-grant-tab .content .users-groups-selector input {}
+	.sharepoint-permissions .permissions-grant-tab .content .users-groups-selector p {margin-bottom: 0px;}
+		.sharepoint-permissions .permissions-grant-tab .content .grant-permissions .permissions-levels {padding: 10px 0px;}
+		.sharepoint-permissions .permissions-grant-tab .content .grant-permissions .group-selector,
+		.sharepoint-permissions .permissions-grant-tab .content .grant-permissions .permissions-levels-list {list-style: none; padding: 0px 0px 0px 25px;}
+	/* Permissions Edit View */
+	.sharepoint-permissions .permissions-edit-tab .content {padding: 10px 15px;}
+	.sharepoint-permissions .permissions-edit-tab .content p {font-weight: bold;}
+	.sharepoint-permissions .permissions-edit-tab .content .users-or-groups {border-bottom: 1px dotted #CCC; padding: 5px 0px;}
+		.sharepoint-permissions .permissions-edit-tab .content .users-or-groups .selected {font-size: 1.5em;}
+		.sharepoint-permissions .permissions-edit-tab .content .permissions-levels {padding: 10px 0px;}
+			.sharepoint-permissions .permissions-edit-tab .content .permissions-levels .permissions-levels-list {list-style: none; padding: 10px 0px; margin: 0px;}
+
+/* SharePoint - Upload/Edit document in a document Library
+*******************************************************/
+.document-library-upload-widget .error {background-color: #CADBEE; border: 1px solid #300; color: black; padding: 12px;}

@@ -1,0 +1,62 @@
+﻿#foreach($library in $libraries)
+#beforeall
+	<div class="document-libraries-header"></div>
+	<ul class="document-libraries">
+#each
+		<li class="library-header"></li>
+		<li class="library">
+			<div class="library-indicator"><a href="$!{library.SPViewUrl}"><span></span></div>
+			<div class="library-identity">
+				<h3>
+					<a href="$core_v2_encoding.HtmlAttributeEncode($!library.Url)" class="internal-link view-document-library">
+						<span></span>$!library.Name
+					</a>
+				</h3>
+				$!library.Description
+			</div>
+			<div class="library-attributes">
+				<div class="attribute-list-header"></div>
+				<ul class="attribute-list">
+
+					#if($showItemCount)
+					<li class="attribute-item post-count">
+						<span class="attribute-key">$core_v2_language.GetResource('BrowseDocumentLibraries_ItemCount')</span>
+						<span class="attribute-value">$!library.ItemCount</span>
+					</li>
+					#end
+
+					#if($showCreatedDate)
+					<li class="attribute-item created-date">
+						<span class="attribute-key">$core_v2_language.GetResource('BrowseDocumentLibraries_CreatedDate')</span>
+						<span class="attribute-value">$core_v2_language.FormatDate($library.Created)</span>
+					</li>
+					#end
+
+					#if($showModifiedDate)
+					<li class="attribute-item latest-post-date">
+						<span class="attribute-key">$core_v2_language.GetResource('BrowseDocumentLibraries_Recent')</span>
+						<span class="attribute-value">$core_v2_language.FormatAgoDate($library.Modified)</span>
+					</li>
+					#end
+
+					#if($showVersioning)
+					<li class="attribute-item latest-post-date">
+						<span class="attribute-key">$core_v2_language.GetResource('BrowseDocumentLibraries_Versioning')</span>
+						<span class="attribute-value">
+							#if($library.VersioningEnabled)
+								$core_v2_language.GetResource('BrowseDocumentLibraries_Versioning_Enabled')
+							#else
+								$core_v2_language.GetResource('BrowseDocumentLibraries_Versioning_Disabled')
+							#end
+						</span>
+					</li>
+					#end
+
+				</ul>
+				<div class="attribute-list-footer"></div>
+			</div>
+		</li>
+#afterall
+	</ul>
+	<div class="document-libraries-footer"></div>
+#end

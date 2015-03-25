@@ -1,0 +1,26 @@
+#set($maxNameLength = 10)
+#set($empty = $core_v2_utility.ParseGuid('00000000-0000-0000-0000-000000000000'))
+
+#if($file) #set($contentId = $file.ContentId)
+#else      #set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue('contentId')))
+#end
+
+#if ($contentId != $empty)
+	#set($fileInfo = false)
+	#set($fileInfo = $sharepoint_v2_file.GetInfo($contentId))
+	#if ($fileInfo)
+		#set($author = false)
+		#if ($fileInfo.CheckedOutByUser.Email)
+			#set($author = $core_v2_user.Get("%{Email = $fileInfo.CheckedOutByUser.Email}"))
+		#end
+		<span class="user-name">
+			#if($author && $author.ProfileUrl)
+				<a href="$core_v2_encoding.HtmlAttributeEncode($author.ProfileUrl)" class="internal-link view-user-profile">$!{author.DisplayName}</a>
+			#elseif($author)
+				$core_v2_language.Truncate($author.DisplayName, $maxNameLength, "...")
+			#else
+				$core_v2_language.Truncate($fileInfo.CheckedOutByUser.DisplayName, $maxNameLength, "...")
+			#end
+		</span>
+	#end
+#end

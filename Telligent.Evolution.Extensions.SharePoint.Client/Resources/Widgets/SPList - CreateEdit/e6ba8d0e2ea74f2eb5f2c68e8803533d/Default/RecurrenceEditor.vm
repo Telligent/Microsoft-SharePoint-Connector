@@ -1,0 +1,416 @@
+#if(!$core_v2_page.IsPost || $isInPreviewMode)
+	#set($isRecurring = false)
+	#set($recurrenceRule = false)
+	#if($listItem.ValueAsText($field.InternalName) == 'Yes')
+		#set($isRecurring = true)
+		#set($recurrenceData = $listItem.Value('RecurrenceData'))
+		#set($recurrenceRule = $sharepoint_v1_recurrence.Parse($recurrenceData))
+	#end
+
+	#registerEndOfPageHtml('telligent.sharepoint.widgets.recurrenceEditor')
+		<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('RecurrenceEditor.js'))"></script>
+	#end
+	#registerEndOfPageHtml()
+		<script type="text/javascript">
+			jQuery(function(j){
+				j.telligent.sharepoint.widgets.recurrenceEditor.register({
+					holderId            : "#${field.InternalName}-holder",
+					isRecurringCheckerId: "#${field.InternalName}-checker",
+					dailySelectorId     : "#${field.InternalName}-Daily",
+					dailyHolderId       : "#${field.InternalName}-DailyHolder",
+					weeklySelectorId    : "#${field.InternalName}-Weekly",
+					weeklyHolderId      : "#${field.InternalName}-WeeklyHolder",
+					monthlySelectorId   : "#${field.InternalName}-Monthly",
+					monthlyHolderId     : "#${field.InternalName}-MonthlyHolder",
+					yearlySelectorId    : "#${field.InternalName}-Yearly",
+					yearlyHolderId      : "#${field.InternalName}-YearlyHolder"
+				});
+			});
+		</script>
+	#end
+	<div class="recurrence-editor" id="${field.InternalName}-holder">
+		<div title="Recurrence">
+			<input id="${field.InternalName}-checker" name="${field.InternalName}" type="checkbox" #if($isRecurring)checked="checked"#end value="$listItem.ValueAsText($field.InternalName)"/>
+			<label for="${field.InternalName}-checker">
+				$core_v2_language.GetResource("SharePoint_ListItem_RecurrenceEdit_IsRepeating")
+			</label>
+		</div>
+
+		#set($dailyRule = false)
+		#if(!$recurrenceRule || $recurrenceRule.Type == 'Daily')
+			#set($dailyRule = $recurrenceRule)
+		#end
+
+		#set($weeklyRule = false)
+		#if($recurrenceRule && $recurrenceRule.Type == 'Weekly')
+			#set($weeklyRule = $recurrenceRule)
+		#end
+
+		#set($monthlyRule = false)
+		#if($recurrenceRule && $recurrenceRule.Type == 'Monthly')
+			#set($monthlyRule = $recurrenceRule)
+		#end
+
+		#set($yearlyRule = false)
+		#if($recurrenceRule && $recurrenceRule.Type == 'Yearly')
+			#set($yearlyRule = $recurrenceRule)
+		#end
+
+		<div class="form-recurrence" #if(!$isRecurring)style="display: none;"#end>
+			<ul class="left recurrence-type-holder">
+				#set($title = $core_v2_language.FormatString($core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_RecurrenceType'), $core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Daily')))
+				<li class="ms-radiotext" title="$!{title}">
+					<input id="${field.InternalName}-Daily" type="radio" name="${field.InternalName}-RecurrencyPattern" value="Daily" 
+						#if($dailyRule)
+							checked="checked"
+						#end
+					/>
+					<label for="${field.InternalName}-Daily">$core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Daily')</label>
+				</li>
+				#set($title = $core_v2_language.FormatString($core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_RecurrenceType'), $core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Weekly')))
+				<li class="ms-radiotext" title="$!{title}">
+					<input id="${field.InternalName}-Weekly" type="radio" name="${field.InternalName}-RecurrencyPattern" value="Weekly"
+						#if($weeklyRule)
+							checked="checked"
+						#end
+					/>
+					<label for="${field.InternalName}-Weekly">$core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Weekly')</label>
+				</li>
+				#set($title = $core_v2_language.FormatString($core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_RecurrenceType'), $core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Monthly')))
+				<li class="ms-radiotext" title="$!{title}">
+					<input id="${field.InternalName}-Monthly" type="radio" name="${field.InternalName}-RecurrencyPattern" value="Monthly"
+						#if($monthlyRule)
+							checked="checked"
+						#end
+					/>
+					<label for="${field.InternalName}-Monthly">$core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Monthly')</label>
+				</li>
+				#set($title = $core_v2_language.FormatString($core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_RecurrenceType'), $core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Yearly')))
+				<li class="ms-radiotext" title="$!{title}">
+					<input id="${field.InternalName}-Yearly" type="radio" name="${field.InternalName}-RecurrencyPattern" value="Yearly"
+						#if($yearlyRule)
+							checked="checked"
+						#end
+					/>
+					<label for="${field.InternalName}-Yearly">$core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Yearly')</label>
+				</li>
+			</ul>
+			<div class="right">
+				<div class="header">
+					$core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Pattern')
+				</div>
+
+				<div id="${field.InternalName}-DailyHolder" #if($recurrenceRule && !$dailyRule)style="display:none;"#end >
+					#set($weekDay = false)
+					#if($dailyRule)
+						#set($weekDay = $dailyRule.WeekDay)
+					#end
+					<ul>
+						<li>
+							<input id="${field.InternalName}-DailyPatternSelector-Type0" class="daily-dayFrequency" type="radio" name="${field.InternalName}-DailyPatternSelector" value="dayFrequency"
+								#if(!$recurrenceRule || !$weekDay)
+									checked="checked"
+								#end
+							/>
+							<label for="${field.InternalName}-DailyPatternSelector-Type0">
+								#set($dayFrequency = 1)
+								#if(!$recurrenceRule || ($dailyRule && !$weekDay))
+									#set($dayFrequency = $dailyRule.Frequency)
+								#end
+								$core_v2_language.FormatString($core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Daily_SelectedDayPattern'), "${field.InternalName}-DayFrequency", "${dayFrequency}")
+							</label>
+						</li>
+						<li>
+							<input id="${field.InternalName}-DailyPatternSelector-Type1" class="daily" type="radio" name="${field.InternalName}-DailyPatternSelector" value="weekday"
+								#if($weekDay)
+									checked="checked"
+								#end
+							/>
+							<label for="${field.InternalName}-DailyPatternSelector-Type1">$core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Daily_WeekDayPattern')</label>
+						</li>
+					</ul>
+				</div>
+
+				<div id="${field.InternalName}-WeeklyHolder" #if(!$weeklyRule)style="display:none;"#end>
+					<div>
+						#set($weekFrequency = 1)
+						#if($weeklyRule)
+							#set($weekFrequency = $weeklyRule.Frequency)
+						#end
+						$core_v2_language.FormatString($core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Weekly_Pattern'), "${field.InternalName}-WeekFrequency", "${weekFrequency}")
+					</div>
+					<div>
+						#foreach($weekday in ['su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'])
+							<span class="weekday">
+								<input id="${field.InternalName}-WeekDay-$weekday" name="${field.InternalName}-WeekDay-$weekday" type="checkbox" value="$weekday"
+									#if($weeklyRule && $weeklyRule.Contains("$weekday"))
+										checked="checked"
+									#end
+								/>
+								<label for="${field.InternalName}-WeekDay-$weekday">
+									$core_v2_language.GetResource("SharePoint_ListItem_RecurrenceDayOfWeek_$weekday")
+								</label>
+							</span>
+						#end
+					</div>
+				</div>
+
+				<div id="${field.InternalName}-MonthlyHolder" #if(!$monthlyRule)style="display:none;"#end>
+					<ul>
+						<li>
+							<input id="${field.InternalName}-MonthlyPatternSelector-Type0" type="radio" name="${field.InternalName}-MonthlyPatternSelector" value="Monthly"
+								#if(!$monthlyRule || !$monthlyRule.MonthlyByDay)
+									checked="checked"
+								#end
+							/>
+							<label for="${field.InternalName}-MonthlyPatternSelector-Type0">
+								#set($monthlyDay = 1)
+								#if($monthlyRule && !$monthlyRule.MonthlyByDay)
+									#set($monthlyDay = $monthlyRule.Day)
+								#end
+								#set($monthlyFrequency = 1)
+								#if($monthlyRule && !$monthlyRule.MonthlyByDay)
+									#set($monthlyFrequency = $monthlyRule.Frequency)
+								#end
+								$core_v2_language.FormatString($core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Monthly_Pattern'), "${field.InternalName}-Monthly-Day", "${monthlyDay}", "${field.InternalName}-Monthly-Month", "${monthlyFrequency}")
+							</label>
+						</li>
+						<li>
+							<input id="${field.InternalName}-MonthlyPatternSelector-Type1" class="daily" type="radio" name="${field.InternalName}-MonthlyPatternSelector" value="MonthlyByDay"
+								#if($monthlyRule && $monthlyRule.MonthlyByDay)
+									checked="checked"
+								#end
+							/>
+							<label for="${field.InternalName}-MonthlyPatternSelector-Type1">
+								$core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Monthly_ByDayPatternPrefix')
+								<select name="${field.InternalName}-MonthlyByDay-WeekdayOrder">
+									#set($selectedValue = 'first')
+									#if($monthlyRule)
+										#set($selectedValue = "$monthlyRule.WeekDayOrder")
+									#end
+									#foreach($order in ['first', 'second', 'third', 'fourth', 'last'])
+										<option #if($selectedValue == $order)selected="selected"#end value="$order"> $core_v2_language.GetResource("SharePoint_ListItem_RecurrenceOrder_$order")</option>
+									#end
+								</select>
+								<select name="${field.InternalName}-MonthlyByDay-Weekday">
+									#set($weekdayValue = 'day')
+									#if($monthlyRule)
+										#set($weekdayValue = "$monthlyRule.WeekDay")
+									#end
+									#foreach($weekday in ['day', 'weekday', 'weekend_day', 'su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'])
+										<option #if($weekdayValue == $weekday)selected="selected"#end value="$weekday">$core_v2_language.GetResource("SharePoint_ListItem_RecurrenceDayOfWeek_$weekday")</option>
+									#end
+								</select>
+								#set($monthlyFrequency = 1)
+								#if($monthlyRule && $monthlyRule.MonthlyByDay)
+									#set($monthlyFrequency = $monthlyRule.Frequency)
+								#end
+								$core_v2_language.FormatString($core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Monthly_ByDayPattern'), "${field.InternalName}-MonthlyByDay-Month", "${monthlyFrequency}")
+							</label>
+						</li>
+					</ul>
+				</div>
+
+				<div id="${field.InternalName}-YearlyHolder" #if(!$yearlyRule)style="display:none;"#end>
+					<ul>
+						<li>
+							<input id="${field.InternalName}-YearlyPatternSelector-Type0" type="radio" name="${field.InternalName}-YearlyPatternSelector" value="Yearly"
+								#if(!$yearlyRule || !$yearlyRule.YearlyByDay)
+									checked="checked"
+								#end
+							/>
+							<label for="${field.InternalName}-YearlyPatternSelector-Type0">
+								$core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Yearly_PatternPrefix')
+
+								<select name="${field.InternalName}-Yearly-Month">
+									#foreach($monthNumber in [1..12])
+										#set($month = $core_v2_utility.ParseDate('1', "$monthNumber", '1'))
+										#set($isSelected = false)
+										#if($yearlyRule && !$yearlyRule.YearlyByDay && $monthNumber == $yearlyRule.Month)
+											#set($isSelected = true)
+										#end
+										<option value="$monthNumber" #if($isSelected)selected="selected"#end>$month.ToString('MMMM')</option>
+									#end
+								</select>
+
+								#set($yearlyDay = 1)
+								#if($yearlyRule && !$yearlyRule.YearlyByDay)
+									#set($yearlyDay = $yearlyRule.Day)
+								#end
+								$core_v2_language.FormatString($core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Yearly_Pattern'), "${field.InternalName}-Yearly-Day", "${yearlyDay}")
+							</label>
+						</li>
+
+						<li>
+							<input id="${field.InternalName}-YearlyPatternSelector-Type1" class="daily" type="radio" name="${field.InternalName}-YearlyPatternSelector" value="YearlyByDay"
+								#if($yearlyRule && $yearlyRule.YearlyByDay)
+									checked="checked"
+								#end
+							/>
+							<label for="${field.InternalName}-YearlyPatternSelector-Type1">
+								$core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Yearly_BeforeWeekdayOrder')
+								<select name="${field.InternalName}-YearlyByDay-WeekdayOrder">
+									#set($selectedValue = 'first')
+									#if($yearlyRule)
+										#set($selectedValue = "$recurrenceRule.WeekDayOrder")
+									#end
+									#foreach($order in ['first', 'second', 'third', 'fourth', 'last'])
+										<option #if($selectedValue == $order)selected="selected"#end value="$order"> $core_v2_language.GetResource("SharePoint_ListItem_RecurrenceOrder_$order")</option>
+									#end
+								</select>
+								$core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Yearly_BeforeWeekday')
+								<select name="${field.InternalName}-YearlyByDay-Weekday">
+									#set($weekdayValue = 'day')
+									#if($yearlyRule)
+										#set($weekdayValue = "$yearlyRule.WeekDay")
+									#end
+									#foreach($weekday in ['day', 'weekday', 'weekend_day', 'su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'])
+										<option #if($weekdayValue == $weekday)selected="selected"#end value="$weekday">$core_v2_language.GetResource("SharePoint_ListItem_RecurrenceDayOfWeek_$weekday")</option>
+									#end
+								</select>
+								$core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_Yearly_BeforeMonth')
+								<select name="${field.InternalName}-YearlyByDay-Month">
+									#foreach($monthNumber in [1..12])
+										#set($month = $core_v2_utility.ParseDate('1', "$monthNumber", '1'))
+										#set($isSelected = false)
+										#if($yearlyRule && $yearlyRule.YearlyByDay && $monthNumber == $yearlyRule.Month)
+											#set($isSelected = true)
+										#end
+										<option value="$monthNumber" #if($isSelected)selected="selected"#end>$month.ToString('MMMM')</option>
+									#end
+								</select>
+							</label>
+						</li>
+					</ul>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="form-recurrence" #if(!$isRecurring)style="display: none;"#end>
+			<div class="left">
+			</div>
+			<ul class="right recurrence-type-holder">
+				<li>
+					<input id="${field.InternalName}-DateRange-Type0" type="radio" name="${field.InternalName}-DateRange" value="NoEndDate"
+						#if(!$recurrenceRule || $recurrenceRule.RepeatForever || (!$recurrenceRule.RepeatInstances && !$recurrenceRule.EndBy))
+							checked="checked"
+						#end
+					/>
+					<label for="${field.InternalName}-DateRange-Type0">
+						$core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_DateRange_NoEndDate')
+					</label>
+				</li>
+
+				<li>
+					<input id="${field.InternalName}-DateRange-Type1" type="radio" name="${field.InternalName}-DateRange" value="EndByOccurrences"
+						#if($recurrenceRule && $recurrenceRule.RepeatInstances)
+							checked="checked"
+						#end
+					/>
+					<label for="${field.InternalName}-DateRange-Type1">
+						#set($occurrences = 10)
+						#if($recurrenceRule && $recurrenceRule.RepeatInstances)
+							#set($occurrences = $recurrenceRule.RepeatInstances)
+						#end
+						$core_v2_language.FormatString($core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_DateRange_EndByOccurrences'), "${field.InternalName}-DateRange-Occurrences", "${occurrences}")
+					</label>
+				</li>
+
+				<li>
+					<input id="${field.InternalName}-DateRange-Type2" type="radio" name="${field.InternalName}-DateRange" value="EndByDate"
+						#if($recurrenceRule && $recurrenceRule.EndBy)
+							checked="checked"
+						#end
+					/>
+					<label for="${field.InternalName}-DateRange-Type2">
+						$core_v2_language.GetResource('SharePoint_ListItem_RecurrenceEdit_DateRange_EndByDate')
+					</label>
+				</li>
+			</ul>
+		</div>
+	</div>
+#else
+	#set($isRecurring = $core_v2_page.GetFormValue("${field.InternalName}"))
+	#if($isRecurring == 'Yes')
+		## Create xml
+		#set($type = $core_v2_page.GetFormValue("${field.InternalName}-RecurrencyPattern"))
+		#set($recurrenceRule = false)
+		#set($recurrenceRule = $sharepoint_v1_recurrence.Create($type))
+		#if($recurrenceRule)
+			#if($recurrenceRule.Type == 'Daily')
+				#set($pattern = $core_v2_page.GetFormValue("${field.InternalName}-DailyPatternSelector"))
+				#if($pattern == 'weekday')
+					$recurrenceRule.SetWeekDay('weekday')
+				#else
+					#set($dayFrequency = $core_v2_page.GetFormValue("${field.InternalName}-DayFrequency"))
+					#set($recurrenceRule.Frequency = $core_v2_utility.ParseInt($dayFrequency))
+				#end
+
+			#elseif($recurrenceRule.Type == 'Weekly')
+				#set($weekFrequency = $core_v2_page.GetFormValue("${field.InternalName}-WeekFrequency"))
+				#set($recurrenceRule.Frequency = $core_v2_utility.ParseInt($weekFrequency))
+				#foreach($weekday in ['su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'])
+					#set($weekdayValue = $core_v2_page.GetFormValue("${field.InternalName}-WeekDay-$weekday"))
+					#set($day = $recurrenceRule.AddDayOfWeek($weekdayValue))
+				#end
+
+			#elseif($recurrenceRule.Type == 'Monthly')
+				#set($pattern = $core_v2_page.GetFormValue("${field.InternalName}-MonthlyPatternSelector"))
+				#if($pattern == 'Monthly')
+					#set($recurrenceRule.MonthlyByDay = false)
+					#set($dayValue = $core_v2_page.GetFormValue("${field.InternalName}-Monthly-Day"))
+					#set($recurrenceRule.Day = $core_v2_utility.ParseInt($dayValue))
+					#set($monthFrequency = $core_v2_page.GetFormValue("${field.InternalName}-Monthly-Month"))
+					#set($recurrenceRule.Frequency = $core_v2_utility.ParseInt($monthFrequency))
+				#else
+					#set($recurrenceRule.MonthlyByDay = true)
+					#set($dayOrderValue = $core_v2_page.GetFormValue("${field.InternalName}-MonthlyByDay-WeekdayOrder"))
+					#set($dayOrder = $recurrenceRule.SetWeekDayOrder($dayOrderValue))
+					#set($weekDayValue = $core_v2_page.GetFormValue("${field.InternalName}-MonthlyByDay-Weekday"))
+					#set($weekDay = $recurrenceRule.SetWeekDay($weekDayValue))
+					#set($monthFrequency = $core_v2_page.GetFormValue("${field.InternalName}-MonthlyByDay-Month"))
+					#set($recurrenceRule.Frequency = $core_v2_utility.ParseInt($monthFrequency))
+				#end
+
+			#elseif($recurrenceRule.Type == 'Yearly')
+				#set($pattern = $core_v2_page.GetFormValue("${field.InternalName}-YearlyPatternSelector"))
+				#if($pattern == 'Yearly')
+					#set($recurrenceRule.YearlyByDay = false)
+					#set($monthValue = $core_v2_page.GetFormValue("${field.InternalName}-Yearly-Month"))
+					#set($recurrenceRule.Month = $core_v2_utility.ParseInt($monthValue))
+					#set($dayValue = $core_v2_page.GetFormValue("${field.InternalName}-Yearly-Day"))
+					#set($recurrenceRule.Day = $core_v2_utility.ParseInt($dayValue))
+				#else
+					#set($recurrenceRule.YearlyByDay = true)
+					#set($dayOrderValue = $core_v2_page.GetFormValue("${field.InternalName}-YearlyByDay-WeekdayOrder"))
+					#set($dayOrder = $recurrenceRule.SetWeekDayOrder($dayOrderValue))
+					#set($weekDayValue = $core_v2_page.GetFormValue("${field.InternalName}-YearlyByDay-Weekday"))
+					#set($weekDay = $recurrenceRule.SetWeekDay($weekDayValue))
+					#set($monthValue = $core_v2_page.GetFormValue("${field.InternalName}-YearlyByDay-Month"))
+					#set($recurrenceRule.Month = $core_v2_utility.ParseInt($monthValue))
+				#end
+			#end
+
+			#set($dateRange = $core_v2_page.GetFormValue("${field.InternalName}-DateRange"))
+			#if($dateRange == 'NoEndDate')
+				#set($recurrenceRule.RepeatForever = true)
+			#elseif($dateRange == 'EndByOccurrences')
+				#set($occurrencesValue = $core_v2_page.GetFormValue("${field.InternalName}-DateRange-Occurrences"))
+				#set($recurrenceRule.RepeatInstances = $core_v2_utility.ParseInt($occurrencesValue))
+			#elseif($dateRange == 'EndByDate')
+				#set($endDateValue = $core_v2_page.GetFormValue('EndDate'))
+				#set($recurrenceRule.EndBy = $core_v2_utility.ParseDate($endDateValue))
+			#end
+
+			## Saving data
+			$listItem.Fields.Add('RecurrenceData', $recurrenceRule.ToXml())
+		#end
+	#end
+	
+	#set($isRecurringValue = 0)
+	#if($isRecurring == 'Yes')
+		#set($isRecurringValue = 1)
+	#end
+	$listItem.Fields.Add("${field.InternalName}", "$isRecurringValue")
+#end

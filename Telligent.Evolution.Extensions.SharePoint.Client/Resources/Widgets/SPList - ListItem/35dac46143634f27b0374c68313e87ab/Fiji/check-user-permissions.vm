@@ -1,0 +1,20 @@
+#set($fullControl = false)
+#set($membershipType = false)
+#if($core_v2_user.IsRegistered($core_v2_user.Accessing.Id))
+	#if($core_v2_user.Accessing.Id == $core_v2_user.Current.Id)
+		#set($fullControl = true)
+	#else
+		#set($groupUserMember = false)
+		#set($groupUserMember = $core_v2_groupUserMember.Get($core_v2_group.Current.Id, "%{UserId = $core_v2_user.Accessing.Id}"))
+		#if($groupUserMember)
+			#set($membershipType = $groupUserMember.MembershipType)
+		#else
+			#set($userRoles = $core_v2_role.List("%{Application = $core_v2_user.Accessing.Application, Include = 'user', UserId = $core_v2_user.Accessing.Id}"))
+			#foreach($role in $userRoles)
+				#if($role.Name == 'Administrators')
+					#set($fullControl = true)
+				#end
+			#end
+		#end
+	#end
+#end

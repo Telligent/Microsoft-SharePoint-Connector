@@ -1,0 +1,17 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($groupId = $core_v2_utility.ParseInt($core_v2_page.GetFormValue('groupId')))
+#set($webUrl = $core_v2_page.GetFormValue('webUrl'))
+#set($libraryName = $core_v2_page.GetFormValue('libraryName'))
+#set($libraryDescription = $core_v2_page.GetFormValue('libraryDescription'))
+
+#set($library = false)
+#set($library = $sharepoint_v2_library.Create($groupId, $webUrl, $libraryName, "%{Description = $libraryDescription}"))
+#if($library && $library.HasErrors)
+	$core_v2_page.SendJsonError($library.Errors)
+#end
+
+{
+	"valid": true, 
+	"redirectUrl": "$core_v2_encoding.JavascriptEncode($sharepoint_v2_fileUrls.Browse($library.Id))"
+}

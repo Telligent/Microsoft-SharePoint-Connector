@@ -1,0 +1,27 @@
+﻿$core_v2_page.SetContentType('application/json')
+
+#set($empty = $core_v2_utility.ParseGuid('00000000-0000-0000-0000-000000000000'))
+#set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetFormValue('documentId')))
+#if ($contentId == $empty)
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('DocumentLibrary_File_Delete_NoPermissions'))
+#end
+
+#set($canEdit = $sharepoint_v2_listItem.CanEdit($contentId))
+#if(!$canEdit)
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('DocumentLibrary_File_Delete_NoPermissions'))
+#end
+
+#set($document = $sharepoint_v2_file.Get($contentId))
+#set($deleteInfo = $sharepoint_v2_file.Delete($contentId))
+#if ($deleteInfo && $deleteInfo.Errors.Count == 0)
+	{
+		"valid"      : true,
+		"statusMsg"  : "$!{core_v2_language.GetResource('DocumentLibrary_File_Deleted')}",
+		"contentId"  : "$!{contentId}",
+		"UrlRedirect": "$!{core_v2_encoding.JavascriptEncode($document.Library.Url)}"
+	}
+#elseif($deleteInfo)
+	$core_v2_page.SendJsonError($deleteInfo.Errors)
+#else
+	$core_v2_page.SendJsonError('Access denied. You do not have permission to perform this method or access this resource.')
+#end

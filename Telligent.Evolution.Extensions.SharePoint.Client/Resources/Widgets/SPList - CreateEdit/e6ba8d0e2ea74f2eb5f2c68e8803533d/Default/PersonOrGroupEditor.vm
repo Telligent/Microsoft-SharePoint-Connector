@@ -1,0 +1,65 @@
+﻿#if(!$core_v2_page.IsPost || $isInPreviewMode)
+	
+	#set($multiValue = $field.AllowMultipleValues)
+	#set($selectedCount = 0)
+
+	#if($listItem)
+
+		#foreach($person in $sharepoint_v2_person.GetValues($currentList.SPWebUrl, "$currentList.Id", $listItem.Id, $field.InternalName, $field.AllowMultipleValues))
+			#beforeall
+				<div id="$core_v2_widget.UniqueId("personOrGroupPreSelected")" class="glow-lookuptextbox" style="width: 456px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); border: 1px solid rgb(153, 153, 153); padding: 2px; display: block; overflow: hidden; cursor: text;">
+			#each
+
+				#set($displayName = $person.DisplayName)
+
+				#set($user = $core_v2_user.Get("%{Email = $person.Email}"))
+				#if ($user)
+					#set($displayName = $user.DisplayName)
+				#end
+
+				<div class="${field.InternalName}SelectedLookUps" personOrGroup="$person.Name" style="padding: 2px;">
+					<div style="border: 1px solid rgb(187, 187, 187); background-color: rgb(238, 238, 238); padding: 2px 6px 2px 2px; height: 20px; line-height: normal; white-space: nowrap; cursor: default; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; box-sizing: content-box;">
+						<a href="#" style="text-decoration: none; color: rgb(255, 0, 0); font-weight: bold; font-size: 80%; line-height: normal; margin-left: 4px; margin-right: 6px;">X</a>
+						<span style="cursor: default;">
+							#if ($displayName != $person.DisplayName)
+								${displayName} (${person.DisplayName})
+							#else
+								${displayName}
+							#end
+						</span>
+					</div>
+				</div>
+
+				#set($selectedCount = $selectedCount + 1)
+
+			#afterall
+				</div>
+		#end
+	#end
+
+	#registerEndOfPageHtml('telligent.sharepoint.widgets.personOrGroupEditor')
+		<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl("PersonOrGroupEditor.js"))"></script>
+	#end
+	#registerEndOfPageHtml()
+		<script type="text/javascript">
+			jQuery(function(j){
+				j.telligent.sharepoint.widgets.personOrGroupEditor.register({
+					allowMultipleValues      : $core_v2_language.Lowercase("$multiValue"),
+					personOrGroupContainer   : "#$core_v2_widget.UniqueId("personOrGroupContainer")",
+					personOrGroupPreSelected : "#$core_v2_widget.UniqueId("personOrGroupPreSelected")",
+					personOrGroupTextbox     : "#${field.InternalName}",
+					selectedLookUps          : ".${field.InternalName}SelectedLookUps",
+					webUrl                   : "${currentList.SPWebUrl}"
+				});
+			});
+		</script>
+	#end
+
+	<div id="$core_v2_widget.UniqueId("personOrGroupContainer")" style="#if($selectedCount > 0 && !$multiValue)display:none;#end">
+		<input type="text" id="${field.InternalName}" name="${field.InternalName}" value=""/>
+	</div>
+
+#else
+	#set($value = $core_v2_page.GetFormValue("$field.InternalName"))
+	$listItem.Fields.Add("$field.InternalName", $sharepoint_v2_person.FromUser($field.AllowMultipleValues, $value))
+#end

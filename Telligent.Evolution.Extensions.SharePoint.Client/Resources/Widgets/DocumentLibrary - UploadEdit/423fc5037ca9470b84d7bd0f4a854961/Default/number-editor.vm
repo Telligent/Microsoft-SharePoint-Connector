@@ -1,0 +1,58 @@
+﻿#set($showAsPercentage = $sharepoint_v1_fieldnumber.ShowAsPercentage($field))
+#if(!$core_v2_page.IsPost || $isInPreviewMode)
+	#set($MinValue = $field.MinimumValue)
+	#set($MaxValue = $field.MaximumValue)
+	#set($controlId = $core_v2_widget.UniqueId($field.InternalName))
+	#set($errorMsgId = "${field.InternalName}_msg")
+
+	#if($showAsPercentage)
+		#set($MinValue = $MinValue*100)
+		#set($MaxValue = $MaxValue*100)
+	#end
+
+	<script type="text/javascript">
+		jQuery(function(j) {
+			var editor = j("#${controlId}"),
+			errorMsg = j("#${errorMsgId}"),
+			isValid = function (input){
+				#if ($field.Required)
+					if(input.val().length == 0){
+						return false;
+					}
+				#end
+				if (/^-?\d+(\.\d+)?$/.test(input.val())) {
+					var floatValue = parseFloat(input.val());
+					if (floatValue >= $MinValue && floatValue <= $MaxValue){
+						return true;
+					}
+				}
+				return false;
+			};
+			j.telligent.sharepoint.widgets.validator.registerInputValidation(editor, errorMsg, isValid);
+		});
+	</script>
+
+	<div class="number-editor">
+		#if($showAsPercentage)
+			#set($percentageValue = 0)
+			#if ($listItem)
+				#set($percentageValue = $listItem.ValueForEdit($field.InternalName).Replace(',', '.').Replace('%', '').Trim())
+			#end
+			<input class="percentage" type="text" id="$!{controlId}" name="$!{field.InternalName}" value="$!{percentageValue}" />
+			<span class="percentage">%</span>
+		#else
+			#set($numberValue = 0)
+			#if ($listItem)
+				#set($numberValue = $listItem.ValueForEdit($field.InternalName).Replace(',', '.'))
+			#end
+			<input class="#if($showAsPercentage)percentage#end" type="text" id="$!{controlId}" name="$!{field.InternalName}" value="$!{numberValue}"  />
+		#end
+		<div id="$!{errorMsgId}" class="invalid-msg" style="display: none;">$core_v2_language.GetResource('SharePoint_ListItem_NumberEditor')</div>
+	</div>
+#else
+	#set($value = $core_v2_utility.ParseDouble($core_v2_page.GetFormValue($field.InternalName)))
+	#if ($showAsPercentage)
+		#set($value = $value / 100)
+	#end
+	$listItem.Fields.Add($field.InternalName, "$value")
+#end

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	#set($isModal = true)
+
+	$core_v2_page.SetTitle($core_v2_language.GetResource('Administration_RemoveModal_Title'), false, false)
+	$core_v2_page.RenderThemeHeaders("%{ IsModal = $isModal}")
+</head>
+<body>
+	#set($libraryId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue('libraryId')))
+
+	#set($library = false)
+	#set($library = $sharepoint_v2_library.Get($libraryId))
+	#if(!$library)
+		<fieldset class="field-list delete-library">
+			<ul class="field-list">
+				<li class="field-item error">
+					$core_v2_language.GetResource('Administration_EmptyLibraryId')
+				</li>
+			</ul>
+		</fieldset>
+	#end
+
+	#if($library && !$library.HasErrors)
+		#set($group = $core_v2_group.Get("%{Id = $library.GroupId}"))
+		<fieldset class="field-list delete-library">
+			<ul class="field-list">
+				<li class="field-item">
+					$core_v2_language.FormatString($core_v2_language.GetResource('Administration_RemoveModal_Warning'), $library.Name, $group.Name)
+				</li>
+				<li class="field-item">
+					<span class="field-item-input">
+						<input id="$core_v2_widget.UniqueId('deleteLibrary')" type="checkbox">
+					</span>
+					<label for="$core_v2_widget.UniqueId('deleteLibrary')" style="display: inline-block; position: relative; bottom: 2px;">$core_v2_language.GetResource('Administration_RemoveModal_DeleteLibrary')</label>
+				</li>
+			</ul>
+		</fieldset>
+	#else
+		#set($hasErrors = true)
+		<fieldset class="field-list delete-library">
+			<ul class="field-list">
+				#if(!$library)
+					<li class="field-item error">
+						$core_v2_language.GetResource('Administration_LibraryNotFound')
+					</li>
+				#elseif($library.HasErrors)
+					#foreach($error in $library.Errors)
+					<li class="field-item error">
+						$!{error.Message}
+					</li>
+					#end
+				#end
+			</ul>
+		</fieldset>
+	#end
+
+	<fieldset class="field-list save-cancel">
+		<div class="field-list">
+			<span class="field-item cancel-changes">
+				<span class="field-item-input">
+					<a href="#" class="internal-link submit-form cancel-changes">
+						<span></span>$core_v2_language.GetResource('Administration_Modal_Cancel')
+					</a>
+				</span>
+			</span>
+			<span class="field-item save-changes" #if($hasErrors)style="display:none;"#end>
+				<span class="field-item-input">
+					<a href="#" class="internal-link submit-form save-changes">
+						<span></span>$core_v2_language.GetResource('Administration_Modal_Ok')
+					</a>
+				</span>
+			</span>
+		</div>
+	</fieldset>
+
+	#registerEndOfPageHtml('telligent.sharepoint.widgets.documentLibrariesAdministration.removeModal')
+		<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+	#end
+	#registerEndOfPageHtml()
+		<script type="text/javascript">
+			jQuery(function(j){
+				j.telligent.sharepoint.widgets.documentLibrariesAdministration.removeModal.register({
+					libraryId        : "$!{library.Id}",
+					removeLibraryUrl : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('remove.vm'))",
+					deleteCheckBoxId : "#$core_v2_widget.UniqueId('deleteLibrary')",
+					saveButtonId     : "a.internal-link.save-changes",
+					cancelButtonId   : "a.internal-link.cancel-changes"
+				})
+			})
+		</script>
+	#end
+</body>
+</html>

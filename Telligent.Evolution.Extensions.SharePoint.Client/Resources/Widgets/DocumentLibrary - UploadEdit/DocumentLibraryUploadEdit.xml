@@ -1,0 +1,127 @@
+﻿<scriptedContentFragments>
+	<scriptedContentFragment name="${resource:Widget_Name}" description="${resource:Widget_Description}" instanceIdentifier="423fc5037ca9470b84d7bd0f4a854961" cssClass="sharepoint document-library-upload" isCacheable="true" varyCacheByUser="true" showHeaderByDefault="false">
+		<contentScript>
+			<![CDATA[
+$core_v2_widget.ExecuteFile('check-user-permissions.vm')
+#set($hasPermissions = $isAdmin || $isOwner || $isManager || $isMember)
+#if(!$hasPermissions)
+	$core_v2_page.Redirect($core_v2_urls.Message(31)) ##AccessDenied
+#end
+
+#set($library = false)
+#set($library = $sharepoint_v2_library.Current)
+#if(!$library || $library.HasErrors())
+	$core_v2_page.Redirect($core_v2_urls.Message(9)) ##PostNotFound
+#end
+
+#set($document = false)
+#set($document = $sharepoint_v2_file.Current)
+#if ($document && $document.HasErrors())
+	$core_v2_page.Redirect($core_v2_urls.Message(9)) ##PostNotFound
+#end
+
+#set($isInPreviewMode = $core_v2_page.IsPost)
+
+#set($uploadContextId = $core_v2_uploadedFile.CreateContextId())
+#set($uploadFileUrl = $core_v2_uploadedFile.GetUploadUrl($uploadContextId))
+
+#if($document)
+	#set($canEdit = $sharepoint_v2_listItem.CanEdit($document.ContentId))
+	#if ($canEdit)
+		$core_v2_widget.ExecuteFile('edit-document-view.vm') 
+	#else
+		<fieldset>
+			<h1>$!core_v2_language.FormatString($core_v2_language.GetResource('EditDocument'), $document.Title)</h1>
+			<div class="message error">$core_v2_language.GetResource('NoEditPermissions')</div>
+		</fieldset>
+	#end
+#elseif($library)
+	#set($canEdit = $sharepoint_v2_list.CanEdit($library.Id))
+	#if ($canEdit)
+		$core_v2_widget.ExecuteFile('create-document-view.vm') 
+	#else
+		<fieldset>
+			<h1>$!core_v2_language.FormatString($core_v2_language.GetResource('NewDocument'), $library.Name)</h1>
+			<div class="message error">$core_v2_language.GetResource('NoCreatePermissions')</div>
+		</fieldset>
+	#end
+#end
+
+		]]>
+		</contentScript>
+		<headerScript>
+			<![CDATA[
+$core_v2_widget.ApplyTokens($core_v2_widget.GetStringValue('fragmentHeader', '${resource:Widget_Name}'))
+		]]>
+		</headerScript>
+		<configuration>
+			<![CDATA[
+<propertyGroup id="Options">
+	<property id="fragmentHeader" resourceName="CF_Title_Name" dataType="string" defaultValue="${resource:Widget_Name}" controlType="Telligent.Evolution.Controls.ContentFragmentTokenStringControl, Telligent.Evolution.Controls" />
+</propertyGroup>
+		]]>
+		</configuration>
+		<languageResources>
+			<language key="en-us">
+				<resource name="Widget_Name">SharePoint - Upload/Edit document in a document Library</resource>
+				<resource name="Widget_Description">Allows user to Upload/Edit document in a SharePoint Document Library</resource>
+				<resource name="CF_Title_Name">Widget Title</resource>
+				<resource name="NewDocument">New Document in {0}</resource>
+				<resource name="EditDocument">Edit {0}</resource>
+				<resource name="NoEditPermissions">You have no permissions to edit this document.</resource>
+				<resource name="NoCreatePermissions">You have no permissions to create a new document in this library.</resource>
+				<resource name="NotFound">Document cannot be found.</resource>
+				<resource name="Attachment_File">Upload a file</resource>
+				<resource name="UploadFile">Upload</resource>
+				<resource name="UploadFile_Description">Browse to the file you intend to upload.</resource>
+				<resource name="UploadProgress">Uploading ({0}%)...</resource>
+				<resource name="RemoveFile">Remove file</resource>
+				<resource name="ChangeFile">Change file</resource>
+				<resource name="DestinationFile_Name">File Name</resource>
+				<resource name="DestinationFile_Description">Specify a new file name for the uploaded file.</resource>
+				<resource name="Overwrite">Overwrite</resource>
+				<resource name="Overwrite_Description">Choose this option to overwrite a file with the same name if exists.</resource>
+				<resource name="FolderPath">Folder</resource>
+				<resource name="FolderPath_Description">Specify a folder in this document library where the document should be saved.</resource>
+				<resource name="FolderUp">Folder Up</resource>
+				<resource name="Tags_Name">Tags</resource>
+				<resource name="Tags_Description"></resource>
+				<resource name="Tags_Specify">Select Tags...</resource>
+				<resource name="Save">Save</resource>
+				<resource name="Delete">Delete</resource>
+				<resource name="InvalidFileName"><![CDATA[
+						The file name contains invalid characters. Please use a different name. Valid file names cannot begin or end with a dot, cannot contain consecutive dots and cannot contain any of the following characters: ~ " # % & * : < > ? / \ { | }.
+					]]></resource>
+				<resource name="NoFileUploaded">No files to upload</resource>
+				<resource name="NoFileName">File name cannot be empty</resource>
+				<resource name="CreatingError_NoFileUploaded">Cannot create a new document, because no files have been uploaded</resource>
+				<resource name="CreatingError_FileExists">Cannot create a new document, because a file with specified name already exists in the 
+specified folder. Please rename this file or choose the 'Overwrite' option.</resource>
+				<resource name="RequiredFieldWarning">You must specify a value for this required field.</resource>
+				<resource name="SharePoint_ListItem_FieldRequired">You must specify a value for this required field.</resource>
+				<resource name="SharePoint_ListItem_NumberEditor">The value of this field is not a valid number.</resource>
+				<resource name="SharePoint_ListItem_CurrencyEditor">The value of this field is not a valid number.</resource>
+				<resource name="SharePoint_ListItem_HyperlinkEditorText">Type the Web address: ({0}Click here to test{1})</resource>
+				<resource name="SharePoint_ListItem_SpecifyYourOwnValue">Specify your own value:</resource>
+				<resource name="SharePoint_ListItem_FieldEditor_Add">Add &gt;</resource>
+				<resource name="SharePoint_ListItem_PersonOrGroup_MultipleValuesNotAllowed">You are only allowed to enter one item.</resource>
+				<resource name="SharePoint_ListItem_PersonOrGroup_RemoveTitle">Remove</resource>
+				<resource name="SharePoint_ListItem_PersonOrGroup_NotFound">No exact match was found.</resource>
+				<resource name="SharePoint_ListItem_FieldEditor_Remove">&lt; Remove</resource>
+				<resource name="SharePoint_ListItem_Attachments_Delete">Delete</resource>
+				<resource name="SharePoint_ListItem_Attachments_Add">Add attachment</resource>
+				<resource name="SharePoint_Lookup_None">(None)</resource>
+				<resource name="SharePoint_ListItem_Ok">Ok</resource>
+				<resource name="SharePoint_ListItem_Save">Save</resource>
+				<resource name="SharePoint_ListItem_Cancel">Cancel</resource>
+				<resource name="SharePoint_ListItem_YesNoEditor_AllDayEvent">Make this an all-day activity that doesn't start or end at a specific hour.</resource>
+				<resource name="SharePoint_ListItem_YesNoEditor_CrossProjectLink">Use a Meeting Workspace to organize attendees, agendas, documents, minutes, and other details for this event.</resource>
+				<resource name="SharePointLibrary_NoEditPermissions">Sorry you do not have permission to add/edit an item.</resource>
+				<resource name="SharePoint_ListItem_TheFileExists">The file with this name already exists. Please, specify a different name or choose an overwrite option.</resource>
+				<resource name="Taxonomies_Loading">Loading...</resource>
+				<resource name="Taxonomies_Select">Select</resource>
+				<resource name="Taxonomies_NoItems">There are no items to display</resource>
+			</language>
+		</languageResources>
+	</scriptedContentFragment>
+</scriptedContentFragments>

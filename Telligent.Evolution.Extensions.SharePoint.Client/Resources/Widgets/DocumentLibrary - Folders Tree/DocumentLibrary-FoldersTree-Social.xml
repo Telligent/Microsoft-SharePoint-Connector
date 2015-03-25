@@ -1,0 +1,74 @@
+﻿<scriptedContentFragments>
+	<scriptedContentFragment name="${resource:Widget_Name}" description="${resource:Widget_Description}" instanceIdentifier="633a1dfb62584b4ab8b52fd01207bfa3" cssClass="document-library-folders-tree" theme="3fc3f82483d14ec485ef92e206116d49" isCacheable="false" varyCacheByUser="true" showHeaderByDefault="false">
+		<contentScript>
+			<![CDATA[
+#set($library = false)
+#set($library = $sharepoint_v2_library.Current)
+#if(!$library)
+	$core_v2_widget.Hide()
+#end
+
+#set($libraryUrl = $sharepoint_v1_urls.Library($library.Id))
+
+<div class="folder-root">
+	<div class="folder-children">
+		<ul class="folder-list">
+			<li class="folder-item">
+				<div class="folder selected">
+					<a href="${libraryUrl}#"><span class="expand-collapse" data-path="/$library.Root"></span>$!library.Name</a>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<script type="folder-children-template">
+	<div class="folder-children">
+		<ul class="folder-list" for-each="{{folders}}">
+			<li class="folder-item" data-path="{{path}}">
+				<div class="folder {{selected}}">
+					<a href="${libraryUrl}#{{path}}"><span class="expand-collapse {{expanded}} {{haschilds}}" data-path="{{path}}"></span><span class="folder-icon"></span>{{name}}</a>
+				</div>
+				{{childs}}
+			</li>
+		</ul>
+	</div>
+</script>
+
+#registerEndOfPageHtml('telligent.sharepoint.widgets.foldersTree')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j) {
+			j.telligent.sharepoint.widgets.foldersTree.register({
+				wrapper           : j("#${core_v2_widget.WrapperElementId}"),
+				relatedFoldersUrl : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('get-related-folders.vm'))",
+				foldersUrl        : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('get-folders.vm'))",
+				#set($document = false)
+				#set($document = $sharepoint_v2_file.Current)
+				#if ($document)
+					#set($index = $document.Path.LastIndexOf('/'))
+					#set($path = $document.Path.Substring(0, $index))
+					currentFolder   : "$core_v2_encoding.JavascriptEncode($path)"
+				#end
+			});
+		});
+	</script>
+#end
+			]]>
+		</contentScript>
+		<headerScript>
+			<![CDATA[
+		$core_v2_widget.ApplyTokens($core_v2_widget.GetStringValue('CF_Widget_Title', '${resource:Widget_Name}'))
+	]]>
+		</headerScript>
+		<languageResources>
+			<language key="en-us">
+				<resource name="CF_Widget_Title">Widget Title</resource>
+				<resource name="Widget_Name">SharePoint - Library Folders Tree</resource>
+				<resource name="Widget_Description">Hierarchical breadcrumbs for Document Library folders navigation.</resource>
+			</language>
+		</languageResources>
+	</scriptedContentFragment>
+</scriptedContentFragments>

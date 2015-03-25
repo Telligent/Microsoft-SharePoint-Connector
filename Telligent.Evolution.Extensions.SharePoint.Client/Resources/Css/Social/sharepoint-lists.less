@@ -1,0 +1,293 @@
+//#dev
+/*@import "../../Images/Social/sharepoint-variables.less";
+@import "../../Images/Social/sharepoint-mixins.less";*/
+//#enddev
+//#build
+@import "../s-fd-3fc3f82483d14ec485ef92e206116d49-files/sharepoint_2D00_variables.less";
+@import "../s-fd-3fc3f82483d14ec485ef92e206116d49-files/sharepoint_2D00_mixins.less";
+//endbuild
+
+// SharePoint - Item List widget
+.sharepoint-lists-widget {
+    position: relative; 
+    .management {
+        float: right;
+        margin: 0 0 10px 10px;
+        font-size: @sharepoint-lists-management-font-size;
+        font-family: @font-family;
+        .button {
+            display: inline-block;
+            margin-right: 10px;
+            padding: 0 10px;
+            line-height: @sharepoint-lists-management-button-height;
+            height: @sharepoint-lists-management-button-height;
+            color: @sharepoint-lists-management-button-color;
+            background-color: @sharepoint-lists-management-button-background-color;
+            border: 0px;
+            .border-radius(3px);
+            .transition(background-color 0.15s);
+            &:hover {background-color: @sharepoint-lists-management-button-hover-background-color;}
+            &:active {background-color: @sharepoint-lists-management-button-active-background-color;}
+            &.disabled {background-color: @sharepoint-lists-management-button-disabled-background-color; color: @sharepoint-lists-management-button-disabled-color; cursor: default;}
+        }
+    }
+    .sharepoint-list {overflow-x: auto; width: 100%;
+        .table-list {
+            width: 100%;
+
+            .table-header {
+                font-weight: bold;
+                background-color: @sharepoint-lists-header-background-color;
+
+                .table-header-column {
+                    padding: 0px;
+                    text-align: left;
+                    height: @sharepoint-lists-header-column-height;
+                    &.item-checker {min-width: 2em; width: 2em; max-width: 2em; text-align: center;}
+                    &.docicon {
+                        font-weight: normal;
+
+                        .field-name {
+                            position: relative;
+                            padding-left: @sharepoint-lists-header-icon-width;
+                            width: @sharepoint-lists-header-icon-width;
+                        }
+                        .field-name::before {.content-icon(@doc-icon, @sharepoint-lists-header-icon-width, @sharepoint-lists-header-icon-height);}
+                    }
+                    &.attachments {font-weight: normal;
+                        .field-name {
+                            position: relative;
+                            padding-left: @sharepoint-lists-header-icon-width;
+                            width: @sharepoint-lists-header-icon-width;
+                        }
+                        .field-name::before {.content-icon(@attachment-icon, @sharepoint-lists-header-icon-width, @sharepoint-lists-header-icon-height);}
+                    }
+                    .field-name {.text-overflow-ellipsis(@sharepoint-lists-header-column-width);}
+                }
+            }
+            .table-item {
+                cursor: pointer;
+
+                &:nth-child(even) {background-color: @sharepoint-lists-item-even-background-color;}
+                &.selected {background-color: @sharepoint-lists-item-selected-background-color;
+                    .table-column.item-checker input[type=checkbox] {visibility:visible;}
+                }
+                &:hover {background-color: @sharepoint-lists-item-hover-background-color;
+                    .table-column.item-checker input[type=checkbox] {visibility:visible;}
+                    .table-column.moderation-cell .moderation-menu {right: 0px}
+                }
+
+                .table-column {
+                    text-align: left;
+                    padding: 0px;
+                    height: @sharepoint-lists-header-column-height;
+                    overflow: hidden;
+                    &.item-checker {min-width: 2em; width: 2em; max-width: 2em; text-align: center;
+                        input[type=checkbox] {
+                            visibility:collapse;
+                            &:checked {visibility:visible;}
+                        }
+                    }
+
+                    &.moderation-cell {
+                        vertical-align: top; 
+                        margin: 0px;
+                        padding: 0px;
+
+                        @moderation-cell-icon-actual-width: @sharepoint-lists-item-moderation-cell-icon-width + @moderation-cell-icon-padding-left + @moderation-cell-icon-padding-right;
+                        @moderation-cell-menu-width: 3 * @moderation-cell-icon-actual-width + @sharepoint-lists-item-moderation-cell-icon-width;
+                        .moderation-menu {
+                            position: absolute;
+                            height: @sharepoint-lists-header-column-height;
+                            right: 10 - @moderation-cell-menu-width;
+                            width: @moderation-cell-menu-width;
+                            .transition(all 200ms);
+
+                            .moderation-item-list {
+                                height: 100%;
+                                width: 100%;
+                                background-color: @sharepoint-lists-item-moderation-cell-background-color;
+                                opacity: 0.85;
+                                padding-top: 0.5em;
+                                padding-left: 0;
+
+                                .moderation-item {
+                                    float: left;
+                                    padding-left: @moderation-cell-icon-padding-left;
+                                    padding-right: @moderation-cell-icon-padding-right;
+                                    border: 0;
+
+                                    a.moderation-link {
+                                        position: relative;
+                                        display: inline-block;
+                                        padding-left: @sharepoint-lists-item-moderation-cell-icon-width;
+                                        width: @sharepoint-lists-item-moderation-cell-icon-width;
+                                        height: @sharepoint-lists-item-moderation-cell-icon-height;
+                                        overflow: hidden;
+                                    }
+                                    &.view .moderation-link::before {.content-icon(@view-icon, @sharepoint-lists-item-moderation-cell-icon-width, @sharepoint-lists-item-moderation-cell-icon-height);}
+                                    &.edit .moderation-link::before {.content-icon(@edit-icon, @sharepoint-lists-item-moderation-cell-icon-width, @sharepoint-lists-item-moderation-cell-icon-height);}
+                                    &.delete .moderation-link::before {.content-icon(@delete-icon, @sharepoint-lists-item-moderation-cell-icon-width, @sharepoint-lists-item-moderation-cell-icon-height);}
+                                }
+                            }
+                            &:hover {.moderation-item-list {opacity: 1;}}
+                        }
+                    }
+
+                    div {.text-overflow-ellipsis(@sharepoint-lists-header-column-width);}
+
+                    .attachments,
+                    .docicon {
+                        position: relative;
+                        padding-left: @sharepoint-lists-item-icon-width;
+                        width: @sharepoint-lists-item-icon-width;
+                        height: @sharepoint-lists-item-icon-height;
+                        overflow: hidden;
+                        margin: 5px 0px;
+                        &.false {display: none;}
+                    }
+                    .attachments::before {.content-icon(@attachment-icon, @sharepoint-lists-item-icon-width, @sharepoint-lists-item-icon-height);}
+                    .attacment-list-holder {display: none;}
+                    .docicon::before {.content-icon(@doc-icon, @sharepoint-lists-item-icon-width, @sharepoint-lists-item-icon-height);}
+                    .small-device-width {display: none;}
+                    .only-small-device-width {display: none;}
+                }
+            }
+        }
+    }
+}
+
+@attachments-popup-width: 250px;
+@attachments-popup-background-color: white;
+@attachments-popup-item-padding: 5px;
+@attachments-popup-item-hover-background-color: #EEEEEE; 
+
+.attachment-list-popup {
+    background-color: transparent;
+    border-width: 0;
+    color: black;
+    position: relative;
+    margin: 0;
+    padding: 12px 0 0 0;
+    font-size: 13px;
+    white-space: normal;
+    .font-default(13px);
+    .arrow {
+        height: 0px;
+        position: relative;
+        top: 20px;
+        &::after {
+            bottom: 100%;
+            border: solid transparent;
+            content: ' ';
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+            border-color: rgba(100, 100, 100, 0);
+            border-bottom-color: white;
+            border-width: 15px;
+            left: 50%;
+            margin-left: -15px;
+        }
+    }
+    .attacment-list {
+        padding: 5px 0;
+        background-color: @attachments-popup-background-color;
+        width: @attachments-popup-width;
+        margin: 20px;
+        .border-radius(4px);
+        .box-shadow(0px 0px 20px 0px rgba(0, 0, 0, 0.5));
+        .attacment-item {
+            padding: @attachments-popup-item-padding;
+            &:hover {background-color: @attachments-popup-item-hover-background-color;}
+        }
+    }
+}
+
+@media only screen and (max-width: 570px) {
+    .sharepoint-lists-widget .sharepoint-list {
+        overflow: auto;
+        .table-list {
+            .table-header {display: none;}
+            .table-item {border-bottom: 1px solid #e6e9ea;
+                .table-column.item-checker {display: none;}
+                .table-column {position: relative; padding-left: 50%; display: block; width: 100%; overflow: hidden;
+                    .only-large-device-width {display: none;}
+                    .only-small-device-width {display: block; height: 100%; overflow-y: auto;}
+                    .attachments.true::before {content: '';}
+                }
+                .table-column::after {content: '\00a0'}
+            }
+            .table-item:hover {background-color: transparent;}
+            .table-item.selected:hover {background-color: #6EA8DC;}
+            .table-item.selected {background-color: #6EA8DC;}
+            .table-item .table-column .small-device-width {position: absolute; display: block; top: 6px; left: 6px; width: 45%; padding-right: 10px; white-space: nowrap; font-weight:bold; -ms-text-overflow: ellipsis; -o-text-overflow: ellipsis; text-overflow: ellipsis; overflow: hidden;}
+            .table-item .table-column div {width: 100%; position: absolute; display: block; top: 6px; width: 50%; -ms-text-overflow: ellipsis; -o-text-overflow: ellipsis; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
+            .table-item .table-column.moderation-cell {display: block; width: 100%;}
+            .table-item .table-column.moderation-cell .moderation-menu {position: relative; left: 0px;}
+            .table-item .table-column.moderation-cell .moderation-menu .moderation-item-list {opacity: 1; width: 100%; padding: 0px; background-color: transparent;}
+            .table-item .table-column.moderation-cell .moderation-menu .moderation-item-list .moderation-item .moderation-link {width: 24px; height: 24px; font-size: 24px; padding-left:24px;}
+            .table-item .table-column.moderation-cell .moderation-menu .moderation-item-list .moderation-item .moderation-link::before {width: 24px; height: 24px; font-size: 24px; line-height: 24px; padding: 0px;}
+            .table-item .table-column .attachments.false {display: none; }
+            .table-item .table-column .attachments .attacment-list-holder {display: block;}
+            .table-item .table-column .attachments,
+            .table-item .table-column .docicon {width: 100%; height: auto; margin: 0px;}
+            .table-item .table-column .attachments .attachment-list .attachment-item {}
+        }
+    }
+}
+
+// Lists - List Item attachements modal
+.sharepoint-listItem-upload-attachments {
+    .internal-link.submit-button {cursor: pointer;}
+    .save-cancel-panel {float:right;
+        .internal-link {margin-left: 10px;}
+    }
+}
+
+// SharePoint - Remove List Modal
+.delete-library .field-list .field-item .field-item-input input[type=checkbox] { min-height: 1em; }
+
+// Search
+.content.abbreviated.rendered.sharepoint-listItem {
+    .attachment {
+        .navigation-list {
+            .navigation-list-item {
+                width: 100%;
+                a {padding-left: 1em; position: relative;}
+                a::before {.content-icon(@attachment-icon, 1em, 1em); line-height: inherit;}
+            }
+        }
+    }
+}
+
+/* SharePoint - ListItem widget
+************************************/
+.sharepoint.sharepoint-listItem-widget {
+    .field-list {
+        .field-item {
+            @title-column-width: 150px;
+
+            .field-item-header {
+                display: block;
+                float: left;
+                font-size: 1em;
+                font-weight: 300;
+                color: #808080;
+                padding: 0px;
+                margin: 0px;
+                width: @title-column-width;
+            }
+
+            .field-item-content {
+                padding-left: @title-column-width;
+            }
+
+            .attachment-list {
+                .attachment-item {padding-left: 1.5em; position: relative;}
+                .attachment-item::before {.content-icon(@attachment-icon, 1em, 1em); line-height: inherit;}
+            }
+        }
+    }
+}

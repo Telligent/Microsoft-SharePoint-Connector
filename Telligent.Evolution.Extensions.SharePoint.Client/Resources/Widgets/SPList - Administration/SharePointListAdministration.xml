@@ -1,0 +1,98 @@
+﻿<scriptedContentFragments>
+	<scriptedContentFragment name="${resource:SharePointListAdministration_Widget_Name}" description="${resource:SharePointListAdministration_Widget_Description}" instanceIdentifier="8f5180c1d2974592954344d3d9e79f2c" cssClass="sharepoint-list-administration" isCacheable="true" varyCacheByUser="true" showHeaderByDefault="false">
+		<contentScript>
+			<![CDATA[
+$core_v2_widget.ExecuteFile('check-user-permissions.vm')
+#set($hasPermissions = $isAdmin || $isOwner || $isManager)
+#if(!$hasPermissions)
+	$core_v2_widget.Hide()
+#end
+
+<ul id="$core_v2_widget.UniqueId('administration')" class="navigation-list">
+	<li class="navigation-item">
+		<a href="#" class="internal-link add-list">
+			<span></span>$core_v2_language.GetResource('Administration_Add_List')
+		</a>
+	</li>
+
+	#set($list = false)
+	#set($list = $sharepoint_v2_list.Current)
+	#if ($list && $list.Errors && $list.Errors.Count() == 0)
+		<li class="navigation-item">
+			<a href="#" class="internal-link remove-list">
+				<span></span>$core_v2_language.GetResource('Administration_Remove_List')
+			</a>
+		</li>
+	#end
+</ul>
+
+<div id="$core_v2_widget.UniqueId('statusMessage')" class="status-message"></div>
+
+#registerEndOfPageHtml('telligent.sharepoint.widgets.listsAdministration')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			j.telligent.sharepoint.widgets.listsAdministration.register({
+				wrapper         : j("#$core_v2_widget.UniqueId('administration')"),
+				statusWrapper   : j("#$core_v2_widget.UniqueId('statusMessage')"),
+				addSuccessMsg   : "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('Administration_Add_Success'))",
+				createSuccessMsg: "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('Administration_Create_Success'))",
+				removeSuccessMsg: "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('Administration_Remove_Success'))",
+				#set ($addModalUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('addcreatemodal.vm'), "mode=add"))
+				addModalUrl     : "$core_v2_encoding.JavascriptEncode($addModalUrl)",
+				#set ($createModalUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('addcreatemodal.vm'), "mode=create"))
+				createModalUrl  : "$core_v2_encoding.JavascriptEncode($createModalUrl)"
+
+				#if ($list && $list.Errors && $list.Errors.Count() == 0)
+					,
+					#set ($removeModalUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('removemodal.vm'), "listId=${list.Id}"))
+					removeModalUrl  : "$core_v2_encoding.JavascriptEncode($removeModalUrl)"
+				#end
+			})
+		})
+	</script>
+#end
+		]]>
+		</contentScript>
+		<headerScript>
+			<![CDATA[
+$core_v2_widget.ApplyTokens($core_v2_widget.GetStringValue('WidgetTitle', '${resource:CF_Title_Value}'))
+		]]>
+		</headerScript>
+		<configuration>
+			<![CDATA[
+<propertyGroup id="Options">
+	<property id="WidgetTitle" resourceName="CF_Title_Name" dataType="string" defaultValue="${resource:CF_Title_Value}" controlType="Telligent.Evolution.Controls.ContentFragmentTokenStringControl, Telligent.Evolution.Controls" />
+</propertyGroup>
+		]]>
+		</configuration>
+		<languageResources>
+			<language key="en-us">
+				<resource name="SharePointListAdministration_Widget_Name">SharePoint - List Administration</resource>
+				<resource name="SharePointListAdministration_Widget_Description">Allows user to manage SharePoint Lists</resource>
+				<resource name="CF_Title_Name">Widget Title</resource>
+				<resource name="CF_Title_Value">Administration</resource>
+				<resource name="Administration_Add_Success">{ListName} was added.</resource>
+				<resource name="Administration_Create_Success">{ListName} was created.</resource>
+				<resource name="Administration_Remove_Success">{ListName} was removed.</resource>
+				<resource name="Administration_Add_List">Import SharePoint List</resource>
+				<resource name="Administration_Remove_List">Remove SharePoint List</resource>
+				<resource name="Administration_AddModal_Title">Import SharePoint List</resource>
+				<resource name="Administration_CreateModal_Title">Create SharePoint List</resource>
+				<resource name="Administration_RemoveModal_Title">Remove SharePoint List</resource>
+				<resource name="Administration_AddCreateModal_SPWeb">SharePoint Site Name</resource>
+				<resource name="Administration_AddCreateModal_SPList">SharePoint List</resource>
+				<resource name="Administration_AddCreateModal_SPListDescription">SharePoint List Description</resource>
+				<resource name="Administration_RemoveModal_Warning">Are you sure you want to remove List '{0}' from the Group '{1}'?</resource>
+				<resource name="Administration_RemoveModal_DeleteList">Delete List from SharePoint</resource>
+				<resource name="Administration_Modal_Ok">Ok</resource>
+				<resource name="Administration_Modal_Save">Save</resource>
+				<resource name="Administration_Modal_Cancel">Cancel</resource>
+				<resource name="Administration_EmptyListId">SharePoint List Id was not specified.</resource>
+				<resource name="Administration_ListNotFound">SharePoint List with a specified Id cannot be found.</resource>
+			</language>
+		</languageResources>
+	</scriptedContentFragment>
+</scriptedContentFragments>

@@ -1,0 +1,68 @@
+#set($contentId = false)
+#set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue("contentId")))
+
+#set($listItem = false)
+#set($listItem = $sharepoint_v2_listItem.Get($contentId))
+
+#set($list = false)
+#set($list = $sharepoint_v2_list.Get($listItem.ListId))
+
+#if($list && $list.Errors.Count() == 0 && $listItem && $listItem.Errors.Count() == 0)
+
+	#set($pageSize = 10)
+	#set($pageIndex = false)
+	#set($pageIndex = $core_v2_ui.GetCurrentPageIndex("%{QueryStringProperty = 'page'}"))
+
+	#set($inherited = false)
+	#set($inherited = $sharepoint_v1_permissions.IsInherited($list, $listItem))
+
+	#set($permissionsList = false)
+	#set($permissionsList = $sharepoint_v1_permissions.List($list, $listItem, "%{PageSize = $pageSize, PageIndex = $pageIndex}"))
+	#if ($permissionsList.TotalCount == 0)
+		<p class="no-items">
+			$core_v2_language.GetResource('Permissions_NoItems')
+		</p>
+	#else
+		<table class="table-list">
+		#foreach($permissions in $permissionsList)
+			<tr class="table-item">
+				#set($principalType = $permissions.Member.PrincipalType)
+				#if (!$inherited)
+					<td class="item-checker" style="width: 20px;">
+						<input type="checkbox" class="invisible" id="$!{permissions.Member.Id}" name="$!{permissions.Member.LoginName}"
+							#if($principalType == "User")
+								isUser="true"
+							#else
+								isUser="false"
+							#end
+						/>
+					</td>
+				#end
+
+				<td class="member-title">
+					$!{permissions.Member.Title}
+				</td>
+
+				<td class="principal-type">
+					$core_v2_widget.ExecuteFile('permissions-principals.vm')
+				</td>
+
+				<td class="permission-levels">
+					#foreach($level in $permissions.Level)
+					#between
+						,
+					#each
+						<span title="$!{level.Description}" levelId="$!{level.Id}">$!{level.Name}</span>
+					#end
+				</td>
+
+			</tr>
+		#end
+		</table>
+		#if($permissionsList.TotalCount > $pageSize)
+			<div style="clear:both;" class="permissions-footer">
+				$core_v2_ui.Pager($pageIndex, $pageSize, $permissionsList.TotalCount, "%{QueryStringProperty = 'page'}")
+			</div>
+		#end
+	#end
+#end

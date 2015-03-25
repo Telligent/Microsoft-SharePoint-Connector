@@ -1,0 +1,72 @@
+$core_v2_widget.ExecuteFile('check-user-permissions.vm')
+#if($isAdmin || $isOwner || $isManager)
+	#set($maxlinks = 0)
+	#set($groupId = $core_v2_group.Current.Id)
+	<div class="navigation-list navigation ui-links" data-minlinks="$maxlinks" data-maxlinks="$maxlinks">
+		<ul class="navigation-list">
+			<li class="navigation-item">
+				<a href="#" data-messagename="editListSubscribe" class="internal-link edit-list">
+					$core_v2_language.GetResource('Edit_List')
+				</a>
+			</li>
+			<li class="navigation-item">
+				<a href="#" data-messagename="deleteSelectedItemsSubscribe" class="internal-link delete-selected-items">
+					$core_v2_language.GetResource('DeleteSelectedItems')
+				</a>
+			</li>
+			<li class="navigation-list-item">
+				<a href="#" data-more>$core_v2_language.GetResource('Header_More')</a>
+			</li>
+			<li class="navigation-list-item">
+				<a href="#" data-cancel>$core_v2_language.GetResource('Header_Cancel')</a>
+			</li>
+		</ul>
+	</div>
+#end
+
+$core_v2_widget.ExecuteFile('current.vm')
+
+#set($isTitleDuplicated = false)
+#foreach($viewField in $view.Fields)
+#beforeall
+	<div class="sort">
+		<span class="by">
+			<select class="ui-select">
+#each
+	#if ($viewField == 'Title' || $viewField == 'LinkTitle' || $viewField == 'LinkTitleNoMenu')
+		#if(!$isTitleDuplicated)
+			<option value="$viewField" selected>$!view.get_item($viewField)</option>
+		#end
+		#set($isTitleDuplicated = true)
+	#else
+		<option value="$viewField">$!view.get_item($viewField)</option>
+	#end
+#afterall
+			</select>
+		</span>
+		<span class="order">
+			<select class="ui-select">
+				<option value="Descending">$core_v2_language.GetResource('Sort_Descending')</option>
+				<option value="Ascending" selected>$core_v2_language.GetResource('Sort_Ascending')</option>
+			</select>
+		</span>
+	</div>
+#nodata
+#end
+
+#foreach($v in $viewList)
+#beforeall
+	<div class="view">
+		<select class="ui-select">
+#each
+	<option value="$!v.Id" #if($v.Id == $view.Id) selected #end>
+		<a class="${v.Name.toLower()}-view" href="#" >
+			<span></span>$!v.Name
+		</a>
+	</option>
+#afterall
+		</select>
+	</div>
+#end
+
+<div style="clear:both;"></div>

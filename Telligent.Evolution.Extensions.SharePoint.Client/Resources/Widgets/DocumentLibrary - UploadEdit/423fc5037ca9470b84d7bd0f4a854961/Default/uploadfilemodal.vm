@@ -1,0 +1,45 @@
+﻿$core_v2_page.SetTitle($core_v2_language.GetResource('BrowseFilesModal_Title'), false, false)
+#set($isModal = true)
+$core_v2_page.RenderThemeHeaders("%{ IsModal = $isModal}")
+
+<div class="document-library-upload">
+	<fieldset class="field-list">
+		<legend class="field-list-description">
+			$core_v2_language.GetResource('BrowseFilesModal_Description')
+		</legend>
+		<ul class="field-list">
+			<li class="field-item file">
+				<label class="field-item-header">$core_v2_language.GetResource('BrowseFilesModal_UploadFile_Name')</label>
+				<span class="field-item-description">$core_v2_language.GetResource('BrowseFilesModal_UploadFile_Description')</span>
+				<span class="field-item-input">
+					<div id="$core_v2_widget.UniqueId('Uploader')" style="display:inline-block; position: relative; width: 500px;">
+						<input type="file" name="fileUploader"> 
+					</div>
+				</span>
+				<span class="field-item-validation" style="display: none;"></span>
+			</li>
+			<li class="field-item upload-file">
+				<span class="field-item-input">
+					<a href="#" id="$core_v2_widget.UniqueId('Save')" class="internal-link upload-file button">$core_v2_language.GetResource('BrowseFilesModal_Save')</a>
+				</span>
+			</li>
+		</ul>
+	</fieldset>
+</div>
+
+#registerEndOfPageHtml('telligent.sharepoint.widgets.uploadFile')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl("ui.js"))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			j.telligent.sharepoint.widgets.uploadFile.register({
+				fileUploader  : "#$core_v2_widget.UniqueId('Uploader')",
+				saveButton    : "#$core_v2_widget.UniqueId('Save')",
+				#set($uploadContextId = $core_v2_page.GetQueryStringValue('UploadContextId'))
+				#set($uploadFileUrl = $core_v2_uploadedFile.GetUploadUrl($uploadContextId))
+				uploadFileUrl : "$core_v2_encoding.JavascriptEncode($uploadFileUrl)"
+			});
+		});
+	</script>
+#end

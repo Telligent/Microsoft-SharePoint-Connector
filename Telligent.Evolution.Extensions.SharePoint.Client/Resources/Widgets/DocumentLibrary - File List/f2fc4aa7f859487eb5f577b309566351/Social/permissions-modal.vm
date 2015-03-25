@@ -1,0 +1,176 @@
+#set($contentId = false)
+#set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue("contentId")))
+#if(!$contentId) #set($contentId = $sharepoint_v2_file.Current.ContentId) #end
+
+#set($file = $sharepoint_v2_file.Get($contentId))
+#set($levels = $sharepoint_v2_permissions.Levels($file.Library.SPWebUrl))
+
+#set($pageTitle = $core_v2_language.FormatString("$core_v2_language.GetResource('Permissions_PageTitle')", $file.Name))
+#set($includeContext = false)
+#set($includeSiteName = false)
+$core_v2_page.SetTitle($pageTitle, $includeContext, $includeSiteName)
+
+#set($isModal = true)
+$core_v2_page.RenderThemeHeaders("%{IsModal = $isModal}")
+
+<ul class="tab-list sharepoint">
+	<li id="list" class="tab-item permissions-list">
+		<nav class="horizontal">
+			<ul class="navigation-list">
+				<li class="navigation-list-item stop-inheriting">
+					<a href="#" class="internal-link button" title="$core_v2_language.GetResource('Permissions_Start_Inheriting_Description')"><span></span>$core_v2_language.GetResource('Permissions_Stop_Inheriting')</a>
+				</li>
+				<li class="navigation-list-item start-inheriting">
+					<a href="#" class="internal-link button" title="$core_v2_language.GetResource('Permissions_Grant_Description')"><span></span>$core_v2_language.GetResource('Permissions_Start_Inheriting')</a>
+				</li>
+				<li class="navigation-list-item grant-permissions">
+					<a href="#grant" class="internal-link button" title="$core_v2_language.GetResource('Permissions_Grant_Description')"><span></span>$core_v2_language.GetResource('Permissions_Grant')</a>
+				</li>
+				<li class="navigation-list-item edit-permissions">
+					<a href="#edit" class="internal-link button" title="$core_v2_language.GetResource('Permissions_Edit_Description')"><span></span>$core_v2_language.GetResource('Permissions_Edit')</a>
+				</li>
+				<li class="navigation-list-item remove-permissions">
+					<a href="#" class="internal-link button" title="$core_v2_language.GetResource('Permissions_Remove_Description')"><span></span>$core_v2_language.GetResource('Permissions_Remove')</a>
+				</li>
+			</ul>
+			<div style="clear: both;"></div>
+		</nav>
+		<header>
+			<h1>$core_v2_language.GetResource('Permissions_List_Title')</h1>
+		</header>
+		<fieldset>
+			<ul class="field-list">
+				<li class="field-item">
+					<span class="field-item-input" id="$core_v2_widget.UniqueId('PagedListHolder')">
+						$core_v2_widget.ExecuteFile('permissions-list.vm')
+					</span>
+				</li>
+			</ul>
+		</fieldset>
+	</li>
+	<li id="edit" class="tab-item permissions-edit">
+		<nav class="horizontal">
+			<ul class="navigation-list">
+				<li class="navigation-list-item">
+					<a href="#list" class="internal-link back-button"><span></span>$core_v2_language.GetResource('Permissions_Edit_Back')</a>
+				</li>
+				<div style="clear: both;"></div>
+			</ul>
+		</nav>
+		<header>
+			<h1>$core_v2_language.GetResource('Permissions_Edit_Title')</h1>
+		</header>
+		<fieldset>
+			<ul class="field-list">
+				<li class="field-item users-or-groups">
+					<label class="field-item-header">$core_v2_language.GetResource('Permissions_Edit_UsersOrGroups')</label>
+					<span class="field-item-input">
+						<div id="users-and-groups"></div>
+					</span>
+				</li>
+				<li class="field-item permissions-levels">
+					<label class="field-item-header">$core_v2_language.GetResource('Permissions_Edit_Levels')</label>
+					<span class="field-item-input">
+						#foreach($level in $levels)
+						#beforeall
+							<ul class="level-list">
+						#each
+							<li class="level-item">
+								<input type="checkbox" data-id="$!{level.Id}" id='$core_v2_widget.UniqueId("checkbox-$!{level.Id}")'/>
+								<label for='$core_v2_widget.UniqueId("checkbox-$!{level.Id}")'><span></span>$!{level.Name}</label>
+							</li>
+						#afterall
+							</ul>
+						#nodata
+							$core_v2_language.GetResource('Permissions_NoLevels')
+						#end
+					</span>
+				</li>
+				<li class="field-item-input">
+					<a href="#" class="internal-link button save">$core_v2_language.GetResource('Permissions_Edit_Save')</a>
+				</li>
+			</ul>
+		</fieldset>
+	</li>
+	<li id="grant" class="tab-item permissions-grant">
+		<nav class="horizontal">
+			<ul class="navigation-list">
+				<li class="navigation-list-item">
+					<a href="#list" class="internal-link back-button"><span></span>$core_v2_language.GetResource('Permissions_Grant_Back')</a>
+				</li>
+				<div style="clear: both;"></div>
+			</ul>
+		</nav>
+		<header>
+			<h1>$core_v2_language.GetResource('Permissions_Grant_Title')</h1>
+		</header>
+		<fieldset>
+			<ul class="field-list">
+				<li class="field-item users-groups-selector">
+					<label class="field-item-header" for="UsersOrGroupsHolderId">$core_v2_language.GetResource('Permissions_Grant_UsersOrGroups')</label>
+					<span class="field-item-input">
+						## User/Group typeahead control
+						<input type="text" id="UsersOrGroupsHolderId" value="">
+					</span>
+				</li>
+				<li class="field-item grant-permissions">
+					<label class="field-item-header">$core_v2_language.GetResource('Permissions_Grant_Permissions')</label>
+					<span class="field-item-input">
+						<div class="add-to-group">
+							<input type="radio" id="group-opt" name="grant-selector" checked="checked" value="add-to-group"/>
+							<label for="group-opt">
+								<span></span>$core_v2_language.GetResource('Permissions_Grant_AddUsersToGroup')
+								<div class="group-selector">
+									<input type="text" id="GroupsHolderId">
+								</div>
+							</label>
+						</div>
+						<div class="grant-directly">
+							<input type="radio" id="direct-opt" name="grant-selector" value="grant-permissions-directly">
+							<label for="direct-opt"><span></span>$core_v2_language.GetResource('Permissions_Grant_Directly')</label>
+								#foreach($level in $levels)
+								#beforeall
+									<ul class="level-list">
+								#each
+									<li class="level-item">
+										<input type="checkbox" name="chlevel" data-id="$!{level.Id}" id='$core_v2_widget.UniqueId("edit-$!{level.Id}")'/>
+										<label for='$core_v2_widget.UniqueId("edit-$!{level.Id}")'>
+											<span></span>$!{level.Name}
+										</label>
+									</li>
+								#afterall
+									</ul>
+								#nodata
+									<div class="message no-records">$core_v2_language.GetResource('Permissions_NoLevels')</div>
+								#end
+							</label>
+						</div>
+					</span>
+				</li>
+				<li class="field-item-input">
+					<a href="#" class="internal-link button save">$core_v2_language.GetResource('Permissions_Grant_Save')</a>
+				</li>
+			</ul>
+		</fieldset>
+	</li>
+</ul>
+
+#registerEndOfPageHtml('telligent.sharepoint.widgets.permissionsModal')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('permissions.js'))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			j.telligent.sharepoint.widgets.permissionsModal.register({
+				tabsId                   : "$core_v2_widget.UniqueId('tabs')",
+				permissionsListUrl       : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('permissions-list.vm'))",
+				permissionsUpdateUrl     : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('permissions-update.vm'))",
+				pagedListHolder          : j("#$core_v2_widget.UniqueId('PagedListHolder')"),
+				#set($inheritance = $sharepoint_v2_permissions.Inherited($contentId))
+				inherited                : #if($inheritance.Enabled) true #else false #end,
+				stopInheritingConfirmMsg : "$core_v2_language.GetResource('Permissions_Stop_Inheriting_Confirm')",
+				webUrl                   : "$core_v2_encoding.JavascriptEncode($file.Library.SPWebUrl)"
+			});
+		})
+	</script>
+#end

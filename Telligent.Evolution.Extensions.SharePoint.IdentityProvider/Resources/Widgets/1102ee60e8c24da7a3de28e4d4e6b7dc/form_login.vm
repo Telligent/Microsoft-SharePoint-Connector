@@ -1,0 +1,83 @@
+##
+## Form shown when widget is in login mode accepting a new login request from the user
+##
+
+## if there were auth providers, render them
+#set ($hasOAuthProviders = false)
+#set ($providers = $core_v2_authentication.ListOAuthProviders())
+#if ($providers.Count > 0)
+	#set ($hasOAuthProviders = true)
+#end
+
+<input type="hidden" name="$core_v2_encoding.HtmlAttributeEncode($actionInput)" id="$core_v2_encoding.HtmlAttributeEncode($actionInput)" value="login" />
+<input type="hidden" name="$core_v2_encoding.HtmlAttributeEncode($providerInput)" id="$core_v2_encoding.HtmlAttributeEncode($providerInput)" />
+
+#if (!$core_v2_user.IsRegistered($core_v2_user.Accessing.Id) || $loginAsAnotherUser)
+	<fieldset class="field-list login">
+		<h2>$core_v2_language.GetResource('Login_Title')</h2>
+		<ul class="field-list login">
+	        <li class="field-item">
+	            <span class="field-item-description">
+					#if ($loginTypeSetting == "email")
+						$core_v2_language.GetResource('Login_Description_Email')
+					#elseif ($loginTypeSetting == "both")
+						$core_v2_language.FormatString($core_v2_language.GetResource('Login_Description_Both'), $siteInfo.SiteName)
+					#else
+						$core_v2_language.FormatString($core_v2_language.GetResource('Login_Description'), $siteInfo.SiteName)
+					#end
+	            </span>
+	        </li>
+			$core_v2_widget.ExecuteFile('sub_form_credentials.vm')
+			<li class="field-item checkbox">
+				<span class="field-item-input">
+					<input name="$core_v2_encoding.HtmlAttributeEncode($rememberMeInput)" id="$core_v2_encoding.HtmlAttributeEncode($rememberMeInput)" checked="checked" type="checkbox">
+					<label for="$core_v2_encoding.HtmlAttributeEncode($rememberMeInput)">$core_v2_language.GetResource('LoginSmall_AutoLogin')</label>
+				</span>
+			</li>
+			<li class="field-item">
+				<span class="field-item-input">
+					<a class="internal-link login submit-button button" href="#">$core_v2_language.GetResource('LoginSmall_Button')</a>
+				</span>
+			</li>
+			<li class="field-item">
+				<span class="field-item-description">
+					#set ($forgotPasswordUrl = $core_v2_urls.ForgotPassword())
+					#if ($forgotPasswordUrl)
+						$core_v2_language.GetResource('Login_Reset_Password_Message') <a href="$core_v2_encoding.HtmlAttributeEncode($forgotPasswordUrl)">$core_v2_language.GetResource('Login_Reset_Password_Link')</a><br />
+					#end
+
+					#if ($core_v2_configuration.AccountActivation != "InvitationOnly" && $core_v2_configuration.AllowNewUserRegistration)
+						#set ($registerUrl = $core_v2_urls.Register($returnUrl))
+						#if ($registerUrl)
+							$core_v2_language.GetResource('Login_Join_Message') <a href="$core_v2_encoding.HtmlAttributeEncode($registerUrl)">$core_v2_language.GetResource('Login_Join_Link')</a>
+						#end
+					#end
+				</span>
+			</li>
+			#if ($hasOAuthProviders)
+				<li class="field-item">
+					<span class="field-item-description">$core_v2_language.GetResource('OrSignInWith')</span>
+					<div class="field-item-input">
+						<div class="navigation-list login-providers">
+							<ul>
+								#foreach ($provider in $providers)
+									#set ($connectText = $core_v2_language.FormatString($core_v2_language.GetResource('Login_Connect_With'), $provider.ClientName))
+									<li class="navigation-list-item login-provider" data-clienttype="$core_v2_encoding.HtmlAttributeEncode(${provider.ClientType})">
+										<a href="#" class="internal-link connect submit-button ui-tip" title="$core_v2_encoding.HtmlAttributeEncode($connectText)">
+											$core_v2_ui.GetResizedImageHtml($provider.IconUrl, 32, 32, "%{ border='0', alt=$provider.ClientName }")
+										</a>
+									</li>
+								#end
+							</ul>
+						</div>
+					</div>
+				</li>
+			#end
+		</ul>
+	</fieldset>
+
+#else
+	<div class="message warning">
+		$core_v2_language.GetResource('Login_AlreadyLoggedIn')
+	</div>
+#end

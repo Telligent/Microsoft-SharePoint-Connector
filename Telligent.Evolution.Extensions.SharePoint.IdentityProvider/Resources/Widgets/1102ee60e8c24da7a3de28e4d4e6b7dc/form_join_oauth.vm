@@ -1,0 +1,33 @@
+##
+## Form rendered when a new user is joining the site via an oauth provider
+##
+
+## optionally round-trip an explicitly-collected email address in the case it was previously
+## collected when oauth didn't provide it.	Will need to use it when creating the account
+#if ($email && $email.Length > 0)
+	<input type="hidden" name="$core_v2_encoding.HtmlAttributeEncode($emailInput)" id="$core_v2_encoding.HtmlAttributeEncode($emailInput)" value="$core_v2_encoding.HtmlAttributeEncode($email)" />
+#end
+
+## Details
+<fieldset class="join-details">
+	<h1>$core_v2_language.GetResource('CreateNewAccount_Welcome')</h1>
+	<ul class="field-list">
+		<li class="field-item">
+			<span class="field-item-description">
+				$core_v2_language.GetResource('CreateNewAccount_Join_Provider_Text')
+			</span>
+		</li>
+
+		$core_v2_widget.ExecuteFile('sub_form_join_details.vm')
+
+		<li class="field-item">
+			<span class="field-item-input">
+				<input type="hidden" name="$core_v2_encoding.HtmlAttributeEncode($actionInput)" id="$core_v2_encoding.HtmlAttributeEncode($actionInput)" value="join_oauth" />
+				<a href="#" class="internal-link create-account submit-button button" >
+					$core_v2_language.GetResource('CreateNewAccount_CreateAccount')
+				</a>
+				<span class="processing" style="visibility: hidden;"></span>
+			</span>
+		</li>
+	</ul>
+</fieldset>

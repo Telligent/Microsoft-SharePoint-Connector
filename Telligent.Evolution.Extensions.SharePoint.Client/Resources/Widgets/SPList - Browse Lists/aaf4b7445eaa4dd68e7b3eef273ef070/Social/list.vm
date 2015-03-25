@@ -1,0 +1,37 @@
+﻿#set($pageSize = 5)
+#set($pageSize = $core_v2_widget.GetIntValue('pageSize', 5))
+#set($pageIndex = 0)
+#set($pageIndex = $core_v2_ui.GetCurrentPageIndex())
+#set($sortBy = 'Name')
+#set($sortBy = $core_v2_page.GetQueryStringValue('w_sortBy'))
+#set($sortOrder = 'Ascending')
+#set($sortOrder = $core_v2_page.GetQueryStringValue('w_sortOrder'))
+#set($lists = false)
+#set($lists = $sharepoint_v2_list.List($core_v2_group.Current.Id, "%{SortBy = $sortBy, SortOrder = $sortOrder, PageIndex = $pageIndex, PageSize = $pageSize}"))
+#if($lists && !$lists.HasErrors)
+	#if($core_v2_widget.GetBoolValue('includeSearch', true) && $lists.TotalCount > $pageSize)
+		#set($searchText = '')
+		#set($searchText = $core_v2_page.GetQueryStringValue('w_searchText'))
+		#if($searchText != '')
+			#set($lists = $sharepoint_v2_list.List($core_v2_group.Current.Id, "%{SortBy = $sortBy, SortOrder = $sortOrder, SearchText = $searchText}"))
+		#end
+		<fieldset class="search">
+			<ul class="field-list">
+				<li class="field-item">
+					<span class="field-item-input">
+						<input autocomplete="off" type="search" placeholder="$core_v2_encoding.HtmlAttributeEncode($core_v2_language.GetResource('SearchText'))" value="$!searchText" />
+					</span>
+				</li>
+			</ul>
+		</fieldset>
+	#end
+	<div class="data-holder">
+		$core_v2_widget.ExecuteFile('header.vm')
+		$core_v2_widget.ExecuteFile('content.vm')
+		#if($lists.TotalCount > $lists.PageSize)
+			#set($baseUrl = $core_v2_page.Url)
+			#set($baseUrl = $core_v2_page.GetQueryStringValue('w_baseUrl'))
+			$!core_v2_ui.Pager($lists.PageIndex, $lists.PageSize, $lists.TotalCount, "%{Target = 'lists',BaseUrl = $baseUrl, PagedContentFile = 'list.vm', Transition = 'none', CssClass='margin-top'}")
+		#end
+	</div>
+#end

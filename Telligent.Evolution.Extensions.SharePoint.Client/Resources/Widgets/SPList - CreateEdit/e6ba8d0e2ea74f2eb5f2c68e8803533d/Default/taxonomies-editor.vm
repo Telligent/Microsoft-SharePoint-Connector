@@ -1,0 +1,122 @@
+﻿#if(!$core_v2_page.IsPost || $isInPreviewMode)
+	#set($taxonomyField = false)
+	#set($taxonomyField = $sharepoint_v2_taxonomies.ParseFieldSchemaXml($field.SchemaXml))
+	#if ($taxonomyField)
+
+		#set($url = $currentList.SPWebUrl)
+		#set($allowMultipleValues = $taxonomyField.AllowMultiple)
+		#set($sspId = $taxonomyField.SSPId)
+		#set($termSetId = $taxonomyField.TermSetId)
+		#set($IsEmptyTermSetId = false)
+		#if ($termSetId == $core_v2_utility.ParseGuid("00000000-0000-0000-0000-000000000000"))
+			#set($IsEmptyTermSetId = true)
+		#end
+
+		#if($IsEmptyTermSetId)
+			<input type="text" id="${field.InternalName}-keywords" placeholder="" class="taxonomies-keywords"/>
+		#else
+			<div id="${field.InternalName}-content" class="taxonomies">
+				$core_v2_language.GetResource('Taxonomies_Loading')
+			</div>
+		#end
+
+		<div class="taxonomies-editor">
+			<input type="button" id="${field.InternalName}-select" class="select" value="$core_v2_language.GetResource('Taxonomies_Select')"/>
+			<ul id="${field.InternalName}-selected-terms" class="selected-terms"></ul>
+		</div>
+
+		<script type="text/html" id="${field.InternalName}-template">
+			<ul class="termset">
+				<% foreach(terms, function(term) { %>
+					<li class="term-item" data-termId="<%: term.id %>" data-termName="<%: term.name %>" data-wssId="<%: term.wssId %>" data-haschilds="<%: term.hasChilds %>">
+						<a href="#">
+							<% if(term.hasChilds) { %>
+								<span class="expand-collapse haschilds" ></span>
+							<% } else { %>
+								<span class="expand-collapse" ></span>
+							<% } %>
+							<span class="taxonomy-icon"></span>
+							<%: term.name %>
+						</a>
+						<% if(term.hasChilds) { %>
+							<div class="content" style="display: none;"></div>
+						<% } %>
+					</li>
+				<% }); %>
+			</ul>
+		</script>
+
+		<script type="text/html" id="${field.InternalName}-term-template">
+			<li class="term-item" data-termId="<%: term.id %>" data-termName="<%: term.name %>">
+				<span class="term-item-inner">
+					<input type="checkbox" checked="checked" style="display: none;" name="$!{field.InternalName}" value="<%: term.wssId %>;#<%: term.name %>" />
+					#set($textField = false)
+					#set($textField = $sharepoint_v1_fields.Get($currentList.Id, $taxonomyField.TextFieldId))
+					#if ($textField)
+						<input type="checkbox" checked="checked" style="display: none;" name="$!{textField.InternalName}" value="<%: term.name %>|<%: term.id %>" />
+					#end
+					<span class="taxonomy-icon"></span>
+					<%: term.name %>
+					<a href="#" class="remove">X</a>
+				</span>
+			</li>
+		</script>
+
+		#registerEndOfPageHtml('telligent.sharepoint.widgets.taxonomies')
+			<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl("taxonomies.js"))"></script>
+		#end
+		#registerEndOfPageHtml()
+			<script type="text/javascript">
+				jQuery(function(j){
+					j.telligent.sharepoint.widgets.taxonomies.register({
+						webUrl: "$core_v2_encoding.JavascriptEncode($url)",
+						sspId: "$sspId",
+						#if(!$IsEmptyTermSetId)
+							termSetId: "$termSetId",
+						#end
+						termSetUrl: "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('taxonomies-terms.vm'))",
+						termSetTemplateId: "${field.InternalName}-template",
+						termSetContentId: "${field.InternalName}-content",
+						selectedTerms: [
+							#foreach($term in $sharepoint_v2_taxonomies.ParseFieldValue($url, $listItem.Value($field.InternalName)))
+							#each
+								{
+									id: "$term.Id",
+									name: "$core_v2_encoding.JavascriptEncode($term.Name)",
+									wssId: $term.WSSId
+								}
+							#between
+								,
+							#end
+						],
+						keywordsHolderId: "${field.InternalName}-keywords",
+						keywordsUrl: "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('taxonomies-keywords.vm'))",
+						selectedTermsContentId: "${field.InternalName}-selected-terms",
+						termItemTemplateId: "${field.InternalName}-term-template",
+						selectButtonId: "${field.InternalName}-select",
+						allowMultipleValues: #if($allowMultipleValues) true #else false #end
+					});
+				});
+			</script>
+		#end
+	#end
+#else
+	#set($taxonomyField = false)
+	#set($taxonomyField = $sharepoint_v2_taxonomies.ParseFieldSchemaXml($field.SchemaXml))
+	#if ($taxonomyField)
+		#set($terms = '')
+		#set($terms = $core_v2_page.GetFormValue($field.InternalName))
+		#if ($taxonomyField.AllowMultiple)
+			$listItem.Fields.Add($field.InternalName, $core_v2_utility.Split(',', $terms))
+		#else
+			$listItem.Fields.Add($field.InternalName, $terms)
+		#end
+		#set($textField = false)
+		#set($textField = $sharepoint_v1_fields.Get($currentList.Id, $taxonomyField.TextFieldId))
+		#if ($textField)
+			#set($hdnTerms = '')
+			#set($hdnTerms = $core_v2_page.GetFormValue($textField.InternalName))
+			$listItem.Fields.Add($textField.InternalName, $hdnTerms.Replace(',', ';#'))
+		#end
+	#end
+#end

@@ -1,0 +1,47 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($contentId = false)
+#set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue("contentId")))
+
+#set($method = false)
+#set($method = $core_v2_page.GetFormValue('method'))
+
+#set($listItem = false)
+#set($listItem = $sharepoint_v2_listItem.Get($contentId))
+
+#set($list = false)
+#set($list = $sharepoint_v2_list.Get($listItem.ListId))
+
+#set($updateResult = false)
+
+#if($method == "add-user-to-group")
+	#set($userNames = false)
+	#set($userNames = $core_v2_page.GetFormValue("userNames"))
+	#set($groupId = false)
+	#set($groupId = $core_v2_utility.ParseInt($core_v2_page.GetFormValue("groupId")))
+	#set($updateResult = $sharepoint_v1_permissions.AddUserToGroup($list.SPWebUrl, $list.Credentials, $userNames, $groupId))
+#else
+	#if($method == "stop-inheriting")
+		#set($updateResult = $sharepoint_v1_permissions.Update($list, $listItem, "%{}"))
+	#elseif($method == "start-inheriting")
+		#set($updateResult = $sharepoint_v1_permissions.ResetInheritance($list, $listItem))
+	#elseif($method == "remove")
+		#set($memberIds = false)
+		#set($memberIds = $core_v2_page.GetFormValue("memberIds"))
+		#set($updateResult = $sharepoint_v1_permissions.Remove($list, $listItem, $memberIds))
+	#elseif($method == "update")
+		#set($userNames = false)
+		#set($userNames = $core_v2_page.GetFormValue("userNames"))
+		#set($groupIds = false)
+		#set($groupIds = $core_v2_page.GetFormValue("groupIds"))
+		#set($levelIds = false)
+		#set($levelIds = $core_v2_page.GetFormValue("levelIds"))
+		#set($isGranted = false)
+		#set($isGranted = $core_v2_page.GetFormValue("isGranted"))
+		#set($updateResult = $sharepoint_v1_permissions.Update($list, $listItem, "%{UserNames = $userNames, GroupIds = $groupIds, PermissionLevelIds = $levelIds, IsGranted = $isGranted}"))
+	#end
+#end
+
+{
+	"valid" : true
+}

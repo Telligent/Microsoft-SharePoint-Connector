@@ -1,0 +1,8 @@
+<div class="sharepoint-list-view">
+	<div class="header">
+		$core_v2_widget.ExecuteFile('header.vm')
+	</div>
+	<div class='sharepoint-list-holder'>
+		$core_v2_widget.ExecuteFile('list.vm')
+	</div>
+</div>

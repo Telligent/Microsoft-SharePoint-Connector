@@ -1,0 +1,43 @@
+$core_v2_page.SetContentType('application/json')
+#set($empty = $core_v2_utility.ParseGuid('00000000-0000-0000-0000-000000000000'))
+
+#set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue('contentId')))
+#if ($contentId == $empty)
+	#set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetFormValue('contentId')))
+#end
+
+## method - checkin/checkout/discardcheckout
+#set($method = false)
+#set($method = $core_v2_page.GetFormValue('method'))
+
+#if($contentId != $empty && $method && $sharepoint_v2_listItem.CanEdit($contentId))
+	#set($result = false)
+
+	## CheckOut
+	#if($method == 'checkout')
+		#set($result = $sharepoint_v2_file.CheckOut($contentId))
+
+	## CheckIn
+	#elseif($method == 'checkin')
+		#set($checkinType = $core_v2_page.GetFormValue("checkintype"))
+		#set($comment = $core_v2_page.GetFormValue("comment"))
+		#set($keepCheckedOut = $core_v2_utility.ParseBool($core_v2_page.GetFormValue("keepcout")))
+		#set($result = $sharepoint_v2_file.CheckIn($contentId, "%{KeepCheckedOut = $keepCheckedOut, CheckInType = $checkinType, Comment = $comment}"))
+
+	## Discard CheckOut
+	#elseif($method == 'discardcheckout')
+		#set($result = $sharepoint_v2_file.UndoCheckOut($contentId))
+	#end
+
+	#if($result && $result.Errors.Count() == 0)
+		{
+			"valid" : true
+		}
+	#elseif($result)
+		$core_v2_page.SendJsonError($result.Errors)
+	#else
+		$core_v2_page.SendJsonError($core_v2_language.GetResource('NoPermissions'))
+	#end
+#else
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('NoPermissions'))
+#end

@@ -1,0 +1,65 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($contentId = false)
+#set($contentId = $sharepoint_v2_file.Current.ContentId)
+
+#set($operation = false)
+#set($operation = $core_v2_page.GetFormValue('operation'))
+#set($checkInOutInfo = false)
+#if ($operation == "checkout")
+	#set($checkInOutInfo = $sharepoint_v2_file.CheckOut($contentId))
+#elseif ($operation == "checkin")
+	#set($checkinType = $core_v2_page.GetFormValue("checkintype"))
+	#set($comment = $core_v2_page.GetFormValue("comment"))
+	#set($keepCOut = $core_v2_utility.ParseBool($core_v2_page.GetFormValue("keepcout")))
+	#set($checkInOutInfo = $sharepoint_v2_file.CheckIn($contentId, "%{KeepCheckedOut = $keepCOut, CheckInType = $checkinType, Comment = $comment}"))
+#elseif( $operation == "discardcheckout")
+	#set($checkInOutInfo = $sharepoint_v2_file.UndoCheckOut($contentId))
+#end
+#if ($checkInOutInfo && $checkInOutInfo.Errors.Count > 0)
+	$core_v2_page.SendJsonError($checkInOutInfo.Errors)
+#end
+
+#set($file = false)
+#set($file = $sharepoint_v2_file.GetInfo($contentId))
+#if ($file.Errors && $file.Errors.Count > 0)
+	$core_v2_page.SendJsonError($file.Errors)
+#end
+
+{
+	"valid"     : true,
+	"contentId"    : "$!{contentId}",
+	"file"      : {
+		"isCheckedOut"        : $file.IsCheckedOut.ToString().ToLower(),
+		"enableVersioning"    : $file.EnableVersioning.ToString().ToLower(),
+		"enableMinorVersions" : $file.EnableMinorVersions.ToString().ToLower(),
+		"majorVersion"        : $file.MajorVersion,
+		"minorVersion"        : $file.MinorVersion
+		#if ($file.IsCheckedOut)
+			,
+			"checkedOutByUser" : {
+				#set($displayName = $file.CheckedOutByUser.LoginName)
+				#set($user = false)
+                
+                #if ($file.CheckedOutByUser.DisplayName)
+                    #set($displayName = $file.CheckedOutByUser.DisplayName)
+                #end
+				
+                #if ($file.CheckedOutByUser.Email)
+    				#set($user = $core_v2_user.Get("%{Email = $file.CheckedOutByUser.Email}"))
+    
+    				#if ($user.DisplayName)
+    					#set($displayName = $user.DisplayName)
+    				#else
+    					#set($displayName = $user.Username)
+    				#end
+                #end
+
+				"id"        : "$!{file.CheckedOutByUser.Id}",
+				"title"     : "$!{core_v2_encoding.JavascriptEncode($displayName)}",
+				"loginName" : "$!{core_v2_encoding.JavascriptEncode($file.CheckedOutByUser.LoginName)}",
+				"url"       : "$!{user.Url}"
+			}
+		#end
+	}
+}

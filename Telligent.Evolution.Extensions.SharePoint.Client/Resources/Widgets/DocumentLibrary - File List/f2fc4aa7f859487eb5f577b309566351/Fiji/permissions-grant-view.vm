@@ -1,0 +1,71 @@
+<div id="$core_v2_widget.UniqueId('GrantPermissionsHolder')" >
+
+	<div class="header">
+		<div class="menu title">
+			<p>
+				<span></span>$core_v2_language.GetResource('Permissions_Grant_Title')
+			</p>
+		</div>
+	</div>
+
+	<div class="content">
+		<div class="users-groups-selector">
+			<span></span>$core_v2_language.GetResource('Permissions_Grant_UsersOrGroups')
+			<input type="text" id="UsersOrGroupsHolderId" value=""/>
+		</div>
+		<div class="grant-permissions">
+			<span></span>$core_v2_language.GetResource('Permissions_Grant_Permissions')
+			<div class="add-to-group">
+				<input type="radio" id="group-opt" name="grant-selector" checked="checked" value="add-to-group"/>
+				<label for="group-opt">
+					<span></span>$core_v2_language.GetResource('Permissions_Grant_AddUsersToGroup')
+					<div class="group-selector"><input type="text" id="GroupsHolderId"/></div>
+				</label>
+			</div>
+			<div class="grant-directly">
+				<input type="radio" id="direct-opt" name="grant-selector" value="grant-permissions-directly"/>
+				<label for="direct-opt">
+					<span></span>$core_v2_language.GetResource('Permissions_Grant_Directly')
+					<ul class="permissions-levels-list">
+						#set($levelList = false)
+						#set($levelList = $sharepoint_v1_permissions.LevelList($list.SPWebUrl, $list.Credentials))
+						#if ($levelList)
+							#foreach($level in $levelList)
+								<li class="permissions-level">
+									<input type="checkbox" name="chlevel" levelId="$!{level.Id}" id='$core_v2_widget.UniqueId("edit-$!{level.Id}")'/>
+									<label for='$core_v2_widget.UniqueId("edit-$!{level.Id}")'>
+										<span></span>$!{level.Name}
+									</label>
+								</li>
+							#end
+						#end
+					</ul>
+				</label>
+			</div>
+		</div>
+	</div>
+
+	<div class="footer">
+		<a href="#" class="internal-link submit-button cancel"><span></span>$core_v2_language.GetResource('Permissions_Grant_Cancel')</a>
+		<a href="#" class="internal-link submit-button save"><span></span>$core_v2_language.GetResource('Permissions_Grant_Ok')</a>
+	</div>
+
+</div>
+
+#registerEndOfPageHtml('telligent.sharepoint.widgets.documentLibrary.grantPermissions')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('permissions.js'))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			j.telligent.sharepoint.widgets.documentLibrary.grantPermissions.register({
+				webUrl              : "$core_v2_encoding.JavascriptEncode($list.SPWebUrl)",
+				groupHolderId       : "#GroupsHolderId",
+				usersGroupsHolderId : "#UsersOrGroupsHolderId",
+				grantHolderId       : "#$core_v2_widget.UniqueId('GrantPermissionsHolder')",
+				#set($updatePermissionsUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('permissions-update.vm'), "contentId=${listItem.ContentId}"))
+				updatePermissionsUrl: "$core_v2_encoding.JavascriptEncode($updatePermissionsUrl)"
+			});
+		})
+	</script>
+#end

@@ -1,0 +1,164 @@
+﻿<scriptedContentFragments>
+	<scriptedContentFragment name="${resource:SharePoint_CheckInOut_Widget_Name}" description="${resource:SharePoint_CheckInOut_Widget_Description}" instanceIdentifier="90f1423d46d84eaea2de94d9558c4098" cssClass="document-library-checkInOut-widget" isCacheable="false" varyCacheByUser="true" showHeaderByDefault="true">
+		<contentScript>
+			<![CDATA[
+#if(!$core_v2_widget.IsInWidgetPreviewMode)
+
+	$core_v2_widget.ExecuteFile('check-user-permissions.vm')
+	#set($userHasEditPermissions = $isAdmin || $isOwner || $isManager)
+	#if(!$userHasEditPermissions)
+		$core_v2_widget.Hide()
+	#end
+
+	#set($document = false)
+	#set($document = $sharepoint_v2_file.Current)
+	#if(!$document)
+		$core_v2_widget.Hide()
+	#end
+
+	<div id="$core_v2_widget.UniqueId('Loading')" class="loading">
+		$core_v2_language.GetResource('SharePoint_CheckInOut_Loading')
+	</div>
+
+	<div id="$core_v2_widget.UniqueId('CheckInOut')">
+		<ul class="links">
+			<li class="checked-out-status link-item">
+				$core_v2_language.GetResource('SharePoint_CheckInOut_CheckedOutTo')
+				<a class="profile" href='#'>
+					## profile name
+				</a>
+			</li>
+			<li class="link-item">
+				<a href="#" class='check-in'>
+					<span></span>$core_v2_language.GetResource('SharePoint_CheckInOut_CheckIn')
+				</a>
+			</li>
+			<li class="link-item">
+				<a href="#" class='discard-check-out'>
+					<span></span>$core_v2_language.GetResource('SharePoint_CheckInOut_Discard')
+				</a>
+			</li>
+			<li class="link-item">
+				<a href="#" class='check-out'>
+					<span></span>$core_v2_language.GetResource('SharePoint_CheckInOut_CheckOut')
+				</a>
+			</li>
+		</ul>
+		#set($fileInfo = $sharepoint_v2_file.GetInfo($document.ContentId))
+		<div class="check-in-form">
+			<div class="check-in-version">
+				<span></span>$core_v2_language.GetResource('SharePoint_CheckInOut_CheckInVersion')
+				<ul class="version-list">
+					<li class="minor version-item">
+						<input type="radio" name="checkin-version-group" id="$core_v2_widget.UniqueId('minorCheckIn')" value="MinorCheckIn">
+						<label for="$core_v2_widget.UniqueId('minorCheckIn')">
+							<span>$core_v2_language.GetResource('SharePoint_CheckInOut_ItemMinor')</span>
+						</label>
+					</li>
+					<li class="major version-item">
+						<input type="radio" name="checkin-version-group" id="$core_v2_widget.UniqueId('majorCheckIn')" value="MajorCheckIn">
+						<label for="$core_v2_widget.UniqueId('majorCheckIn')">
+							<span>$core_v2_language.GetResource('SharePoint_CheckInOut_ItemMajor')</span>
+						</label>
+					</li>
+					<li class="overwrite version-item">
+						<input type="radio" name="checkin-version-group" id="$core_v2_widget.UniqueId('overwriteCheckIn')" value="OverwriteCheckIn">
+						<label for="$core_v2_widget.UniqueId('overwriteCheckIn')">
+							<span>$core_v2_language.GetResource('SharePoint_CheckInOut_ItemOverwrite')</span>
+						</label>
+					</li>
+				</ul>
+			</div>
+			<div class="keep-checked-out">
+				<span></span>$core_v2_language.GetResource('SharePoint_CheckInOut_KeepCheckedOut')
+				<ul class="radio-buttons">
+					<li class="radio-button">
+						<input type="radio" class="rb-keep yes" name="$core_v2_widget.UniqueId('keepCheckedOut')" id="$core_v2_widget.UniqueId('keepCheckedOut_Yes')" value="1" checked>
+						<label for="$core_v2_widget.UniqueId('keepCheckedOut_Yes')">
+							$core_v2_language.GetResource('SharePoint_CheckInOut_KeepCheckedOut_Yes')
+						</label>
+					</li>
+					<li class="radio-button">
+						<input type="radio" class="rb-keep no" name="$core_v2_widget.UniqueId('keepCheckedOut')" id="$core_v2_widget.UniqueId('keepCheckedOut_No')" value="0">
+						<label for="$core_v2_widget.UniqueId('keepCheckedOut_No')">
+							$core_v2_language.GetResource('SharePoint_CheckInOut_KeepCheckedOut_No')
+						</label>
+					</li>
+				</ul>
+			</div>
+			<div class="comment">
+				<span></span>$core_v2_language.GetResource('SharePoint_CheckInOut_CheckIn_Comments')
+				<textarea class="check-in-comment field-item-input" id="$core_v2_widget.UniqueId('txtCheckinComment')"></textarea>
+			</div>
+			<div class="footer">
+				<input type="button" value="$core_v2_language.GetResource('SharePoint_CheckInOut_CheckIn_Ok')" class="post-check-in"></input>
+				<input type="button" value="$core_v2_language.GetResource('SharePoint_CheckInOut_CheckIn_Cancel')" class="cancel-check-in"></input>
+			</div>
+		</div>
+		<div class="error" style="display: none;">
+			<span></span>$core_v2_language.GetResource('SharePoint_CheckInOut_Error')
+		</div>
+	</div>
+	<div style="clear:both;"></div>
+
+	#registerEndOfPageHtml('telligent.sharepoint.widgets.checkInOut')
+		<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+	#end
+	#registerEndOfPageHtml() 
+		<script type="text/javascript">
+			jQuery(function(j){
+				j.telligent.sharepoint.widgets.checkInOut.register({
+					wrapperId        : "#${core_v2_widget.UniqueId('CheckInOut')}",
+					loadingHolderId  : "#${core_v2_widget.UniqueId('Loading')}",
+					#set($checkInOutUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('check-in-out.vm'), "contentId=${document.ContentId}"))
+					checkInOutUrl    : "$core_v2_encoding.JavascriptEncode($checkInOutUrl)",
+					discardConfirmMsg: "$core_v2_language.GetResource('SharePoint_CheckInOut_DiscardConfirm')"
+				});
+			});
+		</script>
+	#end
+
+#end
+			]]>
+		</contentScript>
+		<headerScript>
+			<![CDATA[
+				$core_v2_widget.ApplyTokens($core_v2_widget.GetStringValue('WidgetTitle', '${resource:SharePoint_CheckInOut_Widget_Title}'))
+			]]>
+		</headerScript>
+		<configuration>
+			<![CDATA[
+				<propertyGroup id="Options">
+					<property id="WidgetTitle" resourceName="CF_Title" dataType="string" defaultValue="${resource:SharePoint_CheckInOut_Widget_Title}" controlType="Telligent.Evolution.Controls.ContentFragmentTokenStringControl, Telligent.Evolution.Controls" />
+				</propertyGroup>
+			]]>
+		</configuration>
+		<languageResources>
+			<language key="en-us">
+				<resource name="CF_Title">Widget Title</resource>
+				<resource name="SharePoint_CheckInOut_Widget_Title">SharePoint - Document Check In/Check Out</resource>
+				<resource name="SharePoint_CheckInOut_Widget_Name">SharePoint - Document Check In/Check Out</resource>
+				<resource name="SharePoint_CheckInOut_Widget_Description">Allows the user to Check In or Check Out a document from SharePoint</resource>
+				<resource name="SharePoint_CheckInOut_Loading">Loading...</resource>
+				<resource name="SharePoint_CheckInOut_CheckOut">Check Out</resource>
+				<resource name="SharePoint_CheckInOut_CheckedOutTo">Checked Out To:</resource>
+				<resource name="SharePoint_CheckInOut_CheckIn">Check In</resource>
+				<resource name="SharePoint_CheckInOut_Discard">Discard Check Out</resource>
+				<resource name="SharePoint_CheckInOut_DiscardConfirm">If you discard your check out, you will lose all changes made to the document.	Are you sure you want to discard your check out?</resource>
+				<resource name="SharePoint_CheckInOut_CheckInVersion">What kind of version would you like to check in?</resource>
+				<resource name="SharePoint_CheckInOut_KeepCheckedOut">Keep the document checked out after checking in this version?</resource>
+				<resource name="SharePoint_CheckInOut_KeepCheckedOut_Yes">Yes</resource>
+				<resource name="SharePoint_CheckInOut_KeepCheckedOut_No">No</resource>
+				<resource name="SharePoint_CheckInOut_CheckIn_Comments">Comments: </resource>
+				<resource name="SharePoint_CheckInOut_CheckIn_Ok">OK</resource>
+				<resource name="SharePoint_CheckInOut_CheckIn_Cancel">Cancel</resource>
+				<resource name="SharePoint_CheckInOut_CheckOutTo"><![CDATA[Checked Out To: <br />{0}<br />]]></resource>
+				<resource name="SharePoint_CheckInOut_CheckOutToUser"><![CDATA[Checked Out To: <br /> <a href='mailto:{1}'>{0}</a><br>]]></resource>
+				<resource name="SharePoint_CheckInOut_ItemOverwrite"> Overwrite the current minor version</resource>
+				<resource name="SharePoint_CheckInOut_ItemMajor"> Major version (publish)</resource>
+				<resource name="SharePoint_CheckInOut_ItemMinor"> Minor version (draft)</resource>
+				<resource name="SharePoint_CheckInOut_Error">An item is no longer available. It may have been deleted by another user or you have no permissions for this operation.</resource>
+			</language>
+		</languageResources>
+	</scriptedContentFragment>
+</scriptedContentFragments>

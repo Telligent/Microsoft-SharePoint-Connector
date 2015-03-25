@@ -1,0 +1,76 @@
+﻿<scriptedContentFragments>
+	<scriptedContentFragment name="${resource:SharePoint_ListItem_Widget_Name}" description="${resource:SharePoint_ListItem_Widget_Description}" instanceIdentifier="35dac46143634f27b0374c68313e87ab" theme="424eb7d9138d417b994b64bff44bf274" cssClass="sharepoint-listItem-widget" isCacheable="false" varyCacheByUser="true" showHeaderByDefault="true">
+		<contentScript>
+			<![CDATA[
+#set($listItem = false)
+#set($listItem = $sharepoint_v2_listItem.Current)
+#if(!$listItem || $listItem.Id < 1)
+	$core_v2_page.Redirect($core_v2_urls.Message(9)))
+#end
+#set($viewType = $core_v2_widget.GetStringValue('viewType', 'simple'))
+$core_v2_widget.ExecuteFile("${viewType}-view.vm")
+#registerEndOfPageHtml('telligent.sharepoint.widgets.listItem.properties')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			j.telligent.sharepoint.widgets.listItem.properties.register({
+				wrapper               : j("#${core_v2_widget.WrapperElementId}"),
+				deleteVerificationText: "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('SharePoint_ListItem_DeleteConfirmation'))",
+				#set($deleteListItemUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('delete.vm'), "webUrl=${core_v2_encoding.UrlEncode($listItem.ListUrl)}&listId=${listItem.ListId}"))
+				deleteListItemUrl     : "$core_v2_encoding.JavascriptEncode($deleteListItemUrl)",
+				listItemId            : "${listItem.Id}"
+			});
+		});
+	</script>
+#end
+			]]>
+		</contentScript>
+		<headerScript>
+			<![CDATA[
+				$core_v2_widget.ApplyTokens($core_v2_widget.GetStringValue('fragmentHeader', '${resource:SharePoint_ListItem_Widget_Title}'))
+			]]>
+		</headerScript>
+		<configuration>
+			<![CDATA[
+				<propertyGroup id="Options">
+					<property id="fragmentHeader" resourceName="CF_Widget_Title" dataType="string" defaultValue="${resource:SharePoint_ListItem_Widget_Title}" controlType="Telligent.Evolution.Controls.ContentFragmentTokenStringControl, Telligent.Evolution.Controls" />
+					<property id="showEditUrl" resourceName="CF_ShowEditUrl" dataType="bool" defaultValue="true" />
+					<property id="viewType" resourceName="CF_View" dataType="string" defaultValue="simple" controlType="Telligent.Evolution.Controls.PropertyVisibilityValueSelectionControl, Telligent.Evolution.Controls">
+						<propertyValue value="full" resourceName="CF_FullView" propertiesToShow="" propertiesToHide="" />
+						<propertyValue value="simple" resourceName="CF_SimpleView" propertiesToShow="" propertiesToHide="" />
+					</property>
+				</propertyGroup>
+			]]>
+		</configuration>
+		<languageResources>
+			<language key="en-us">
+				<resource name="SharePoint_ListItem_Widget_Name">SharePoint - List Item</resource>
+				<resource name="SharePoint_ListItem_Widget_Description">Allows user to manage SharePoint List Item properties.</resource>
+				<resource name="CF_Widget_Title">Widget Title</resource>
+				<resource name="SharePoint_ListItem_Widget_Title">SharePoint - List Item</resource>
+				<resource name="CF_ShowEditUrl">Show edit in SharePoint link</resource>
+				<resource name="CF_View">View Type</resource>
+				<resource name="CF_FullView">Full View</resource>
+				<resource name="CF_SimpleView">Simple View</resource>
+				<resource name="SharePoint_ListItem_DeleteConfirmation">Are you sure you want to delete this ListItem?</resource>
+				<resource name="SharePoint_ListItem_EditLink">Edit</resource>
+        <resource name="SharePoint_ListItem_Attachments">Attachments</resource>
+        <resource name="SharePoint_ListItem_NoAttachments">No Attachments</resource>
+				<resource name="SharePoint_ListItem_EmptyValue">Empty</resource>
+				<resource name="SharePoint_ListItem_Likes">Likes</resource>
+				<resource name="SharePoint_ListItem_Comments">Comments</resource>
+				<resource name="SharePoint_ListItem_Tags">Tags</resource>
+				<resource name="SharePoint_ListItem_RateThis">Rate This</resource>
+				<resource name="SharePoint_ListItem_ModerationMenu_Create">Create</resource>
+				<resource name="SharePoint_ListItem_ModerationMenu_Edit">Edit</resource>
+				<resource name="SharePoint_ListItem_ModerationMenu_Delete">Delete</resource>
+				<resource name="SharePoint_ListItem_Deleted">List Item was removed successfully.</resource>
+				<resource name="SharePoint_ListItem_Delete_EmptyWebUrl">SharePoint Web Url was not specified.</resource>
+				<resource name="SharePoint_ListItem_Delete_EmptyListId">SharePoint List Id was not specified.</resource>
+				<resource name="SharePoint_ListItem_Delete_EmptyListItemId">SharePoint List Item Ids were not specified.</resource>
+			</language>
+		</languageResources>
+	</scriptedContentFragment>
+</scriptedContentFragments>

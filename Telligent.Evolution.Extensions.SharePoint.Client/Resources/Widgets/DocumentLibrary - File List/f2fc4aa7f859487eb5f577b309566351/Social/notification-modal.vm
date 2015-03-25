@@ -1,0 +1,51 @@
+#set($mode = 'add')
+#set($mode = $core_v2_page.GetQueryStringValue('mode'))
+
+#set($contentId = false)
+#set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue('contentId')))
+
+#set($document = false)
+#set($document = $sharepoint_v2_file.Get($contentId))
+
+#set($title = $core_v2_language.GetResource('NotificationModal_Title'))
+$core_v2_page.SetTitle($title, false, false)
+#set($isModal = true)
+$core_v2_page.RenderThemeHeaders("%{ IsModal = $isModal}")
+
+<fieldset>
+	<ul class="field-list">
+		<li class="field-item user-names-emails">
+			<label for="$core_v2_widget.UniqueId('user-names-emails')" class="field-item-header">$core_v2_language.GetResource('NotificationModal_UserNamesEmails')</label>
+			<span class="field-item-input">
+				<input type="text" id="$core_v2_widget.UniqueId('user-names-emails')"/>
+			</span>
+		</li>
+		<li class="field-item">
+			<span class="field-item-input">
+				#set($defaultMessage = $core_v2_language.FormatString($core_v2_language.GetResource("NotificationModal_DefaultMessage"), "$document.Title", "$core_v2_urls.FullPath($document.Url)"))
+				$core_v2_editor.Render($core_v2_widget.UniqueId('message'), "%{Value = $defaultMessage}")
+			</span>
+		</li>
+		<li class="field-item">
+			<a href="#" class="internal-link send-button button" data-sending="$core_v2_language.GetResource('NotificationModal_Sending')">$core_v2_language.GetResource('NotificationModal_Send')</a>
+		</li>
+	</ul>
+</fieldset>
+
+#registerEndOfPageHtml('telligent.sharepoint.widgets.documentNotification')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('notification-ui.js'))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			j.telligent.sharepoint.widgets.documentNotification.register({
+				userNamesEmailsHolder: "#$core_v2_widget.UniqueId('user-names-emails')",
+				getMessage           : function() { return $core_v2_editor.GetContentScript($core_v2_widget.UniqueId('message'));},
+				sendNotificationUrl  : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('notification.vm'))",
+				findUsersOrEmailsUrl : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('find-users-or-emails.vm'))",
+				subject              : "$core_v2_language.GetResource('NotificationModal_NotificationSubject')",
+				noUserOrEmailMatchesText: "$core_v2_language.GetResource('NotificationModal_NoUserOrEmailMatches')"
+			});
+		})
+	</script>
+#end

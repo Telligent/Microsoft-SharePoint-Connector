@@ -1,0 +1,28 @@
+﻿$core_v2_page.SetContentType('application/json')
+
+#set($empty = $core_v2_utility.ParseGuid('00000000-0000-0000-0000-000000000000'))
+#set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetFormValue('contentId')))
+#if ($contentId == $empty)
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('NoPermissions'))
+#end
+
+#set($canEdit = $sharepoint_v2_listItem.CanEdit($contentId))
+#if(!$canEdit)
+	$core_v2_page.SendJsonError($core_v2_language.GetResource('NoPermissions'))
+#end
+
+#set($listItem = $sharepoint_v2_listItem.Get($contentId))
+#set($deleteInfo = $sharepoint_v2_listItem.Delete($contentId))
+#if ($deleteInfo && $deleteInfo.Errors.Count == 0)
+	{
+		"valid"      : true,
+		"statusMsg"  : "$!{core_v2_language.GetResource('Deleted')}",
+		"contentId"  : "$!{contentId}",
+		#set($listUrl = $sharepoint_v1_urls.SPList("$listItem.ListId"))
+		"UrlRedirect": "$!{core_v2_encoding.JavascriptEncode($listUrl)}"
+	}
+#elseif($deleteInfo)
+	$core_v2_page.SendJsonError($deleteInfo.Errors)
+#else
+	$core_v2_language.GetResource('NoPermissions')
+#end

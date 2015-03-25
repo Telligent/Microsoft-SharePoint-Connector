@@ -1,0 +1,24 @@
+﻿<div class="filter">
+	<div class="filter-sort">
+		<div class="filters">
+			#if($showSortOptions)
+				<select class="sort-options" style="display:none">
+						<option value="Name" data-direction="Ascending" #if ($sortBy == 'Name' && $sortOrder == 'Ascending') selected #end>$core_v2_language.GetResource('BrowseDocumentLibraries_Header_Name')</option>
+						<option value="Name" data-direction="Descending" #if ($sortBy == 'Name' && $sortOrder == 'Descending') selected #end>$core_v2_language.GetResource('BrowseDocumentLibraries_Header_Name')</option>
+					#if($showItemCount)
+						<option value="ItemCount" data-direction="Ascending" #if ($sortBy == 'ItemCount' && $sortOrder == 'Ascending') selected #end>$core_v2_language.GetResource('BrowseDocumentLibraries_Header_ItemCount')</option>
+						<option value="ItemCount" data-direction="Descending" #if ($sortBy == 'ItemCount' && $sortOrder == 'Descending') selected #end>$core_v2_language.GetResource('BrowseDocumentLibraries_Header_ItemCount')</option>
+					#end
+					#if($showCreatedDate)
+						<option value="Created" data-direction="Ascending" #if ($sortBy == 'Created' && $sortOrder == 'Ascending') selected #end>$core_v2_language.GetResource('BrowseDocumentLibraries_Header_Created')</option>
+						<option value="Created" data-direction="Descending" #if ($sortBy == 'Created' && $sortOrder == 'Descending') selected #end>$core_v2_language.GetResource('BrowseDocumentLibraries_Header_Created')</option>
+					#end
+					#if($showModifiedDate)
+						<option value="Modified" data-direction="Ascending" #if ($sortBy == 'Modified' && $sortOrder == 'Ascending') selected #end>$core_v2_language.GetResource('BrowseDocumentLibraries_Header_Recent')</option>
+						<option value="Modified" data-direction="Descending" #if ($sortBy == 'Modified' && $sortOrder == 'Descending') selected #end>$core_v2_language.GetResource('BrowseDocumentLibraries_Header_Recent')</option>
+					#end
+				</select>
+			#end
+		</div>
+	</div>
+</div>

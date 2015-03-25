@@ -1,0 +1,59 @@
+﻿#set($pageSize = 5)
+#set($pageSize = $core_v2_widget.GetIntValue('pageSize', 5))
+#set($pageIndex = $core_v2_ui.GetCurrentPageIndex())
+
+#set($showItemCount = $core_v2_widget.GetBoolValue('showItemCountColumn', true))
+#set($showCreatedDate = $core_v2_widget.GetBoolValue('showCreatedDateColumn', true))
+#set($showModifiedDate = $core_v2_widget.GetBoolValue('showModifiedDateColumn', true))
+#set($showVersioning = $core_v2_widget.GetBoolValue('showVersioningColumn', true))
+#set($showSortOptions = $core_v2_widget.GetBoolValue('showSortOptions', true))
+
+#set($sortBy = 'Name')
+#set($sortBy = $core_v2_page.GetQueryStringValue('w_sortBy'))
+#set($sortOrder = 'Ascending')
+#set($sortOrder = $core_v2_page.GetQueryStringValue('w_sortOrder'))
+
+#set($libraries = false)
+#set($libraries = $sharepoint_v2_library.List($core_v2_group.Current.Id, "%{SortBy = $sortBy, SortOrder = $sortOrder, PageIndex=$pageIndex, PageSize=$pageSize}"))
+#if($libraries && $libraries.TotalCount == 0)
+	<div class="message norecords">$core_v2_language.GetResource('BrowseDocumentLibraries_NoRecords')</div>
+#elseif($libraries && !$libraries.HasErrors && $libraries.TotalCount > 0)
+
+	#if($core_v2_widget.GetBoolValue('includeSearch', true) && $libraries.TotalCount > 3)
+		#set($searchText = '')
+		#set($searchText = $core_v2_page.GetQueryStringValue('w_searchText'))
+		#if($searchText != '')
+			#set($libraries = $sharepoint_v2_library.List($core_v2_group.Current.Id, "%{SortBy = $sortBy, SortOrder = $sortOrder, SearchText = $searchText}"))
+		#end
+		<div class="field-list-header"></div>
+		<fieldset class="field-list">
+			<ul class="field-list">
+				<li class="field-item">
+					<span class="field-item-input">
+						<input type="text" value="#if($searchText == '')$core_v2_language.GetResource('BrowseDocumentLibraries_DefaultSearchText')#else${searchText}#end" class="search-text"/>
+						<a href="#" class="internal-link clear-search" title="$core_v2_language.GetResource('BrowseDocumentLibraries_Search_Clear')">$core_v2_language.GetResource('BrowseDocumentLibraries_Search_Clear')</a>
+					</span>
+				</li>
+			</ul>
+		</fieldset>
+		<div class="field-list-footer"></div>
+	#end
+
+	<div class="data-holder">
+		<div class="table-list-header">
+		</div>
+		<table class="table-list">
+			$core_v2_widget.ExecuteFile('header.vm')
+			<tbody class="table-content">
+				$core_v2_widget.ExecuteFile('content.vm')
+			</tbody>
+		</table>
+		<div class="document-libraries-footer"></div>
+
+		#if($libraries.TotalCount > $libraries.PageSize)
+			#set($baseUrl = $core_v2_page.Url)
+			#set($baseUrl = $core_v2_page.GetQueryStringValue('w_baseUrl'))
+			$!core_v2_ui.Pager($libraries.PageIndex, $libraries.PageSize, $libraries.TotalCount, "%{Target='libraries',BaseUrl=$baseUrl,PagedContentFile='list.vm',Transition='none'}")
+		#end
+	</div>
+#end

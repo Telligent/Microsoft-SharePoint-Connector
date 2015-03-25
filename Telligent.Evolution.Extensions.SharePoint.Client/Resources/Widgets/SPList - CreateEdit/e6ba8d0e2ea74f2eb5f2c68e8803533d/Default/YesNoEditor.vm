@@ -1,0 +1,24 @@
+﻿#if(!$core_v2_page.IsPost || $isInPreviewMode)
+	#set($controlId = $core_v2_widget.UniqueId($field.InternalName))
+	#set($errorMsgId = "${field.InternalName}-msg")
+
+	#set($value = false)
+	#if($listItem)
+		#set($value = $listItem.ValueForEdit($field.InternalName).ToLower())
+	#end
+	<input id="$!{controlId}" type="checkbox" class="yes-no-editor" name="$!{field.InternalName}" #if($value == "yes")checked#end />
+	<label for="$!{controlId}">
+		#if ($field.FieldTypeKind == 'AllDayEvent')
+			$core_v2_language.GetResource('SharePoint_ListItem_YesNoEditor_AllDayEvent')
+		#elseif($field.FieldTypeKind == 'CrossProjectLink')
+			$core_v2_language.GetResource('SharePoint_ListItem_YesNoEditor_CrossProjectLink')
+		#else
+			$!{field.Description}
+		#end
+	</label>
+#else
+	#set($formValue = $core_v2_page.GetFormValue($field.InternalName))
+	#set($value = 'False')
+	#if($formValue == 'on') #set($value = 'True') #end
+	$listItem.Fields.Add($field.InternalName, $value)
+#end

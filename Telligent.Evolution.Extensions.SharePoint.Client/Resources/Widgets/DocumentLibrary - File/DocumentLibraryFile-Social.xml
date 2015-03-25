@@ -1,0 +1,302 @@
+﻿<scriptedContentFragments>
+	<scriptedContentFragment name="${resource:WidgetName}" description="${resource:WidgetDescription}" instanceIdentifier="cf6e80c020fd482bb4956008f8fe2e28" theme="3fc3f82483d14ec485ef92e206116d49" cssClass="sharepoint document-library-file" isCacheable="true" varyCacheByUser="true" showHeaderByDefault="false">
+		<contentScript>
+			<![CDATA[
+#set($file = false)
+#set($file = $sharepoint_v2_file.Current)
+#if(!$file || $file.HasErrors() || $file.Id < 1)
+	$core_v2_page.Redirect($core_v2_urls.Message(9))
+#end
+
+#set ($accessingUserIsRegistered = false)
+#set ($accessingUserIsRegistered = $core_v2_user.IsRegistered($core_v2_user.Accessing.Id))
+
+#set($fileType = false)
+#set($fileType = $core_v2_ui.GetMediaType($file.Path))
+
+#set($maxNameLength = 10)
+
+<div class="content full">
+	<div class="actions download">
+		<a href="$core_v2_encoding.HtmlAttributeEncode("${file.Library.SPWebUrl}${file.Path}")" class="internal-link download-attachment button">$core_v2_language.GetResource('Download')</a>
+	</div>  
+	<h3 class="name">
+		$file.Title
+	</h3>
+	#set($list = false)
+	#set($list = $sharepoint_v2_list.Get($file.Library.Id))
+	#set($listItem = false)
+	#set($listItem = $sharepoint_v2_listItem.Get($file.ContentId))
+	#if($list && $listItem)
+		#set($fieldsOfTypeAttachment = [])
+		#foreach($field in $list.Fields)
+		#beforeall
+			<fieldset class="show">
+				<ul class="field-list">
+		#each
+			#if(!$field.ReadOnlyField && !$field.Hidden && $field.FieldTypeKind != "Attachments")
+				#if($listItem.HasValue($field.InternalName))
+					<li class="field-item">
+						<h4 class="field-item-header">$!{field.Title}</h4>
+						<div class="field-item-content">$!listItem.get_item($field.InternalName)</div>
+					</li>
+				#end
+			#elseif($field.FieldTypeKind == "Attachments")
+				#set($index = $fieldsOfTypeAttachment.Add($field))
+			#end
+		#afterall
+				</ul>
+			</fieldset>
+		#end
+
+		#foreach($field in $fieldsOfTypeAttachment)
+			#set($hasItems = $listItem.Value($field.InternalName))
+			#if ($hasItems)
+				#set($attachments = false)
+				#set($attachments = $sharepoint_v2_attachments.List($listItem.ContentId, $field.InternalName))
+				#foreach($attachment in $attachments)
+				#beforeall
+					<h3 class="name">
+						$!field.Title
+					</h3>
+					<fieldset>
+						<ul class="field-list attachments">
+				#each
+					<li class="field-item">
+						<div class="attachment-list">
+							<a class="attachment-item" href="$!attachment.Uri">$!{attachment.Name}</a>
+						</div>
+					</li>
+				#afterall
+						</ul>
+					</fieldset>
+				#end
+			#end
+		#end
+	#end
+
+	<fieldset class="show">
+		<ul class="field-list">
+			#if($file.Modified)
+				<li class="field-item">
+					<h4 class="field-item-header">$core_v2_language.GetResource('Modified')</h4>
+					<div class="field-item-content">
+						$core_v2_language.FormatDate($file.Modified)
+					</div>
+				</li>
+			#end
+
+			#if ($file.Editor && $file.Editor.Email && $file.Editor.DisplayName)
+				<li class="field-item">
+					<h4 class="field-item-header">$core_v2_language.GetResource('ModifiedBy')</h4>
+					<div class="field-item-content">
+						<span class="user-name">
+							#set($editor = false)
+							#set($editor = $core_v2_user.Get("%{Email = $file.Editor.Email}"))
+							#if ($editor)
+								## Zimbra User Profile
+								#if($editor.ProfileUrl)
+									<a href="$core_v2_encoding.HtmlAttributeEncode($editor.ProfileUrl)" class="internal-link view-user-profile">$!{editor.DisplayName}</a>
+								#else
+									$!core_v2_language.Truncate($editor.DisplayName, $maxNameLength, "...")
+								#end
+							#else
+								## SharePoint User Profile
+								<span title="$!core_v2_encoding.HtmlAttributeEncode($file.Editor.DisplayName)">$core_v2_language.Truncate($file.Editor.DisplayName, $maxNameLength, "...")</span>
+							#end
+						</span>
+					</div>
+				</li>
+			#end
+
+			<li id="$core_v2_widget.UniqueId('CheckedOut')" class="field-item" #if(!$file.IsCheckedOut) style="display: none;" #end>
+				<h4 class="field-item-header">$core_v2_language.GetResource('CheckedOutTo')</h4>
+				<div class="field-item-content">
+					#if($file.IsCheckedOut)
+						$core_v2_widget.ExecuteFile('checkedout.vm')
+					#end
+				</div>
+			</li>
+		</ul>
+	</fieldset>
+	<div style="clear:both;"></div>
+
+	#set($tags = $core_v2_tags.Get($file.ContentId, $file.ContentTypeId))
+	#if ($tags.Count > 0)
+		#foreach ($tag in $tags)
+		#beforeall
+			<div class="content-tags">
+				<ul class="tag-list">
+		#each
+			#set($tagUrl = false)
+			#set($tagUrl = $core_v2_groupUrls.Tags($core_v2_group.Current.Id, $core_v2_utility.MakeList($tag)))
+			#if ($tagUrl)
+				<li class="tag-item">
+					<a href="$core_v2_encoding.HtmlAttributeEncode($tagUrl)">$!{tag.TagName}</a>
+				</li>
+			#end
+		#afterall
+				</ul>
+			</div>
+		#end
+	#end
+	#set($author = false)
+	#if ($file.Author && $file.Author.Email)
+		#set($author = $core_v2_user.Get("%{Email = $file.Author.Email}"))
+	#end
+	<div class="author">
+		<span class="user-name">
+		#if($author && $author.ProfileUrl && $author.DisplayName)
+				<a href="$core_v2_encoding.HtmlAttributeEncode($author.ProfileUrl)" class="internal-link view-user-profile">
+					$!{author.DisplayName}
+				</a>
+			#elseif($author && $author.DisplayName)
+				$core_v2_language.Truncate($author.DisplayName, $maxNameLength, "...")
+			#elseif($file.Author && $file.Author.DisplayName)
+				<span title="$!core_v2_encoding.HtmlAttributeEncode($file.Author.DisplayName)">$core_v2_language.Truncate($file.Author.DisplayName, $maxNameLength, "...")</span>
+			#end
+		</span>
+		<div class="avatar">
+			#if($author && $author.ProfileUrl && $author.AvatarUrl && $author.DisplayName)
+				<a href="$core_v2_encoding.HtmlAttributeEncode($author.ProfileUrl)">
+					$core_v2_ui.GetResizedImageHtml($author.AvatarUrl, 32, 32, "%{border = '0', alt = $author.DisplayName, ResizeMethod = 'ZoomAndCrop'}")
+				</a>
+			#elseif($author && $author.AvatarUrl && $author.DisplayName)
+				$core_v2_ui.GetResizedImageHtml($author.AvatarUrl, 32, 32, "%{border = '0', alt = $author.DisplayName, ResizeMethod = 'ZoomAndCrop'}")
+			#elseif($file.Author && $file.Author.AvatarUrl && $file.Author.DisplayName)
+				$core_v2_ui.GetResizedImageHtml($file.Author.AvatarUrl, 32, 32, "%{border = '0', alt = $file.Author.DisplayName, ResizeMethod = 'ZoomAndCrop'}")
+			#end
+		</div>
+	</div>
+	<div class="actions">
+		#set($maxLinks = 3)
+		<div class="ui-links navigation-list" data-minlinks="$maxLinks" data-maxlinks="$maxLinks" data-direction="horizontal">
+			<ul class="navigation-list">
+				<li class="navigation-list-item date">
+					<span class="attribute-value">$core_v2_language.FormatDate($file.Modified)</span>
+				</li>
+				<li class="navigation-list-item like">
+					#if($accessingUserIsRegistered)
+						#set ($likeFormat = '{toggle} <span class="count"><span class="icon"></span>{count}</span>')
+					#else
+						#set ($likeFormat = '<span class="count"><span class="icon"></span>{count}</span>')
+					#end
+					$core_v2_ui.Like($file.ContentId, $file.ContentTypeId, "%{ Format = $likeFormat, IncludeTip = 'true'}")
+				</li>
+				<li class="navigation-list-item rating">
+					#set($canCreateRating = false)
+					#set($canCreateRating = $core_v2_rating.CanCreate($file.ContentId, $file.ContentTypeId))
+					#if($canCreateRating)
+						$core_v2_ui.Rate($file.ContentId, $file.ContentTypeId)
+					#else
+						$core_v2_ui.Rate($file.ContentId, $file.ContentTypeId, "%{ReadOnly = 'true', CssClass = 'small'}")
+					#end
+				</li>
+				#if($accessingUserIsRegistered)
+					$core_v2_widget.ExecuteFile('check-user-permissions.vm')
+
+					#if($isAdmin || $isOwner || $isManager || $isMember)
+						<li class="attribute-item checkIn">
+							<a href="#" data-type="checkIn" data-messagename="checkInSubscribe" data-contentId="$!file.ContentId"  #if(!$file.IsCheckedOut) style="display: none;" #end>$core_v2_language.GetResource('Menu_CheckIn')</a>
+						</li>
+						<li class="attribute-item discard-checkOut">
+							<a href="#" data-type="discardCheckOut" data-messagename="discardCheckOutSubscribe" data-contentId="$!file.ContentId"  #if(!$file.IsCheckedOut) style="display: none;" #end>$core_v2_language.GetResource('Menu_DiscardCheckOut')</a>
+						</li>
+						<li class="attribute-item checkOut">
+							<a href="#" data-type="checkOut" data-messagename="checkOutSubscribe" data-contentId="$!file.ContentId" #if($file.IsCheckedOut) style="display: none;" #end>$core_v2_language.GetResource('Menu_CheckOut')</a>
+						</li>
+						#set($canEditDocument = false)
+						#set($canEditDocument = $sharepoint_v2_listItem.CanEdit($file.ContentId))
+						#if ($canEditDocument)
+							<li class="navigation-list-item">
+								<a href="$sharepoint_v2_fileUrls.Edit($file.ContentId)">$core_v2_language.GetResource('Menu_Edit')</a>
+							</li>
+							<li class="navigation-list-item">
+								<a href="#" data-messagename="delete-document" data-contentid="$!file.ContentId">$core_v2_language.GetResource('Menu_Delete')</a>
+							</li>
+						#end
+					#end
+				#end
+				<li class="navigation-list-item">
+					$core_v2_ui.Moderate($file.ContentId, $file.ContentTypeId)
+				</li>
+				<li class="navigation-list-item">
+					<a href="#" data-more>$core_v2_language.GetResource('More')</a>
+				</li>
+				<li class="navigation-list-item">
+					<a href="#" data-cancel>$core_v2_language.GetResource('Cancel')</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+#registerEndOfPageHtml('telligent.sharepoint.widgets.document')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			j.telligent.sharepoint.widgets.document.register({
+				wrapper                :j("#${core_v2_widget.WrapperElementId}"),
+				#set($checkInUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('checkin.vm'), "contentId=${file.ContentId}"))
+				checkInUrl             :"$core_v2_encoding.JavascriptEncode($checkInUrl)",
+				#set($checkInModalUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('checkin-modal.vm'), "contentId=${file.ContentId}"))
+				checkInModalUrl        :"$core_v2_encoding.JavascriptEncode($checkInModalUrl)",
+				#set($checkedOutUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('checkedout.vm'), "contentId=${file.ContentId}"))
+				checkedOutId           :"#$core_v2_widget.UniqueId('CheckedOut')",
+				checkedOutUrl          :"$core_v2_encoding.JavascriptEncode($checkedOutUrl)",
+				deleteVerificationText :"$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('DeleteConfirmation'))",
+				deleteDocumentUrl      :"$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('delete.vm'))"
+			});
+		});
+	</script>
+#end
+		]]>
+		</contentScript>
+		<headerScript>
+			<![CDATA[
+$core_v2_widget.ApplyTokens($core_v2_widget.GetStringValue('fragmentHeader', '${resource:WidgetName}'))
+		]]>
+		</headerScript>
+		<configuration>
+			<![CDATA[
+<propertyGroup id="options" resourceName="Options">
+	<property id="fragmentHeader" resourceName="CF_Title" dataType="string" defaultValue="${resource:WidgetName}" controlType="Telligent.Evolution.Controls.ContentFragmentTokenStringControl, Telligent.Evolution.Controls" />
+</propertyGroup>
+			]]>
+		</configuration>
+		<languageResources>
+			<language key="en-us">
+				<resource name="Options">Options</resource>
+				<resource name="CF_Title">Widget Title</resource>
+				<resource name="WidgetName">SharePoint - Document Library - File</resource>
+				<resource name="WidgetDescription">Displays a file from the SharePoint document library.</resource>
+				<resource name="Download">Download</resource>
+				<resource name="More">More</resource>
+				<resource name="Cancel">Cancel</resource>
+				<resource name="Menu_CheckOut">Check Out</resource>
+				<resource name="Menu_CheckIn">Check In</resource>
+				<resource name="Menu_DiscardCheckOut">Discard Check Out</resource>
+				<resource name="Menu_Create">Create</resource>
+				<resource name="Menu_Edit">Edit</resource>
+				<resource name="Menu_Delete">Delete</resource>
+				<resource name="DeleteConfirmation">Are you sure you want to delete this document?</resource>
+				<resource name="Deleted">SharePoint Document was deleted successfully.</resource>
+				<resource name="NoPermissions">You have no permissions to edit this document.</resource>
+				<resource name="Modified">Modified</resource>
+				<resource name="ModifiedBy">Modified By</resource>
+				<resource name="CheckedOutTo">Checked Out To</resource>
+				<resource name="CheckIn_Title">Check In</resource>
+				<resource name="CheckIn_Version">What kind of version would you like to check in?</resource>
+				<resource name="CheckIn_MinorVersion">{0} Minor version (draft)</resource>
+				<resource name="CheckIn_MajorVersion">{0} Major version (publish)</resource>
+				<resource name="CheckIn_Overwrite">{0} Overwrite the current minor version</resource>
+				<resource name="CheckIn_Comment">Comment</resource>
+				<resource name="CheckIn_Leave_a_comment">Leave a comment...</resource>
+				<resource name="CheckIn_KeepCheckedOut">Keep the document checked out after checking in this version?</resource>
+				<resource name="Save">Save</resource>
+			</language>
+		</languageResources>
+	</scriptedContentFragment>
+</scriptedContentFragments>

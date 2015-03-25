@@ -1,0 +1,83 @@
+<div class="message error" id="$core_v2_widget.UniqueId('ErrorMessageId')" style="display:none;"></div>
+<fieldset class="edit-document edit">
+
+	<h1>$!core_v2_language.FormatString($core_v2_language.GetResource('EditDocument'), $document.Title)</h1>
+
+	<ul class="field-list">
+		#set ($hiddenFields = ['TaskGroup'])
+		#set($currentList = $sharepoint_v2_list.Get($document.Library.Id))
+		#set($listItem = $sharepoint_v2_listItem.Get($document.ContentId))
+		#foreach($field in $currentList.Fields)
+			#if(!$field.ReadOnlyField && $field.FieldTypeKind != 'Calculated' && !$hiddenFields.Contains($field.InternalName))
+				<li class="field-item list-item-field">
+					<label for="$core_v2_widget.UniqueId($field.InternalName)" class="field-item-header">
+						$!{field.Title}
+						#if($field.Required)
+							<span class="field-required" title="$core_v2_language.GetResource('RequiredFieldWarning')">*</span>
+						#end
+					</label>
+					<div class="field-item-input" name="$!{field.InternalName}">
+						$core_v2_widget.ExecuteFile('get-field-editor.vm')
+					</div>
+				</li>
+			#end
+		#end
+
+		## Tags
+		#set($jsTags = '')
+		#set($tags = '')
+		#set ($allTags =$core_v2_tags.Get($document.ContentId, $document.ContentTypeId))
+		#foreach($tag in $allTags)
+		#each
+			#set($jsTags = "$jsTags'$core_v2_encoding.JavascriptEncode($core_v2_encoding.HtmlDecode($tag.TagName))'")
+			#set($tags = "$tags$core_v2_encoding.JavascriptEncode($core_v2_encoding.HtmlDecode($tag.TagName))")
+		#between
+			#set($jsTags = "$jsTags,")
+			#set($tags = "$tags,")
+		#end
+		<li class="field-item document-tags">
+			<label for="$core_v2_widget.UniqueId('TagBox')" class="field-item-header">$core_v2_language.GetResource('Tags_Name')</label>
+			<span class="field-item-description">$core_v2_language.GetResource('Tags_Description')</span>
+			<span class="field-item-input"><input id="$core_v2_widget.UniqueId('TagBox')" type="text" value="$tags" size="70" /></span>
+			<span class="field-item-input"><input type="button" id="$core_v2_widget.UniqueId('SelectTagsId')" value="$core_v2_encoding.HtmlAttributeEncode($core_v2_language.GetResource('Tags_Specify'))" /></span>
+		</li>
+
+		## Save
+		<li class="field-item submit-button">
+			<span class="field-item-input">
+				<a id="$core_v2_widget.UniqueId('Save')" href="#" class="internal-link save-post button">$core_v2_language.GetResource('Save')</a>
+				#set($canEdit = $sharepoint_v2_list.CanEdit($document.Library.Id))
+				#if ($canEdit)
+					<a id="$core_v2_widget.UniqueId('Delete')" href="#" class="internal-link delete-post">$core_v2_language.GetResource('Delete')</a>
+				#end
+				<span class="processing" style="display: none;"></span>
+			</span>
+		</li>
+	</ul>
+</fieldset>
+
+#registerEndOfPageHtml()
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			j.telligent.sharepoint.widgets.editDocument.register({
+				wrapper     : j("#$core_v2_widget.WrapperElementId"),
+				contentId   : "${document.ContentId}",
+				tags        : [#if($jsTags)$jsTags#end],
+				tagBox      : "#$core_v2_widget.UniqueId('TagBox')",
+				selectTags  : "#$core_v2_widget.UniqueId('SelectTagsId')",
+				saveUrl     : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('edit-document.vm'))",
+				saveButtonId: "#$core_v2_widget.UniqueId('Save')",
+				deleteUrl     : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('delete-document.vm'))",
+				deleteButtonId: "#$core_v2_widget.UniqueId('Delete')",
+				#set($index = $document.Path.LastIndexOf('/'))
+				#set($folderPath = $document.Path.Substring(0, $index))
+				#set($libraryUrl = $sharepoint_v2_fileUrls.Browse($library.Id))
+				#set($libraryUrl = "${libraryUrl}#${folderPath}")
+				libraryUrl  : "$core_v2_encoding.JavascriptEncode($libraryUrl)"
+			});
+		});
+	</script>
+#end

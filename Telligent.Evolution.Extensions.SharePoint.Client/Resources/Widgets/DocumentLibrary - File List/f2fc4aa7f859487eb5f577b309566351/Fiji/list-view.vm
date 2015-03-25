@@ -1,0 +1,164 @@
+#set($sharepoint_v2_library.View = "ListView")
+
+#set($libraryId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue("libraryId")))
+#set($library = false)
+#set($library = $sharepoint_v2_library.Get($libraryId))
+#if(!$library)
+	$core_v2_widget.Hide()
+#end
+
+## $fileListOptions
+$core_v2_widget.ExecuteFile('list-options.vm')
+
+#set($fileList = $sharepoint_v2_file.List($library.Id, $fileListOptions))
+
+## Header
+<div class="filter">
+
+	<div class="view-type">
+
+		## Get value of $AllowEditing for the current user
+		$core_v2_widget.ExecuteFile('check-user-permissions.vm')
+		#if($isAdmin || $isOwner || $isManager)
+			<span class="upload-document-button">
+				<a href="#" class="upload-document" title="$core_v2_language.GetResource('DocumentLibrary_UploadLink')">
+					<span></span>
+				</a>
+			</span>
+
+			<span class="new-folder-button">
+				<a href="#" class="new-folder" title="$core_v2_language.GetResource('New_Folder_Link')">
+					<span></span>
+				</a>
+			</span>
+		#end
+		<span class="filter-option">
+			<a class="explorer-view" href="#" title="$core_v2_language.GetResource('Library_FilterView_Explorer')">
+				<span></span>
+			</a>
+		</span>
+		<span class="filter-option selected" title="$core_v2_language.GetResource('Library_FilterView_List')">
+			<a class="list-view" href="#">
+				<span></span>
+			</a>
+		</span>
+	</div>
+
+	<div class="query-filter">
+		<span class="filter-option #if($sortBy=='FileLeafRef') selected #end">
+			<a class="sortbyname" href="#" sortBy="FileLeafRef" sortOrder="Ascending">
+				$core_v2_language.GetResource('ExplorerView_FilterOption_Name')
+			</a>
+		</span>
+		<span class="filter-option #if($sortBy=='Modified') selected #end">
+			<a class="sortbydate" href="#" sortBy="Modified" sortOrder="Descending">
+				$core_v2_language.GetResource('ExplorerView_FilterOption_Date')
+			</a>
+		</span>
+		<span class="filter-option #if($sortBy=='Author') selected #end">
+			<a class="sortbyauthor" href="#" sortBy="Author" sortOrder="Ascending">
+				$core_v2_language.GetResource('ExplorerView_FilterOption_Author')
+			</a>
+		</span>
+	</div>
+
+</div>
+
+## Content
+<ul class="file-list list-view">
+
+	#set($parentFolder = false)
+	#set($parentFolder = $sharepoint_v1_folder.GetParent("$libraryId", $folder))
+	#if($parentFolder)
+		<li class="file-info">
+			<div class="folder-up">
+				<a href="#" class="open-folder" path="$!parentFolder.Path">
+					<span></span>
+					<div class="name"><h3></h3></div>
+				</a>
+			</div>
+		</li>
+	#end
+
+	#if($fileList.TotalCount == 0)
+		<li class="file-info norecords">
+			<div class="message norecords">
+				$core_v2_language.GetResource('Message_Norecords')
+			</div>
+		</li>
+	#else
+		#foreach($file in $fileList)
+
+			#set($displayName = $!{file.Author.DisplayName})
+      
+			#if ($file.Author.Email)
+				#set($user = false)
+				#set($user = $core_v2_user.Get("%{Email = $file.Author.Email}"))
+
+				#if ($user && $user.DisplayName)
+					#set($displayName = $user.DisplayName)
+				#elseif ($user)
+					#set($displayName = $user.Username)
+				#end
+			#end
+
+			<li class="file-info" itemId="$!{file.Id}" contentId="$!{file.ContentId}" url="$!{library.SPWebUrl}$!{file.Path}" user="${user.Id}" >
+				#if($file.IsFolder)
+					<div class="folder-preview">
+						<a href="#" class="open-folder" path="$!file.Path">
+							<span></span>
+							<div class="name"><h3 class="folder-name">$file.Name</h3></div>
+						</a>
+					</div>
+				#else
+					#set($isCheckedOut = $file.IsCheckedOut)
+					<div class="file-preview" checkedout="$isCheckedOut">
+						<a href="$!{file.Url}">
+
+							#if($isCheckedOut)
+								<span class="checkout-icon"></span>
+							#end
+
+							#set($fileTypeImageUrl = $core_v2_ui.GetFileTypeImageUrl($file.Name, "%{Width = 32, Height = 32}"))
+							<img src="$!fileTypeImageUrl" alt="$!{file.Name}"></img>
+							<div class="name"><h3>$file.DisplayName</h3></div>
+
+						</a>
+					</div>
+
+					<div class="avatar" userId="$!{file.Author.Id}">
+						#set($avatarUrl = false)
+						#set($avatarUrl = $file.Author.AvatarUrl)
+						#if($avatarUrl)
+							<img src="$!{file.Author.AvatarUrl}" alt="$!{file.Author.DisplayName}"></img>
+						#end
+					</div>
+
+					#set($displayName = $!{file.Author.DisplayName})
+      
+					#if ($file.Author.Email)
+						#set($user = $core_v2_user.Get("%{Email = $file.Author.Email}"))
+
+						#if ($user.DisplayName)
+							#set($displayName = $user.DisplayName)
+						#else
+							#set($displayName = $user.Username)
+						#end
+					#end
+
+					<ul class="file-attributes">
+						<li class="attribute-item author">$displayName</li>
+						<li class="attribute-item created-date">$core_v2_language.FormatDate($file.Modified)</li>
+					</ul>
+				#end
+			</li>
+		#end
+	#end
+</ul>
+
+## Footer
+<div style="clear:both; padding-top: 1em;" class="file-list-footer explorer-file-list-footer">
+	#if($fileList.TotalCount > $pageSize)
+		$core_v2_ui.Pager($pageIndex, $pageSize, $fileList.TotalCount, "%{QueryStringProperty = 'page'}")
+	#end
+</div>

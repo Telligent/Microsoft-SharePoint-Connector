@@ -1,0 +1,37 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($listId = $core_v2_utility.ParseGuid($core_v2_page.GetFormValue('listId')))
+#set($deleteList = $core_v2_utility.ParseBool($core_v2_page.GetFormValue('deleteList')))
+
+#set($list = $sharepoint_v2_list.Get($listId))
+#if(!$list.HasErrors)
+	#set($deleteInfo = $sharepoint_v2_list.Delete($listId, $deleteList))
+	#if(!$deleteInfo.HasErrors)
+		{
+			"valid" : true,
+			"list"  : {
+				"id"         : "$!{list.Id}",
+				"name"       : "$!{core_v2_encoding.JavascriptEncode($list.Title)}",
+				"description": "$!{core_v2_encoding.JavascriptEncode($list.Description)}",
+				"groupId"    : "$!{list.GroupId}",
+				"url"        : "$!{core_v2_encoding.JavascriptEncode($list.Url)}",
+				"spviewUrl"  : "$!{core_v2_encoding.JavascriptEncode($list.SPViewUrl)}",
+				"spwebUrl"   : "$!{core_v2_encoding.JavascriptEncode($list.SPWebUrl)}"
+			},
+
+			#set($pagedList = $sharepoint_v2_list.List($list.GroupId, "%{PageIndex = 0, PageSize = 1}"))
+			#if ($pagedList && $pagedList.Errors.Count == 0)
+				"count"      : $pagedList.TotalCount,
+			#elseif($pagedList)
+				$core_v2_page.SendJsonError($pagedList.Errors)
+			#end
+
+			#set($browseListsUrl = $core_v2_utility.Split('?', $list.Url).get_item(0))
+			"urlRedirect": "$!{core_v2_encoding.JavascriptEncode($core_v2_urls.FullPath($browseListsUrl))}"
+		}
+	#else
+		$core_v2_page.SendJsonError($deleteInfo.Errors)
+	#end
+#else
+	$core_v2_page.SendJsonError($list.Errors)
+#end

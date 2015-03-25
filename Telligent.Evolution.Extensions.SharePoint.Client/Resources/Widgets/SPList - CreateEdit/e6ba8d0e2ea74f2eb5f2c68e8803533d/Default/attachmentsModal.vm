@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>$core_v2_language.GetResource('SharePoint_ListItem_Attachment_Title')</title>
+		#set($isModal = true)
+		$core_v2_page.RenderThemeHeaders("%{ IsModal = $isModal}")
+	</head>
+	<body>
+		<div class="sharepoint-listItem-upload-attachments">
+			#set($fileUploaderId = 'fileUploader')
+			#set($uploadFileUrl = false)
+			#set($uploadFileUrl = $core_v2_page.GetQueryStringValue("uploadFileUrl"))
+			#if ($uploadFileUrl)
+				<fieldset class="field-list">
+					<legend class="field-list-description">
+						<span>
+							$core_v2_language.GetResource('SharePoint_ListItem_Attachment_Description')
+						</span>
+					</legend>
+					<ul class="field-list">
+						<li class="field-item file">
+							<label class="field-item-header">$core_v2_language.GetResource('SharePoint_ListItem_Attachment_UploadFile_Name')</label>
+							<span class="field-item-description">$core_v2_language.GetResource('SharePoint_ListItem_Attachment_UploadFile_Description')</span>
+							<div class="field-item-input content" id="${fileUploaderId}">
+								<input type="file" name="fileUploader"> 
+							</div>
+							<span class="field-item-validation" style="display: none;"></span>
+						</li>
+						<li class="field-item-input">
+							<a href="#" class="internal-link save-post button">
+								<span></span>$core_v2_language.GetResource('SharePoint_ListItem_Attachment_Save')
+							</a>
+						</li>
+					</ul>
+				</fieldset>
+
+				#registerEndOfPageHtml('telligent.sharepoint.widgets.listItem.attachments')
+					<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl("attachmentsModal.js"))"></script>
+				#end
+				#registerEndOfPageHtml()
+					<script type="text/javascript">
+						jQuery(function(j){
+							j.telligent.sharepoint.widgets.listItem.attachments.register({
+								fileUploaderId: "#${fileUploaderId}",
+								uploadFileUrl : "${uploadFileUrl}",
+								saveHolderId  : j(".internal-link.save-post")
+							});
+						})
+					</script>
+				#end
+			#else
+				<ul class="error">
+					<li>
+						$core_v2_language.GetResource('SharePoint_ListItem_Attachment_Exception_NoFileUploadUrl')
+					</li>
+				</ul>
+			#end
+		</div>
+	</body>
+</html>

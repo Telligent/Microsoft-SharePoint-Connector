@@ -1,0 +1,56 @@
+<div id="$core_v2_widget.UniqueId('EditPermissionsHolder')">
+
+	<div class="header">
+		<div class="menu">
+			<p>
+				<span></span>$core_v2_language.GetResource('Permissions_Edit_Title')
+			</p>
+		</div>
+	</div>
+
+	<div class="content">
+		<div class="users-or-groups">
+			<span></span>$core_v2_language.GetResource('Permissions_Grant_UsersOrGroups')
+			<div id="selected-users-or-groups" class="selected"></div>
+		</div>
+
+		<div class="permissions-levels">
+			<span></span>$core_v2_language.GetResource('Permissions_Grant_Permissions')
+			<ul class="permissions-levels-list">
+				#set($levelList = false)
+				#set($levelList = $sharepoint_v1_permissions.LevelList($list.SPWebUrl, $list.Credentials))
+				#if ($levelList)
+					#foreach($level in $levelList)
+						<li class="permissions-level">
+							<input type="checkbox" name="chlevel" levelId="$!{level.Id}" id='$core_v2_widget.UniqueId("checkbox-$!{level.Id}")'/>
+							<label for='$core_v2_widget.UniqueId("checkbox-$!{level.Id}")'>
+								<span></span>$!{level.Name}
+							</label>
+						</li>
+					#end
+				#end
+			</ul>
+		</div>
+	</div>
+
+	<div class="footer">
+		<a href="#" class="internal-link submit-button cancel"><span></span>$core_v2_language.GetResource('Permissions_Grant_Cancel')</a>
+		<a href="#" class="internal-link submit-button save"><span></span>$core_v2_language.GetResource('Permissions_Grant_Ok')</a>
+	</div>
+
+</div>
+
+#registerEndOfPageHtml('telligent.sharepoint.widgets.documentLibrary.editPermissions')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('permissions.js'))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			j.telligent.sharepoint.widgets.documentLibrary.editPermissions.register({
+				holderId            : "#$core_v2_widget.UniqueId('EditPermissionsHolder')",
+				#set($updatePermissionsUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('permissions-update.vm'), "contentId=${listItem.ContentId}"))
+				updatePermissionsUrl: "$core_v2_encoding.JavascriptEncode($updatePermissionsUrl)"
+			});
+		})
+	</script>
+#end

@@ -1,0 +1,11 @@
+#set($contentId = false)
+#set($contentId = $core_v2_utility.ParseGuid($core_v2_page.GetFormValue("ContentId")))
+#set($contentType = false)
+#set($contentType = $core_v2_utility.ParseGuid($core_v2_page.GetFormValue("ContentTypeId")))
+#set($comment = false)
+#set($comment = $core_v2_page.GetFormValue("Comment"))
+#set($canCreateComment = false)
+#set($canCreateComment = $core_v2_comments.CanCreateComment($contentId, $contentType))
+#if($canCreateComment)
+	#set($commentResponse = $core_v2_comments.Create($contentId, $contentType, $comment, "%{}"))
+#end

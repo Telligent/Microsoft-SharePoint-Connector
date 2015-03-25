@@ -1,0 +1,43 @@
+﻿#if(!$core_v2_page.IsPost || $isInPreviewMode)
+	#set($MinValue = $field.MinimumValue)
+	#set($MaxValue = $field.MaximumValue)
+	#set($CurrencyLocaleId = $field.CurrencyLocaleId)
+
+	#set($controlId = $core_v2_widget.UniqueId($field.InternalName))
+	#set($errorMsgId = "${field.InternalName}_msg")
+
+	<script type="text/javascript">
+		jQuery(function(j) {
+			var editor = j("#${controlId}"),
+			errorMsg = j("#${errorMsgId}"),
+			isValid = function (input){
+				#if ($field.Required)
+					if (input.val().length == 0){
+						return false;
+					}
+				#end
+				if (/^-?\d+(\.\d+)?$/.test(input.val())) {
+					var floatValue = parseFloat(input.val());
+					if (floatValue >= $MinValue && floatValue <= $MaxValue){
+						return true;
+					}
+				}
+				return false;
+			};
+			j.telligent.sharepoint.widgets.validator.registerInputValidation(editor, errorMsg, isValid);
+		});
+	</script>
+	<div class="currency-editor">
+		#set($currency = "")
+		#set($value = "0")
+		#if($listItem)
+			#set($value = $listItem.Value("$field.InternalName"))
+		#end
+		<input type="text" id="${controlId}" name="${field.InternalName}" value='$!{value}' />
+		<span class="currency"></span>
+		<div id="${errorMsgId}" class="invalid-msg" style="display: none;">$core_v2_language.GetResource('SharePoint_ListItem_CurrencyEditor')</div>
+	</div>
+#else
+	#set($value = $core_v2_page.GetFormValue($field.InternalName))
+	$listItem.Fields.Add($field.InternalName, "$value")
+#end

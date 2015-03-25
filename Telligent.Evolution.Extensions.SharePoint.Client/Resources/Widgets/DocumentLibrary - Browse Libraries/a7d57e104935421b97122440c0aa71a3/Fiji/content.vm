@@ -1,0 +1,34 @@
+﻿#foreach($library in $libraries)
+#each
+	<tr class="table-item">
+		<td class="table-column library-title">
+				<a href="$core_v2_encoding.HtmlAttributeEncode($!library.Url)" class="internal-link view-document-library">$!library.Name</a>
+				<div>$!library.Description</div>
+		</td>
+		#if($showGroup)
+			<td class="table-column application-group">$gallery.Group.Name</td>
+		#end
+
+		#if($showItemCount)
+			<td class="table-column item-count">$!library.ItemCount</td>
+		#end
+
+		#if($showCreatedDate)
+			<td class="table-column created-date">$core_v2_language.FormatDate($library.Created)</td>
+		#end
+
+		#if($showModifiedDate)
+			<td class="table-column modified-date">$core_v2_language.FormatAgoDate($library.Modified)</td>
+		#end
+
+		#if($showVersioning)
+			<td class="table-column versioning">
+				#if($library.VersioningEnabled)
+					$core_v2_language.GetResource('BrowseDocumentLibraries_Versioning_Enabled')
+				#else
+					$core_v2_language.GetResource('BrowseDocumentLibraries_Versioning_Disabled')
+				#end
+			</td>
+		#end
+	</tr>
+#end

@@ -1,0 +1,63 @@
+﻿#foreach($list in $lists)
+#beforeall
+	<div class="sharepoint-lists-header"></div>
+	<ul class="sharepoint-lists">
+#each
+		<li class="list-header"></li>
+		<li class="list">
+			<div class="list-indicator"><a href="$!{list.SPViewUrl}"><span></span></div>
+			<div class="list-identity">
+				<h3>
+					#set($url = $sharepoint_v1_urls.SPList($list.Id))
+					<a href="$!core_v2_encoding.HtmlAttributeEncode($url)" class="internal-link view-sharepoint-list">
+						<span></span>$!list.Title
+					</a>
+				</h3>
+				$!list.Description
+			</div>
+			<div class="list-attributes">
+				<div class="attribute-list-header"></div>
+				<ul class="attribute-list">
+
+					#if($showItemCount)
+					<li class="attribute-item post-count">
+						<span class="attribute-key">$core_v2_language.GetResource('BrowseSharePointLists_ItemCount')</span>
+						<span class="attribute-value">$!list.ItemCount</span>
+					</li>
+					#end
+
+					#if($showCreatedDate)
+					<li class="attribute-item created-date">
+						<span class="attribute-key">$core_v2_language.GetResource('BrowseSharePointLists_CreatedDate')</span>
+						<span class="attribute-value">$core_v2_language.FormatDate($list.Created)</span>
+					</li>
+					#end
+
+					#if($showModifiedDate)
+					<li class="attribute-item latest-post-date">
+						<span class="attribute-key">$core_v2_language.GetResource('BrowseSharePointLists_Recent')</span>
+						<span class="attribute-value">$core_v2_language.FormatAgoDate($list.Modified)</span>
+					</li>
+					#end
+
+					#if($showVersioning)
+					<li class="attribute-item latest-post-date">
+						<span class="attribute-key">$core_v2_language.GetResource('BrowseSharePointLists_Versioning')</span>
+						<span class="attribute-value">
+							#if($list.VersioningEnabled)
+								$core_v2_language.GetResource('BrowseSharePointLists_Versioning_Enabled')
+							#else
+								$core_v2_language.GetResource('BrowseSharePointLists_Versioning_Disabled')
+							#end
+						</span>
+					</li>
+					#end
+
+				</ul>
+				<div class="attribute-list-footer"></div>
+			</div>
+		</li>
+#afterall
+	</ul>
+	<div class="sharepoint-lists-footer"></div>
+#end

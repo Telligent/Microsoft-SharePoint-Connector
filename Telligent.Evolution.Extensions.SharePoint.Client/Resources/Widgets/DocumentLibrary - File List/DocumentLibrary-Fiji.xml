@@ -1,0 +1,386 @@
+﻿<scriptedContentFragments>
+	<scriptedContentFragment name="${resource:DocumentLibrary_Widget_Name}" description="${resource:DocumentLibrary_Widget_Description}" instanceIdentifier="f2fc4aa7f859487eb5f577b309566351" theme="7e987e474b714b01ba29b4336720c446" cssClass="document-library-widget" isCacheable="false" varyCacheByUser="true" showHeaderByDefault="false">
+	<contentScript>
+		<![CDATA[
+#set($library = false)
+#set($library = $sharepoint_v2_library.Current)
+#if(!$library || $library.HasErrors())
+	$core_v2_page.Redirect($core_v2_urls.Message(9))
+#end
+
+#set($defaultView = $core_v2_widget.GetStringValue('viewType', 'ExplorerView'))
+#set($defaultSort = $core_v2_widget.GetStringValue('sortBy', 'name'))
+
+<div id="$core_v2_widget.UniqueId('SharePointLibraryContent')" class="document-library">
+	<div class="loading"></div>
+</div>
+<div class="dropbox" style="display: none;"><span class="dropbox-text">$core_v2_language.GetResource('Drop_Box_Text')</span></div>
+<div style="clear:both;"></div>
+
+#registerEndOfPageHtml()
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl("jquery.contextmenu.js"))"></script>
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl("EditSharePointDocument.js"))"></script>
+#end
+
+## Get value of $AllowEditing for the current user
+$core_v2_widget.ExecuteFile('check-user-permissions.vm')
+
+#registerEndOfPageHtml('telligent.sharepoint.widgets.documentLibrary')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl("ui.js"))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			## SharePoint Context Menu
+			var SharePoinLibrary_FileMenuItems = [
+			#if($isAdmin || $isOwner || $isManager)
+				{ item: {
+						"$core_v2_language.GetResource('ContextMenu_File_CheckOut')": {
+							onclick: function (menuItem, menu) {
+								var contentId = j(this).attr("contentId");
+								var checkOut = {
+									"method" : "checkout",
+									"contentId" : contentId
+								};
+								UpdateDocument(checkOut);
+							},
+							className: "check-out-file",
+							disabled: false
+						}
+					},
+					isVisible: function(t) { return j(t).attr("checkedout") == "False" }
+				},
+				{ item: {
+						"$core_v2_language.GetResource('ContextMenu_File_CheckIn')": {
+							onclick: function (menuItem, menu) {
+								var contentId = j(this).attr("contentId");
+								var checkIn = {
+									"method" : "checkin",
+									"contentId" : contentId
+								};
+								UpdateDocument(checkIn);
+							},
+							className: "check-in-file",
+							disabled: false
+						}
+					},
+					isVisible: function(t) { return j(t).attr("checkedout") == "True" }
+				},
+				{ item: {
+						"$core_v2_language.GetResource('ContextMenu_File_DiscardCheckOut')": {
+							onclick: function (menuItem, menu) {
+								var contentId = j(this).attr("contentId");
+								var discardCheckOut = {
+									"method":"discardcheckout",
+									"contentId": contentId
+								};
+								UpdateDocument(discardCheckOut);
+							},
+							className: "discard-check-out",
+							disabled: false
+						}
+					},
+					isVisible: function(t) { return j(t).attr("checkedout") == "True" }
+				},
+				jQuery.contextMenu.separator,
+			#end
+
+			#if ($library.VersioningEnabled)
+				{ "$core_v2_language.GetResource('ContextMenu_File_VersionHistory')": {
+						onclick: function (menuItem, menu) {
+							var data = { contentId: j(this).attr("contentId") };
+							j.telligent.sharepoint.widgets.documentLibrary.api(j("#${core_v2_widget.WrapperElementId}"),'versions', data);
+						},
+						className: "see-file-version-history",
+						disabled: false
+					}
+				},
+				j.contextMenu.separator,
+			#end
+
+				{ "$core_v2_language.GetResource('ContextMenu_File_OpenFile')": {
+						onclick: function (menuItem, menu) {
+							window.location.href = j(this).attr("url"); 
+						},
+						className: "open-file",
+						disabled: false
+					}
+				},
+
+				#if($isAdmin || $isOwner || $isManager)
+				{ "$core_v2_language.GetResource('ContextMenu_File_EditFile')": {
+						onclick: function (menuItem, menu) {
+							var href = j(this).attr("url");
+							editDocument(href);
+						},
+						className: "edit-file",
+						disabled: false
+					}
+				},
+				#end
+
+				{ "$core_v2_language.GetResource('ContextMenu_File_EMailFile')": {
+						onclick: function (menuItem, menu) {
+							var href = j(this).attr("url");
+							window.location.href = "mailto:?body="+escape(href);
+						},
+						className: "email-file",
+						disabled: false
+					}
+				}
+				#if($isAdmin || $isOwner || $isManager)
+					,
+					{ "$core_v2_language.GetResource('ContextMenu_Manage_Permissions')": {
+							onclick: function (menuItem, menu) {
+								var contentId = j(this).attr("contentId");
+								ManagePermissions(contentId);
+							},
+							className: "manage-permissions",
+							disabled: false
+						}
+					},
+					{ "$core_v2_language.GetResource('ContextMenu_File_DeleteFile')": {
+							onclick: function (menuItem, menu) {
+								var contentId = j(this).attr("contentId");
+								RemoveDocument(contentId);
+							},
+							className: "delete-file",
+							disabled: false
+						}
+					}
+				#end
+			]
+
+			var SharePoinLibrary_FolderMenuItems = [
+				#if($isAdmin || $isOwner || $isManager)
+					{ "$core_v2_language.GetResource('ContextMenu_Folder_Rename')": {
+							onclick: function (menuItem, menu) { 
+								var contentId = j(this).attr("contentId");
+								var folderPath = j(".open-folder", this).attr("path");
+								RenameFolder(contentId, folderPath);
+							},
+							className: "rename-file",
+							disabled: false
+						}
+					},
+					{ "$core_v2_language.GetResource('ContextMenu_Manage_Permissions')": {
+							onclick: function (menuItem, menu) { 
+								var contentId = j(this).attr("contentId");
+								ManagePermissions(contentId);
+							},
+							className: "manage-permissions",
+							disabled: false
+						}
+					},
+					{ "$core_v2_language.GetResource('ContextMenu_Folder_Delete')": {
+							onclick: function (menuItem, menu) { 
+								var contentId = j(this).attr("contentId");
+								RemoveDocument(contentId);
+							},
+							className: "delete-file",
+							disabled: false
+						}
+					}
+				#end
+			]
+
+			function ManagePermissions(contentId){
+				j.telligent.sharepoint.widgets.documentLibrary.api(j("#${core_v2_widget.WrapperElementId}"),'permissions', { contentId: contentId });
+			}
+
+			function RenameFolder(contentId, folderPath){
+				j.telligent.sharepoint.widgets.documentLibrary.api(j("#${core_v2_widget.WrapperElementId}"),'rename', { contentId: contentId, folderPath: folderPath });
+			}
+
+			function UpdateDocument(data){
+				j.telligent.sharepoint.widgets.documentLibrary.api(j("#${core_v2_widget.WrapperElementId}"),'update',data);
+			}
+
+			function RemoveDocument(contentId){
+				j(document).click();
+				if (window.confirm("$core_v2_language.GetResource('ContextMenu_File_DeleteConfirmationMessage')")){
+					UpdateDocument({method: "delete", contentId: contentId});
+				}
+			}
+
+			j.telligent.sharepoint.widgets.documentLibrary.register({
+				widget            : j("#${core_v2_widget.WrapperElementId}"),
+				visible           : #if($library) true #else false #end,
+				contentHolderId   : "#$core_v2_widget.UniqueId('SharePointLibraryContent')",
+
+				#if($library)
+				libraryId         : "$!library.Id",
+				libraryRootFolder : "$!library.Root",
+				#end
+
+				sortBy            : "$!defaultSort",
+				view              : "$!defaultView",
+				#set($defaultFolder = false)
+				#set($defaultFolder = $core_v2_page.GetQueryStringValue('FolderPath'))
+				#if($defaultFolder)
+				folderPath        : "$core_v2_encoding.JavascriptEncode($defaultFolder)",
+				#end
+				viewHolderId      : "#$core_v2_widget.UniqueId('View')",
+				fileMenuItems     : SharePoinLibrary_FileMenuItems,
+				folderMenuItems   : SharePoinLibrary_FolderMenuItems,
+				listViewUrl       : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('list-view.vm'))",
+				explorerViewUrl   : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('explorer-view.vm'))",
+				updateUrl         : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('update-document.vm'))",
+				createFolderUrl   : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('create-edit-folder-modal.vm'))",
+				#set($contextId = $core_v2_uploadedFile.CreateContextId())
+				#set($fileUploadUrl = $core_v2_encoding.UrlEncode($core_v2_uploadedFile.GetUploadUrl($contextId)))
+				#set($uploadDocumentUrl = $core_v2_page.AdjustQueryString($core_v2_widget.GetExecutedFileUrl('upload-document-modal.vm'), "contextId=${contextId}&fileUploadUrl=${fileUploadUrl}"))
+				uploadDocumentUrl    : "$core_v2_encoding.JavascriptEncode($uploadDocumentUrl)",
+				uploadDocumentWidth  : 600,
+				uploadDocumentHeight : 300,
+				versionsModalUrl     : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('file-versions.vm'))",
+				permissionsModalUrl  : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('permissions-modal.vm'))",
+				uploadFileDirectUrl  : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('upload-document-direct.vm'))",
+				dragAndDropEnabled   : #if($isAdmin || $isOwner || $isManager) true #else false #end
+			});
+		});
+	</script>
+#end
+		]]>
+	</contentScript>
+	<headerScript>
+		<![CDATA[
+$core_v2_widget.ApplyTokens($core_v2_widget.GetStringValue('WidgetTitle', '${resource:CF_DocumentLibrary}'))
+		]]>
+	</headerScript>
+	<configuration>
+		<![CDATA[
+<propertyGroup id="Options">
+	<property id="WidgetTitle" resourceName="CF_Widget_Title" dataType="string" defaultValue="${resource:CF_DocumentLibrary}" controlType="Telligent.Evolution.Controls.ContentFragmentTokenStringControl, Telligent.Evolution.Controls" />
+	<property id="sortBy" resourceName="CF_DocumentLibrary_OrderBy" dataType="string" defaultValue="FileLeafRef">
+		<propertyValue value="FileLeafRef" resourceName="CF_OrderBy_Name" />
+		<propertyValue value="Created" resourceName="CF_OrderBy_Date" />
+		<propertyValue value="Author" resourceName="CF_OrderBy_Author" />
+	</property>
+	<property id="pageSize" resourceName="CF_PageSize" dataType="int" defaultValue="20">
+		<propertyRule type="Telligent.Evolution.Controls.PropertyRules.MinMaxValueRule, Telligent.Evolution.Controls" minValue="1" maxValue="100" />
+	</property>
+	<property id="viewType" resourceName="CF_DocumentLibrary_ViewType" dataType="string" defaultValue="ListView">
+		<propertyValue value="ExplorerView" resourceName="CF_ViewType_ExplorerView" />
+		<propertyValue value="ListView" resourceName="CF_ViewType_ListView" />
+	</property>
+</propertyGroup>
+		]]>
+		</configuration>
+		<languageResources>
+			<language key="en-us">
+				<resource name="DocumentLibrary_Widget_Name">SharePoint - Document Library</resource>
+				<resource name="DocumentLibrary_Widget_Description">This widget allows user to manage documents and files on SharePoint side</resource>
+				<resource name="CF_Widget_Title">Widget Title</resource>
+				<resource name="CF_DocumentLibrary">SharePoint - Document Library</resource>
+				<resource name="CF_PageSize">Page size</resource>
+				<resource name="CF_DocumentLibrary_ViewType">Default View</resource>
+				<resource name="CF_ViewType_ListView">List</resource>
+				<resource name="CF_ViewType_ExplorerView">Explorer</resource>
+				<resource name="CF_DocumentLibrary_OrderBy">Default Sort</resource>
+				<resource name="CF_OrderBy_Name">Name</resource>
+				<resource name="CF_OrderBy_Date">Date</resource>
+				<resource name="CF_OrderBy_Author">Author</resource>
+				<resource name="Drop_Box_Text">Drop here...</resource>
+				<resource name="ContextMenu_File_CheckOut">Check Out</resource>
+				<resource name="ContextMenu_File_CheckIn">Check In</resource>
+				<resource name="ContextMenu_File_DiscardCheckOut">Discard Check Out</resource>
+				<resource name="ContextMenu_File_VersionHistory">Version History</resource>
+				<resource name="ContextMenu_File_OpenFile">Open</resource>
+				<resource name="ContextMenu_File_EditFile">Edit</resource>
+				<resource name="ContextMenu_File_EMailFile">E-Mail</resource>
+				<resource name="ContextMenu_File_DeleteFile">Delete</resource>
+				<resource name="ContextMenu_File_DeleteConfirmationMessage">Are you sure you want to delete this file?</resource>
+				<resource name="ContextMenu_Folder_Rename">Rename</resource>
+				<resource name="ContextMenu_Manage_Permissions">Permissions</resource>
+				<resource name="ContextMenu_Folder_Delete">Delete</resource>
+				<resource name="DocumentLibrary_UploadLink">Upload a Document</resource>
+				<resource name="Library_FilterView_Explorer">Explorer View</resource>
+				<resource name="Library_FilterView_List">List View</resource>
+				<resource name="ExplorerView_FilterOption_Name">Name</resource>
+				<resource name="ExplorerView_FilterOption_Date">Date</resource>
+				<resource name="ExplorerView_FilterOption_Author">Author</resource>
+				<resource name="Message_Norecords">There are no items to show.</resource>
+				<resource name="VLibrary_Exception_NoDocLib">No document library has been found.</resource>
+				<resource name="VLibrary_Exception_NoSiteCollection">No site collection has been found. Please, check that partnered site was added into the Integration Manager plugin.</resource>
+				<resource name="New_Folder_Link">Add a new folder</resource>
+				<resource name="New_Folder_FieldRequired">You must specify a value for this required field.</resource>
+				<resource name="New_Folder_InvalidCharacters">
+					<![CDATA[
+						The folder name contains invalid characters. Please use a different name. Valid file or folder names cannot begin or end with a dot, cannot contain consecutive dots and cannot contain any of the following characters: ~ " # % & * : < > ? / \ { | }.
+					]]>
+				</resource>
+				<resource name="New_Folder_FolderExists">A folder with that name already exists. Please enter a different name.</resource>
+				<resource name="New_Folder_Name">Type a Name for the Folder</resource>
+				<resource name="New_Folder_Description">The folder name should be short and descriptive of the content expected to be placed in this folder.</resource>
+				<resource name="New_Folder_Save">Save</resource>
+				<resource name="New_Folder_Cancel">Cancel</resource>
+				<resource name="New_Folder_Created"><![CDATA[Created at {0} by {1}]]></resource>
+				<resource name="New_Folder_Modified"><![CDATA[Last modified at {0} by {1}]]></resource>
+				<resource name="FileVersions_Header_Date">Date</resource>
+				<resource name="FileVersions_Header_EditedBy">Edited By</resource>
+				<resource name="FileVersions_Header_Size">Size</resource>
+				<resource name="FileVersions_Header_Comment">Check in comment</resource>
+				<resource name="FileVersions_File_ZeroSize"><![CDATA[< 1 KB]]></resource>
+				<resource name="FileVersions_File_SizeInKB">{0} KB</resource>
+				<resource name="FileVersions_File_Restore">Restore</resource>
+				<resource name="FileVersions_File_ConfirmRestore">You are about to replace the current version with the selected version.</resource>
+				<resource name="FileVersions_File_Ok">Ok</resource>
+				<resource name="FileVersions_File_Cancel">Cancel</resource>
+				<resource name="UploadModal_Title">Document Library - Upload</resource>
+				<resource name="UploadModal_UploadHeader">Upload Document</resource>
+				<resource name="UploadModal_UploadDescription">Browse to the document you intend to upload.</resource>
+				<resource name="UploadModal_OverwriteHeader">Overwrite</resource>
+				<resource name="UploadModal_OverwriteDescription">Add as a new version to existing files.</resource>
+				<resource name="UploadModal_DestinationFileName">File name</resource>
+				<resource name="UploadModal_DestinationFileNameDescription">Specify the name of the file.</resource>
+				<resource name="UploadModal_Save">Save</resource>
+				<resource name="UploadModal_NoFile">You must specify a file.</resource>
+				<resource name="UploadModal_InvalidCharacters">
+					<![CDATA[
+						The file name contains invalid characters. Please use a different name. Valid file names cannot begin or end with a dot, cannot contain consecutive dots and cannot contain any of the following characters: ~ " # % & * : < > ? / \ { | }.
+					]]>
+				</resource>
+				<resource name="UploadModal_TheFileExists">The file with this name already exists. Please, specify a different name or choose an overwrite option.</resource>
+				<resource name="SharePoint_DocumentLibrary_FileVersions_Date">Date</resource>
+				<resource name="SharePoint_DocumentLibrary_FileVersions_EditedBy">Edited By</resource>
+				<resource name="SharePoint_DocumentLibrary_FileVersions_Size">Size</resource>
+				<resource name="SharePoint_DocumentLibrary_FileVersions_Comment">Check in comment</resource>
+				<resource name="SharePoint_DocumentLibrary_FileVersions_ZeroSize">&lt; 1 KB</resource>
+				<resource name="SharePoint_DocumentLibrary_FileVersions_SizeInKB">{0} KB</resource>
+				<resource name="SharePoint_DocumentLibrary_FileVersions_Restore">Restore</resource>
+				<resource name="SharePoint_DocumentLibrary_FileVersions_ConfirmRestore">You are about to replace the current version with the selected version.</resource>
+				<resource name="SharePoint_DocumentLibrary_FileVersions_Ok">Ok</resource>
+				<resource name="SharePoint_DocumentLibrary_FileVersions_Cancel">Cancel</resource>
+				<resource name="Permissions_Title">Manage Permissions</resource>
+				<resource name="Permissions_Title_Format">Manage Permissions - {0}</resource>
+				<resource name="Permissions_Stop_Inheriting">Stop Inheriting Permissions</resource>
+				<resource name="Permissions_Stop_Inheriting_Description">Copy permissions from parent, and then stop inheriting permissions. Changes made to the parent permissions in the future will not apply.</resource>
+				<resource name="Permissions_Stop_Inheriting_Confirm">You are about to create unique permissions for this document. Changes made to the parent folder or document library permissions will no longer affect this document.</resource>
+				<resource name="Permissions_Start_Inheriting">Inherit Permissions</resource>
+				<resource name="Permissions_Start_Inheriting_Description">Inherit permissions from parent. Any custom permissions will be lost.</resource>
+				<resource name="Permissions_Grant">Grant Permissions</resource>
+				<resource name="Permissions_Grant_Description">Grant permissions to users and groups.</resource>
+				<resource name="Permissions_Edit">Edit Permissions</resource>
+				<resource name="Permissions_Edit_Description">Edit the permission levels for the selected users and groups.</resource>
+				<resource name="Permissions_Remove">Remove Permissions</resource>
+				<resource name="Permissions_Remove_Description">Remove the permission levels for the selected users and groups.</resource>
+				<resource name="Permissions_NoItems">There are no items to show.</resource>
+				<resource name="Permissions_PrincipalType_None">None</resource>
+				<resource name="Permissions_PrincipalType_User">User</resource>
+				<resource name="Permissions_PrincipalType_DistributionList">Distribution List</resource>
+				<resource name="Permissions_PrincipalType_SecurityGroup">Security Group</resource>
+				<resource name="Permissions_PrincipalType_SharePointGroup">SharePoint Group</resource>
+				<resource name="Permissions_PrincipalType_All">SharePoint Group</resource>
+				<resource name="Permissions_Edit_Title">Edit Permissions</resource>
+				<resource name="Permissions_Grant_Title">Grant Permissions</resource>
+				<resource name="Permissions_Grant_UsersOrGroups">Users/Groups:</resource>
+				<resource name="Permissions_Grant_Permissions">Permissions:</resource>
+				<resource name="Permissions_Grant_AddUsersToGroup">Add users to a SharePoint group</resource>
+				<resource name="Permissions_Grant_Directly">Grant permissions directly</resource>
+				<resource name="Permissions_Grant_Ok">Ok</resource>
+				<resource name="Permissions_Grant_Cancel">Cancel</resource>
+			</language>
+		</languageResources>
+	</scriptedContentFragment>
+</scriptedContentFragments>

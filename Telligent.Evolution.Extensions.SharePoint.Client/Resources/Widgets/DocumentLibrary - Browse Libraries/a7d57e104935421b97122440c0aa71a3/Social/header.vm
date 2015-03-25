@@ -1,0 +1,19 @@
+﻿#set($showSort = $core_v2_widget.GetBoolValue('showSort', false))
+#if ($showSort)
+	<div class="sort">
+		<span class="by">
+			<select class="ui-select">
+				<option value="Name" #if($sortBy == 'Name') selected #end>$core_v2_language.GetResource('Header_Name')</option>
+				<option value="ItemCount" #if($sortBy == 'ItemCount') selected #end>$core_v2_language.GetResource('Header_ItemCount')</option>
+				<option value="Created" #if($sortBy == 'Created') selected #end>$core_v2_language.GetResource('Header_Created')</option>
+				<option value="Modified" #if($sortBy == 'Modified') selected #end>$core_v2_language.GetResource('Header_Recent')</option>
+			</select>
+		</span>
+		<span class="order">
+			<select class="ui-select">
+				<option value="Descending" #if ($sortOrder.ToLower() == 'descending') selected #end>$core_v2_language.GetResource('Sort_Descending')</option>
+				<option value="Ascending" #if ($sortOrder.ToLower() == 'ascending') selected #end>$core_v2_language.GetResource('Sort_Ascending')</option>
+			</select>
+		</span>
+	</div>
+#end

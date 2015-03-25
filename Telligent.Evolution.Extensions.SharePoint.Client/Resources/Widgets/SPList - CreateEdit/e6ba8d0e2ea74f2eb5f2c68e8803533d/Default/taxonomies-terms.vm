@@ -1,0 +1,42 @@
+﻿$core_v2_page.SetContentType('application/json')
+
+#set($url = false)
+#set($url = $core_v2_page.GetQueryStringValue("url"))
+
+#set($sspId = false)
+#set($sspId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue("sspId")))
+
+#set($termSetId = false)
+#set($termSetId = $core_v2_utility.ParseGuid($core_v2_page.GetQueryStringValue("termSetId")))
+
+#set($termId = false)
+#set($termId = $core_v2_page.GetQueryStringValue("termId"))
+#if ($termId)
+	#set($termId = $core_v2_utility.ParseGuid($termId))
+#end
+
+#set($terms = false)
+#if ($termId)
+	#set($terms = $sharepoint_v2_taxonomies.Terms($url, $sspId, $termSetId, $termId))
+#else
+	#set($terms = $sharepoint_v2_taxonomies.Terms($url, $sspId, $termSetId))
+#end
+#if ($terms)
+	{
+		#foreach($term in $terms)
+		#beforeall
+			"terms": [
+		#each
+			{
+				"id": "$!term.Id",
+				"name": "$!term.Name",
+				"wssId": "$!term.WSSId",
+				"hasChilds": #if($term.HasChilds) true #else false #end
+			}
+		#between
+			,
+		#afterall
+			]
+		#end
+	}
+#end

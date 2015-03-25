@@ -1,0 +1,125 @@
+.text-overflow-ellipsis (@width) {
+    width: @width;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.content-icon (@content, @width, @height) {
+    content: @content;
+    text-indent: 0;
+    position: absolute;
+    text-align: center;
+    width: @width;
+    height: @height;
+    top: 0px;
+    left: 0;
+    display: block;
+    font-family: Entypo;
+    font-size: @height;
+    line-height: @height;
+    clear: both;
+    padding: 0;
+    margin: 0;
+}
+.content-icon-left (@content, @width, @height, @leftAdjust) {
+    content: @content;
+    text-indent: 0;
+    position: absolute;
+    text-align: center;
+    width: @width;
+    height: @height;
+    top: 0px;
+    left: @leftAdjust;
+    display: block;
+    font-family: Entypo;
+    font-size: @height;
+    line-height: @height;
+    clear: both;
+    padding: 0;
+    margin: 0;
+}
+.transition-background-color (@duration){
+    -webkit-transition: background-color @duration;
+    -moz-transition: background-color @duration;
+    -o-transition: background-color @duration;
+    transition: background-color @duration;
+}
+// clockwise-spin animation declaration
+@-moz-keyframes clockwise-spin {
+    from {-moz-transform: rotate(360deg); -ms-transform: rotate(360deg); -o-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);}
+    to {-moz-transform: rotate(0deg); -ms-transform: rotate(0deg); -o-transform: rotate(0deg); -webkit-transform: rotate(0deg); transform: rotate(0deg);}
+}
+@-webkit-keyframes clockwise-spin {
+    from {-webkit-transform: rotate(360deg); -moz-transform: rotate(360deg); -ms-transform: rotate(360deg); -o-transform: rotate(360deg); transform: rotate(360deg);}
+    to {-webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); -ms-transform: rotate(0deg); -o-transform: rotate(0deg); transform: rotate(0deg);}
+}
+@keyframes clockwise-spin {
+    from {-moz-transform:rotate(360deg); -ms-transform:rotate(360deg); -o-transform:rotate(360deg); -webkit-transform:rotate(360deg); transform:rotate(360deg);}
+    to {-moz-transform:rotate(0deg); -ms-transform:rotate(0deg); -o-transform:rotate(0deg); -webkit-transform:rotate(0deg); transform:rotate(0deg);}
+}
+.processing-animation(@conent, @color, @width, @height, @duration) {
+    -webkit-animation-name: clockwise-spin;
+    -webkit-animation-duration: @duration;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    -moz-animation-name: clockwise-spin;
+    -moz-animation-duration: @duration;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: linear;
+    -o-animation-name: clockwise-spin;
+    animation-name: clockwise-spin;
+    -o-animation-duration: @duration;
+    animation-duration: @duration;
+    -o-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -o-animation-timing-function: linear;
+    animation-timing-function: linear;
+    color: @color;
+    text-indent: 0;
+    position: absolute;
+    text-align: center;
+    width: @width;
+    height: @height;
+    top: 0px;
+    left: 0;
+    display: block;
+    content: @conent;
+    font-family: Entypo;
+    font-size: @height;
+    line-height: @height;
+}
+.font-default(@line-height: 32px) {
+    line-height: @line-height;
+    font-family: 'Open Sans', 'Helvetica', Arial, sans-serif;
+    font-weight: 300;
+}
+.transition(@property) {
+    -webkit-transition: @property;
+    -moz-transition: @property;
+    -o-transition: @property;
+    transition: @property;
+}
+.size(@size) {
+    width: @size;
+    height: @size;
+}
+.size(@width, @height) {
+    width: @width;
+    height: @height;
+}
+.border-radius(@radius) {
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+    border-radius: @radius;
+}
+.box-shadow(@shadow) {
+    -webkit-box-shadow: @shadow;
+    -moz-box-shadow: @shadow;
+    box-shadow: @shadow;
+}
+.text-shadow(@shadow) {
+    -webkit-text-shadow: @shadow;
+    text-shadow: @shadow;
+}

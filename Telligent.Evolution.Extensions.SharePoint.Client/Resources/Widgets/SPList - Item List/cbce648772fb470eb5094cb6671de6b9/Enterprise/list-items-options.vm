@@ -1,0 +1,28 @@
+#set($listItemsOptions = "%{}")
+
+#set($sortBy = false)
+#set($sortBy = $core_v2_page.GetQueryStringValue('sortBy'))
+#if ($sortBy)
+	$listItemsOptions.Add('SortBy', $sortBy) 
+#end
+
+#set($sortOrder = false)
+#set($sortOrder = $core_v2_page.GetQueryStringValue('sortOrder'))
+#if ($sortOrder)
+	$listItemsOptions.Add('SortOrder', $sortOrder) 
+#end
+
+#set($pageSize = $core_v2_widget.GetIntValue('pageSize',25))
+#if ($pageSize)
+	$listItemsOptions.Add('PageSize', $pageSize)
+#end
+
+#set($pageIndex = $core_v2_utility.ParseInt($core_v2_page.GetQueryStringValue('page')))
+#if ($pageIndex)
+	$listItemsOptions.Add('PageIndex', $pageIndex)
+#end
+
+#if($view)
+	$listItemsOptions.Add('ViewFields', $view.Fields)
+	$listItemsOptions.Add('ViewQuery', $view.Query)
+#end

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	#set($mode = 'add')
+	#set($mode = $core_v2_page.GetQueryStringValue('mode'))
+
+	#set($isMode = true)
+
+	#set($title = $core_v2_language.GetResource('Administration_AddModal_Title'))
+	#if($mode == 'create')
+		#set($title = $core_v2_language.GetResource('Administration_CreateModal_Title'))
+	#end
+	$core_v2_page.SetTitle($title, false, false)
+	$core_v2_page.RenderThemeHeaders("%{ IsModal = $isMode}")
+</head>
+<body>
+	<fieldset class="field-list sharepoint-list-options">
+		<ul class="field-list">
+			<li class="field-item weburl">
+				<label for="$core_v2_widget.UniqueId('weburl')" class="field-item-header">$core_v2_language.GetResource('Administration_AddCreateModal_SPWeb')</label>
+				<span class="field-item-input">
+					<input type="text" id="$core_v2_widget.UniqueId('weburl')"/>
+				</span>
+			</li>
+
+			<li class="field-item listId">
+				<label for="$core_v2_widget.UniqueId('listId')" class="field-item-header">$core_v2_language.GetResource('Administration_AddCreateModal_SPList')</label>
+				<span class="field-item-input">
+					<input type="text" id="$core_v2_widget.UniqueId('listId')"/>
+				</span>
+			</li>
+
+			#if($mode == 'create')
+			<li class="field-item description">
+				<label for="$core_v2_widget.UniqueId('description')" class="field-item-header">$core_v2_language.GetResource('Administration_AddCreateModal_SPListDescription')</label>
+				<span class="field-item-input">
+					<textarea rows='4' id="$core_v2_widget.UniqueId('description')"></textarea>
+				</span>
+			</li>
+			#end
+		</ul>
+	</fieldset>
+
+	<fieldset class="field-list save-cancel">
+		<div class="field-list">
+			<span class="field-item cancel-changes">
+				<span class="field-item-input">
+					<a href="#" class="internal-link submit-form cancel-changes">
+						<span></span>$core_v2_language.GetResource('Administration_Modal_Cancel')
+					</a>
+				</span>
+			</span>
+			<span class="field-item save-changes">
+				<span class="field-item-input">
+					<a href="#" class="internal-link submit-form save-changes disabled">
+						<span></span>$core_v2_language.GetResource('Administration_Modal_Save')
+					</a>
+				</span>
+			</span>
+		</div>
+	</fieldset>
+
+	#if($mode == 'add')
+		#registerEndOfPageHtml('telligent.sharepoint.widgets.listsAdministration.addModal')
+			<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+		#end
+		#registerEndOfPageHtml()
+			<script type="text/javascript">
+				jQuery(function(j){
+					j.telligent.sharepoint.widgets.listsAdministration.addModal.register({
+						groupId       : "$!{core_v2_group.Current.Id}",
+						addListUrl    : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('add.vm'))",
+						webUrlTextbox : j("#$core_v2_widget.UniqueId('weburl')"),
+						listIdTextbox : j("#$core_v2_widget.UniqueId('listId')"),
+						saveButtonId  : "a.internal-link.save-changes",
+						cancelButtonId: "a.internal-link.cancel-changes"
+					});
+				})
+			</script>
+		#end
+	#elseif($mode == 'create')
+		#registerEndOfPageHtml('telligent.sharepoint.widgets.listsAdministration.createModal')
+			<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+		#end
+		#registerEndOfPageHtml()
+			<script type="text/javascript">
+				jQuery(function(j){
+					j.telligent.sharepoint.widgets.listsAdministration.createModal.register({
+						groupId       : "$!{core_v2_group.Current.Id}",
+						createListUrl : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('create.vm'))",
+						webUrlTextbox : j("#$core_v2_widget.UniqueId('weburl')"),
+						listIdTextbox : j("#$core_v2_widget.UniqueId('listId')"),
+						descriptionTextbox : j("#$core_v2_widget.UniqueId('description')"),
+						saveButtonId  : "a.internal-link.save-changes",
+						cancelButtonId: "a.internal-link.cancel-changes"
+					});
+				})
+			</script>
+		#end
+	#end
+</body>
+</html>

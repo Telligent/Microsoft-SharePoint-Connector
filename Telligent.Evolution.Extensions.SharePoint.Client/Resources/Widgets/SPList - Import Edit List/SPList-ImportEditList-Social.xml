@@ -1,0 +1,53 @@
+﻿<scriptedContentFragments>
+	<scriptedContentFragment name="${resource:Widget_Name}" description="${resource:Widget_Description}" instanceIdentifier="956082803a89415f89b95f5ae0fdc58a" theme="3fc3f82483d14ec485ef92e206116d49" cssClass="splist-import-edit-widget" isCacheable="false" varyCacheByUser="true" showHeaderByDefault="false">
+	<contentScript>
+		<![CDATA[
+$core_v2_widget.ExecuteFile('check-user-permissions.vm')
+#set($hasPermissions = $isAdmin || $isOwner || $isManager)
+#if(!$hasPermissions)
+	$core_v2_page.Redirect($core_v2_urls.Message(31)) ##AccessDenied
+#end
+
+#set($list = false)
+#set($list = $sharepoint_v2_list.Current)
+#if ($list)
+	$core_v2_widget.ExecuteFile('edit-view.vm')
+#else
+	$core_v2_widget.ExecuteFile('import-view.vm')
+#end
+		]]>
+	</contentScript>
+	<headerScript>
+		<![CDATA[
+$core_v2_widget.ApplyTokens($core_v2_widget.GetStringValue('WidgetTitle', '${resource:Widget_Name}'))
+		]]>
+	</headerScript>
+	<configuration>
+		<![CDATA[
+<propertyGroup id="Options">
+	<property id="WidgetTitle" resourceName="CF_Widget_Title" dataType="string" defaultValue="${resource:Widget_Name}" controlType="Telligent.Evolution.Controls.ContentFragmentTokenStringControl, Telligent.Evolution.Controls" />
+</propertyGroup>
+		]]>
+		</configuration>
+		<languageResources>
+			<language key="en-us">
+				<resource name="Widget_Name">SharePoint - List Import/Edit Form</resource>
+				<resource name="Widget_Description">Allows to import/edit a SharePoint List.</resource>
+				<resource name="CF_Widget_Title">Widget Title</resource>
+				<resource name="ImportList">Import List</resource>
+				<resource name="SiteName">SharePoint Site Name</resource>
+				<resource name="SiteUrl">SharePoint Site URL</resource>
+				<resource name="DeleteTitle">Delete List - {0}</resource>
+				<resource name="DeleteConfirmation">Are you sure you want to delete this List?</resource>
+				<resource name="DeleteFromSharePoint">Delete List from SharePoint</resource>
+				<resource name="SiteNameErrorMessage">The web site name cannot be empty.</resource>
+				<resource name="ListName">SharePoint List</resource>
+				<resource name="ListNameErrorMessage">The SharePoint List name cannot be empty.</resource>
+				<resource name="ListDescription">SharePoint List Description</resource>
+				<resource name="DefaultView">Default View</resource>
+				<resource name="Save">Save</resource>
+				<resource name="Delete">Delete</resource>
+			</language>
+		</languageResources>
+	</scriptedContentFragment>
+</scriptedContentFragments>

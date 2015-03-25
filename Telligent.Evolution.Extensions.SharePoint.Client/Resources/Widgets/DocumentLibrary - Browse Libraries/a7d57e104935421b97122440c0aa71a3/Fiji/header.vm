@@ -1,0 +1,31 @@
+﻿#set($ask = 'ascending')
+#set($desk = 'descending')
+<thead>
+	<tr class="table-header">
+		<th class="table-header-column application-title">$core_v2_language.GetResource('BrowseDocumentLibraries_Header_Name')
+			#if($showSortOptions)<a href='#' sortBy='Name' sortOrder='#if(!$sortBy || $sortBy != 'Name' || $sortOrder.ToLower() == 'descending')${ask}#else${desk}#end'
+				class="internal-link#if(!$sortBy || $sortBy != 'Name' || $sortOrder.ToLower() == 'descending') sort-descending#else sort-ascending#end"><span></span></a>#end
+		</th>
+		#if($showItemCount)
+			<th class="table-header-column item-count">$core_v2_language.GetResource('BrowseDocumentLibraries_Header_ItemCount')
+				#if($showSortOptions)<a href='#' sortBy='ItemCount' sortOrder='#if(!$sortBy || $sortBy != 'ItemCount' || $sortOrder.ToLower() == 'descending')${ask}#else${desk}#end'
+					class="internal-link#if(!$sortBy || $sortBy != 'ItemCount' || $sortOrder.ToLower() == 'descending') sort-descending#else sort-ascending#end"><span></span></a>#end
+			</th>
+		#end
+		#if($showCreatedDate)
+			<th class="table-header-column created-date">$core_v2_language.GetResource('BrowseDocumentLibraries_Header_Created')
+				#if($showSortOptions)<a href='#' sortBy='Created' sortOrder='#if(!$sortBy || $sortBy != 'Created' || $sortOrder.ToLower() == 'descending')${ask}#else${desk}#end'
+					class="internal-link#if(!$sortBy || $sortBy != 'Created' || $sortOrder.ToLower() == 'descending') sort-descending#else sort-ascending#end"><span></span></a>#end
+			</th>
+		#end
+		#if($showModifiedDate)
+			<th class="table-header-column modified-date">$core_v2_language.GetResource('BrowseDocumentLibraries_Header_Recent')
+				#if($showSortOptions)<a href='#' sortBy='Modified' sortOrder='#if(!$sortBy || $sortBy != 'Modified' || $sortOrder.ToLower() == 'descending')${ask}#else${desk}#end'
+					class="internal-link#if(!$sortBy || $sortBy != 'Modified' || $sortOrder.ToLower() == 'descending') sort-descending#else sort-ascending#end"><span></span></a>#end
+			</th>
+		#end
+		#if($showVersioning)
+			<th class="table-header-column versioning">$core_v2_language.GetResource('BrowseDocumentLibraries_Header_Versioning')</th>
+		#end
+	</tr>
+</thead>

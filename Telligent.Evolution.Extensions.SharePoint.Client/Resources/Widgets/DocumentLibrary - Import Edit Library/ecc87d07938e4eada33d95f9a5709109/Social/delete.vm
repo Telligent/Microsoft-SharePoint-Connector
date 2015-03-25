@@ -1,0 +1,12 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($libraryId = $core_v2_utility.ParseGuid($core_v2_page.GetFormValue('libraryId')))
+#set($deleteLibrary = $core_v2_utility.ParseBool($core_v2_page.GetFormValue('isDelete')))
+#set($deleteInfo = $sharepoint_v2_library.Delete($libraryId, $deleteLibrary))
+#if ($deleteInfo.HasErrors)
+	$core_v2_page.SendJsonError($deleteInfo.Errors)
+#end
+
+{
+	"valid": true
+}

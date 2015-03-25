@@ -1,0 +1,38 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($empty = $core_v2_utility.ParseGuid('00000000-0000-0000-0000-000000000000'))
+#set($documentId = $core_v2_utility.ParseGuid($core_v2_page.GetFormValue('DocumentId')))
+#if ($documentId != $empty)
+	#set($listItem = false)
+	#set($listItem = $sharepoint_v2_listItem.Get($documentId))
+
+	#set($canEdit = false)
+	#set($canEdit = $sharepoint_v2_listItem.CanEdit($documentId))
+	#if(!$canEdit)
+		$core_v2_page.SendJsonError('Access denied. You do not have permission to perform this method or access this resource.')
+	#end
+
+	#set($currentList = $sharepoint_v2_list.Get($listItem.ListId))
+	#foreach($field in $currentList.Fields)
+		#if(!$field.ReadOnlyField)
+			$core_v2_widget.ExecuteFile('get-field-editor.vm')
+		#end
+	#end
+
+	#set($document = $sharepoint_v2_file.Update($listItem.ContentId, "%{Fields = $listItem.Fields}"))
+	#if ($document.Errors.Count > 0)
+		$core_v2_page.SendJsonError($document.Errors)
+	#end
+
+	#set($tags = $core_v2_page.GetFormValue('Tags'))
+	#set($additionalInfo = $core_v2_tags.Set($document.ContentId, $document.ContentTypeId, $tags))
+	#if ($additionalInfo && $additionalInfo.Errors && $additionalInfo.Errors.Count > 0)
+		$core_v2_page.SendJsonError($additionalInfo.Errors)
+	#end
+	{
+		"valid" : true,
+		"redirectUrl" : "$!core_v2_encoding.JavascriptEncode($sharepoint_v2_fileUrls.Show($document.ContentId))"
+	}
+#else
+	$core_v2_page.SendJsonError('Access denied. You do not have permission to perform this method or access this resource.')
+#end

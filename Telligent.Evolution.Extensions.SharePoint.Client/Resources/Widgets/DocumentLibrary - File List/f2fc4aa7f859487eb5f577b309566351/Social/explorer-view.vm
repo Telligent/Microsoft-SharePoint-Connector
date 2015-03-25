@@ -1,0 +1,43 @@
+#set($sharepoint_v2_library.View = "1")
+
+#set($library = $sharepoint_v2_library.Current)
+$core_v2_widget.ExecuteFile('process-options.vm')
+#set($fileList = $sharepoint_v2_file.List($library.Id, $fileListOptions))
+#set($parentFolder = false)
+#set($parentFolder = $sharepoint_v1_folder.GetParent("$library.Id", $folder))
+$core_v2_widget.ExecuteFile('check-user-permissions.vm')
+
+#set($fileIconWidth = 140)
+#set($fileIconHeight = 140)
+#set($fileNameLength = 15)
+
+#foreach($file in $fileList)
+#beforeall
+	<div class="content-list thumbnail ui-masonry margin-top explorer-view" id="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.UniqueId('thumbnails'))" data-columnclass="thumbnail-column">
+#each
+	#if($file.IsFolder)
+		#set($folder = $file)
+		<div class="content-item content thumbnail folder-type" data-url="#$!folder.Path" data-contentid="$!file.ContentId">
+			<div class="avatar post-preview folder-button">
+				<span></span>$!folder.Name
+			</div>
+			<h3 class="name">
+				<a href="#$!folder.Path">$core_v2_language.Truncate($folder.Name, $fileNameLength, "...")</a>
+			</h3>
+		</div>
+	#else
+		<div class="content-item content thumbnail file-type" data-url="$!file.Url" data-contentid="$!file.ContentId">
+			<div class="avatar">
+				<img src='$!core_v2_ui.GetFileTypeImageUrl($file.Name, "%{width = $fileIconWidth}")' alt="$!{file.Name}"></img>
+			</div>
+			<h3 class="name">
+				<a href="$file.Url">$core_v2_language.Truncate($file.DisplayName, $fileNameLength, "...")</a>
+			</h3>
+		</div>
+	#end
+#afterall
+	</div>
+	$core_v2_ui.Pager($pageIndex, $pageSize, $fileList.TotalCount, "%{QueryStringProperty = 'page'}")
+#nodata
+	<div class="message norecords">$core_v2_language.GetResource('NoRecords')</div>
+#end

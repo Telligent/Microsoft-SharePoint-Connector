@@ -1,0 +1,14 @@
+## $permissions
+#if($permissions.Member.PrincipalType == "None")
+	$core_v2_language.GetResource('Permissions_PrincipalType_None')
+#elseif($permissions.Member.PrincipalType == "User")
+	$core_v2_language.GetResource('Permissions_PrincipalType_User')
+#elseif($permissions.Member.PrincipalType == "DistributionList")
+	$core_v2_language.GetResource('Permissions_PrincipalType_DistributionList')
+#elseif($permissions.Member.PrincipalType == "SecurityGroup")
+	$core_v2_language.GetResource('Permissions_PrincipalType_SecurityGroup')
+#elseif($permissions.Member.PrincipalType == "SharePointGroup")
+	$core_v2_language.GetResource('Permissions_PrincipalType_SharePointGroup')
+#elseif($permissions.Member.PrincipalType == "All")
+	$core_v2_language.GetResource('Permissions_PrincipalType_All')
+#end

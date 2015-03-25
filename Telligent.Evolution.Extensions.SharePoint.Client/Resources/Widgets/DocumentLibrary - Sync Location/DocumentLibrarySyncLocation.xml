@@ -1,0 +1,38 @@
+﻿<scriptedContentFragments>
+	<scriptedContentFragment name="${resource:Widget_Name}" description="${resource:Widget_Description}" instanceIdentifier="c871678f0fc749c7949cb7ec29d441a1" cssClass="sharepoint-syncLocation-widget" isCacheable="false" varyCacheByUser="true" showHeaderByDefault="true">
+		<contentScript>
+			<![CDATA[
+#set($library = false)
+#set($library = $sharepoint_v2_library.Current)
+#if(!$library)
+	$core_v2_widget.Hide()
+#end
+$core_v2_language.FormatString($core_v2_language.GetResource('Location'), ${library.SPViewUrl}, ${library.Name})
+		]]>
+		</contentScript>
+		<headerScript>
+			<![CDATA[
+				$core_v2_widget.ApplyTokens($core_v2_widget.GetStringValue('WidgetTitle', '${resource:Widget_Name}'))
+			]]>
+		</headerScript>
+		<configuration>
+			<![CDATA[
+				<propertyGroup id="Options">
+					<property id="WidgetTitle" resourceName="CF_Title" dataType="string" defaultValue="${resource:Widget_Name}" controlType="Telligent.Evolution.Controls.ContentFragmentTokenStringControl, Telligent.Evolution.Controls" />
+				</propertyGroup>
+			]]>
+		</configuration>
+		<languageResources>
+			<language key="en-us">
+				<resource name="Widget_Name">SharePoint - Document Library Sync Location</resource>
+				<resource name="CF_Title">Widget Title</resource>
+				<resource name="Widget_Description">Displays a link to the SharePoint Document Library</resource>
+				<resource name="Location">
+					<![CDATA[
+						Synced with the <a href='{0}'>{1}</a> SharePoint Document Library.
+					]]>
+				</resource>
+			</language>
+		</languageResources>
+	</scriptedContentFragment>
+</scriptedContentFragments>

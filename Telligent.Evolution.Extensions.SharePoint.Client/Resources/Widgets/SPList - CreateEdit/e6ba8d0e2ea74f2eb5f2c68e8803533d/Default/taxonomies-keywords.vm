@@ -1,0 +1,29 @@
+﻿$core_v2_page.SetContentType('application/json')
+
+#set($url = false)
+#set($url = $core_v2_page.GetFormValue("url"))
+
+#set($labels = false)
+#set($labels = $core_v2_page.GetFormValue("labels"))
+
+#set($terms = false)
+#set($terms = $sharepoint_v2_taxonomies.GetCreateKeywords($url, $labels))
+#if ($terms)
+	{
+		#foreach($term in $terms)
+		#beforeall
+			"terms": [
+		#each
+			{
+				"id": "$!term.Id",
+				"name": "$!term.Name",
+				"wssId": "$!term.WSSId",
+				"hasChilds": #if($term.HasChilds) true #else false #end
+			}
+		#between
+			,
+		#afterall
+			]
+		#end
+	}
+#end

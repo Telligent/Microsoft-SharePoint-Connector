@@ -1,0 +1,70 @@
+﻿$core_v2_page.SetContentType('application/json')
+
+#set($library = false)
+#set($library = $sharepoint_v2_library.Current)
+#if ($library)
+
+	#set($folderPath = false)
+	#set($folderPath = $core_v2_page.GetQueryStringValue("w_folder"))
+	#if(!$folderPath || $folderPath == "" || $folderPath == "/")
+		#set($folderPath = $core_v2_utility.Replace("$library.Root", '(^/|/$)', ''))
+	#end
+
+	#set($selectedFolderPath = $core_v2_utility.Trim($folderPath))
+	#set($selectedFolderPath = $core_v2_utility.Replace($selectedFolderPath, '(^/|/$)', ''))
+	#set($selectedFolderPath = "/$selectedFolderPath")
+	#set($currentFolder = '')
+	#set($folderParts = $core_v2_utility.Split('/', $selectedFolderPath))
+	#if ($folderPath == "/") #set($folderParts = ['']) #end
+
+	{
+		"path"  : "$selectedFolderPath",
+		"levels": [
+			{"folders": [
+				{   ## Root Folder
+					#set($folderPath = $core_v2_utility.Replace("$library.Root", '(^/|/$)', ''))
+					#set($folderPath = "/$folderPath")
+					"name" : "$!library.Name",
+					"path" : "$folderPath",
+					"count": $core_v2_utility.ParseInt("$library.ItemCount"),
+					"selected": #if($selectedFolderPath == $folderPath) true #else false #end,
+					"expanded": #if($selectedFolderPath != $folderPath && $selectedFolderPath.StartsWith($folderPath)) true #else false #end,
+					#set($rootFolder = "$library.Root")
+					#set($childs = false)
+					#set($childs = $sharepoint_v1_folder.List("$library.Id", "%{FolderPath = $rootFolder, PageSize = 1}"))
+					"haschilds": #if($childs && $childs.TotalCount > 0) true #else false #end
+				}
+			]}
+		#foreach($folderPart in $folderParts)
+		#beforeall
+			,
+		#between
+			,
+		#each
+			{
+				#set($currentFolder = $core_v2_utility.Join('/', $core_v2_utility.MakeList($currentFolder, $folderPart)))
+				#set($folders = false)
+				#set($folders = $sharepoint_v1_folder.List("$library.Id", "%{FolderPath = $currentFolder}"))
+				#foreach($folder in $folders)
+				#beforeall
+					"folders": [
+				#between
+					,
+				#each
+					{   ## folder
+						"name" : "$!folder.Name",
+						"path" : "$!folder.Path",
+						"count": $core_v2_utility.ParseInt("$folder.ItemCount"),
+						"selected": #if($selectedFolderPath == $folder.Path) true #else false #end,
+						"expanded": #if($selectedFolderPath != $folder.Path && $selectedFolderPath.StartsWith($folder.Path)) true #else false #end,
+						#set($childs = false)
+						#set($childs = $sharepoint_v1_folder.List("$library.Id", "%{FolderPath = $folder.Path, PageSize = 1}"))
+						"haschilds": #if($childs && $childs.TotalCount > 0) true #else false #end
+					}
+				#afterall
+					]
+				#end
+			}
+		#end
+	]}
+#end

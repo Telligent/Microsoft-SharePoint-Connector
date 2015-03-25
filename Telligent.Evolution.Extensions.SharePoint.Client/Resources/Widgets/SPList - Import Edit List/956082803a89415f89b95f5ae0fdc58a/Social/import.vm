@@ -1,0 +1,26 @@
+$core_v2_page.SetContentType('application/json')
+
+#set($groupId = $core_v2_utility.ParseInt($core_v2_page.GetFormValue('groupId')))
+#set($listId = $core_v2_utility.ParseGuid($core_v2_page.GetFormValue('listId')))
+#set($url = $core_v2_page.GetFormValue('webUrl'))
+
+#set($list = false)
+#set($list = $sharepoint_v2_list.Add($groupId, $listId, $url))
+#if ($list.HasErrors)
+	$core_v2_page.SendJsonError($list.Errors)
+#end
+
+#set($empty = $core_v2_utility.ParseGuid('00000000-0000-0000-0000-000000000000'))
+#set($viewId = $core_v2_utility.ParseGuid($core_v2_page.GetFormValue('viewId')))
+#if ($viewId != $empty)
+	#set($updateInfo = false)
+	#set($updateInfo = $sharepoint_v2_list.Update($listId, "%{DefaultViewId = $viewId}"))
+	#if ($updateInfo.HasErrors)
+		$core_v2_page.SendJsonError($updateInfo.Errors)
+	#end
+#end
+
+{
+	"valid"    : true, 
+	"redirectUrl": "$!core_v2_encoding.JavascriptEncode($sharepoint_v2_listItemUrls.Browse($list.Id))"
+}

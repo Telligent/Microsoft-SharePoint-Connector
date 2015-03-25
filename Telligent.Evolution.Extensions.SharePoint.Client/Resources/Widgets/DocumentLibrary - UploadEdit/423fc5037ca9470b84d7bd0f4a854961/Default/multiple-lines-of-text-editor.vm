@@ -1,0 +1,44 @@
+﻿#if(!$core_v2_page.IsPost || $isInPreviewMode)
+	#set($controlId = $field.InternalName)
+	#set($errorMsgId = "${field.InternalName}_msg")
+	#if ($field.Required)
+		<script type="text/javascript">
+			jQuery(function(j) {
+				var editor = j("#${controlId}"),
+				errorMsg = j("#${errorMsgId}"),
+				isValid = function (input){
+					return input.val().length > 0;
+				};
+				j.telligent.sharepoint.widgets.validator.registerInputValidation(editor, errorMsg, isValid);
+			});
+		</script>
+	#end
+	#if(!$field.RichText)
+		<table class="multiple-lines-of-text-editor simple">
+			<tr>
+				<td>
+					<textarea id="${controlId}" name="$!{field.InternalName}" rows="5">
+						#if($listItem)
+							$listItem.ValueForEdit($field.InternalName)
+						#end
+					</textarea>
+				</td>
+			</tr>
+		</table>
+	#else
+		#set($textEditor = "${field.InternalName}_editor")
+		<script type="text/javascript">			
+			jQuery(function(j) {
+				j("#$textEditor textarea").attr('name', '${field.InternalName}');
+			});
+		</script>
+		<div id="$textEditor">
+			$!{core_v2_editor.Render($controlId, "%{Value = $listItem.ValueForEdit($field.InternalName)}")}
+		</div>
+	#end
+	<div id="${errorMsgId}" class="invalid-msg" style="display: none;">$core_v2_language.GetResource('SharePoint_ListItem_FieldRequired')</div>
+#else
+	#set($value = $core_v2_page.GetFormValue($field.InternalName))
+	#set($value = $core_v2_utility.Replace($value, ';', $core_v2_utility.NewLine))
+	$listItem.Fields.Add($field.InternalName, "$value")
+#end

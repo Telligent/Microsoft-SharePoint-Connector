@@ -1,0 +1,148 @@
+<div class="message error" id="$core_v2_widget.UniqueId('ErrorMessageId')" style="display:none;"></div>
+<fieldset class="create-document create">
+
+	<h1>$!core_v2_language.FormatString($core_v2_language.GetResource('NewDocument'), $library.Name)</h1>
+
+	<ul class="field-list">
+		## Attachment
+		<li class="field-item required post-attachment upload-with-preview" id="$core_v2_widget.UniqueId('attachment')">
+			<label for="$core_v2_widget.UniqueId('attachment_input')" class="field-item-name">$core_v2_language.GetResource('Attachment_File')</label>
+			<span class="field-item-description">$core_v2_language.GetResource('UploadFile_Description')</span>
+			<span class="field-item-input file">
+				<input type="text" columns="90" id="$core_v2_widget.UniqueId('attachment_input')" required="required"/>
+			</span>
+			<span class="field-item-input preview">
+			</span>
+			<span class="field-item-input upload">
+				<a href="#" class="upload add" id="$core_v2_widget.UniqueId('upload')">$core_v2_language.GetResource('UploadFile')</a>
+				<a href="#" class="remove" style="margin-left: 1em; display: none;">$core_v2_language.GetResource('RemoveFile')</a>
+			</span>
+			<span class="field-item-validation" style="display: none;"></span>
+		</li>
+
+		## File Name
+		<li class="field-item destination-file-name">
+			<label class="field-item-header">$core_v2_language.GetResource('DestinationFile_Name')</label>
+			<span class="field-item-description">$core_v2_language.GetResource('DestinationFile_Description')</span>
+			<span class="field-item-input">
+				<input id="$core_v2_widget.UniqueId('FileNameInput')" type="text" required="required"/>
+			</span>
+			<span class="field-item-validation" style="display: none;"></span>
+		</li>
+
+		## Browse Folder
+		<li class="field-item document-folder">
+			<label class="field-item-header">$core_v2_language.GetResource('FolderPath')</label>
+			<span class="field-item-description">$core_v2_language.GetResource('FolderPath_Description')</span>
+			<span class="field-item-input">
+				<div class="document-library-folders-tree">
+					<div class="folder-root">
+						<div class="folder-children">
+							<ul class="folder-list">
+								<li class="folder-item">
+									<div class="folder selected">
+										<a href="#"><span class="expand-collapse" data-path="/$library.Root"></span>$!library.Name</a>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<script type="folder-children-template">
+						<div class="folder-children">
+							<ul class="folder-list" for-each="{{folders}}">
+								<li class="folder-item" data-path="{{path}}">
+									<div class="folder {{selected}}">
+										<a href="javascript: void(0);"><span class="expand-collapse {{expanded}} {{haschilds}}" data-path="{{path}}"></span><span class="folder-icon"></span>{{name}}</a>
+									</div>
+									{{childs}}
+								</li>
+							</ul>
+						</div>
+					</script>
+				</div>
+			</span>
+			<span class="field-item-validation" style="display: none;"></span>
+		</li>
+
+		## Overwrite?
+		<li class="field-item overwrite-document">
+			<span class="field-item-input">
+				<input type="checkbox" id="$core_v2_widget.UniqueId('Overwrite')" checked="checked">
+				<label for="$core_v2_widget.UniqueId('Overwrite')">$core_v2_language.GetResource('Overwrite')</label>
+				<span class="field-item-description">$core_v2_language.GetResource('Overwrite_Description')</span>
+			</span>
+		</li>
+
+		## Fields
+		#set ($hiddenFields = ['FileLeafRef', 'TaskGroup'])
+		#set ($currentList = $sharepoint_v2_list.Get($library.Id))
+		#foreach($field in $currentList.Fields)
+			#if(!$field.ReadOnlyField && $field.FieldTypeKind != 'Calculated' && !$hiddenFields.Contains($field.InternalName))
+				<li class="field-item list-item-field">
+					<label class="field-item-header" for="$core_v2_widget.UniqueId($field.InternalName)">
+						$!{field.Title}
+						#if($field.Required)
+							<span class="field-required" title="$core_v2_language.GetResource('RequiredFieldWarning')">*</span>
+						#end
+					</label>
+					<span class="field-item-input" name="$!{field.InternalName}">
+						$core_v2_widget.ExecuteFile('get-field-editor.vm')
+					</span>
+				</li>
+			#end
+		#end
+
+		## Tags
+		<li class="field-item document-tags">
+			<label for="$core_v2_widget.UniqueId('TagBox')" class="field-item-name">$core_v2_language.GetResource('Tags_Name')</label>
+			<span class="field-item-input">
+				<input id="$core_v2_widget.UniqueId('TagBox')" type="text" value="" size="60" />
+				<input type="button" id="$core_v2_widget.UniqueId('SelectTagsId')" value="$core_v2_encoding.HtmlAttributeEncode($core_v2_language.GetResource('Tags_Specify'))" />
+			</span>
+		</li>
+
+		## Save
+		<li class="field-item submit-button">
+			<span class="field-item-input">
+				<a id="$core_v2_widget.UniqueId('Save')" href="#" class="internal-link save-post disabled button">$core_v2_language.GetResource('Save')</a>
+				<span class="processing" style="display: none;"></span>
+			</span>
+		</li>
+	</ul>
+
+</fieldset>
+
+#registerEndOfPageHtml('telligent.sharepoint.widgets.uploadDocument')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+#end
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+		jQuery(function(j){
+			j.telligent.sharepoint.widgets.uploadDocument.register({
+				wrapper               : j("#$core_v2_widget.WrapperElementId"),
+				libraryId             : "$library.Id",
+				libraryUrl            : "$core_v2_encoding.JavascriptEncode($sharepoint_v1_urls.Library($library.Id))",
+				relatedFoldersUrl     : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('get-related-folders.vm'))",
+				foldersUrl            : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('get-folders.vm'))",
+				currentFolder         : "$library.Root",
+				attachmentId          : "#$core_v2_widget.UniqueId('attachment')",
+				attachmentProgressText: "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('UploadProgress'))",
+				attachmentChangeText  : "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('ChangeFile'))",
+				attachmentAddText     : "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('UploadFile'))",
+				previewAttachmentUrl  : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('preview-attachment.vm'))",
+				#set($attachmentContextId = $core_v2_uploadedFile.CreateContextId())
+				uploadContextId       : "$core_v2_encoding.JavascriptEncode($attachmentContextId)",
+				uploadFileUrl         : "$core_v2_encoding.JavascriptEncode($core_v2_uploadedFile.GetUploadUrl($attachmentContextId))",
+				documentNameId        : "#$core_v2_widget.UniqueId('FileNameInput')",
+				overwriteId           : "#$core_v2_widget.UniqueId('Overwrite')",
+				tagBox                : j("#$core_v2_widget.UniqueId('TagBox')"),
+				selectTagsBox         : j("#$core_v2_widget.UniqueId('SelectTagsId')"),
+				saveButtonId          : "#$core_v2_widget.UniqueId('Save')",
+				saveUrl               : "$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl('create-document.vm'))",
+				invalidFileNameError  : "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('InvalidFileName'))",
+				noFileNameError       : "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('NoFileName'))",
+				noFileUploadedError   : "$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('NoFileUploaded'))"
+			});
+		});
+	</script>
+#end

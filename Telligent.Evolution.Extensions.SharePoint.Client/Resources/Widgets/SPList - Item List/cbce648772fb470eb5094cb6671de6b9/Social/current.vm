@@ -1,0 +1,31 @@
+#set($list = false)
+#set($list = $sharepoint_v2_list.Current)
+#if(!$list)
+	$core_v2_widget.Hide()
+#elseif($list.Errors.Count() > 0)
+	$core_v2_page.SendJsonError($list.Errors)
+#end
+
+#set($viewList = false)
+#set($viewList = $sharepoint_v1_view.List($list))
+#if(!$viewList)
+	$core_v2_widget.Hide()
+#end
+
+#set($view = false)
+#set($viewId = false)
+#set($viewId = $core_v2_page.GetQueryStringValue('viewId'))
+#set($empty = $core_v2_utility.ParseGuid('00000000-0000-0000-0000-000000000000'))
+#if (!$viewId && $list.ViewId != $empty)
+	#set($viewId = $list.ViewId)
+#end
+
+#if ($viewId)
+	#set($view = $sharepoint_v1_view.Get("%{List = $list, ById = $viewId}"))
+#end
+#if(!$view) #set($view = $viewList.get_Item(0)) #end
+#if(!$view)
+	$core_v2_widget.Hide()
+#elseif($view.Errors.Count() > 0)
+	$core_v2_page.SendJsonError($view.Errors)
+#end

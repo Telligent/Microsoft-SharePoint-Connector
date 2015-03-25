@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{99AC6BA3-28EC-450B-9F6B-C536503FD8D1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Telligent.Evolution.Extensions.SharePoint.ProfileSync</RootNamespace>
+    <AssemblyName>Telligent.Evolution.Extensions.SharePoint.ProfileSync</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.SharePoint.Client, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\Microsoft.SharePoint.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SharePoint.Client.Runtime, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\Microsoft.SharePoint.Client.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.XML" />
+    <Reference Include="Telligent.DynamicConfiguration, Version=1.0.133.22115, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.DynamicConfiguration.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Api, Version=7.0.1539.24262, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Components, Version=7.0.1539.24262, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Components.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Controls, Version=7.0.1539.24262, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Core">
+      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="ExecuteProfileSyncHelper.cs" />
+    <Compile Include="InternalApi\Entities\SPBaseConfig.cs" />
+    <Compile Include="InternalApi\Entities\ProfileField.cs" />
+    <Compile Include="InternalApi\Entities\SPConfiguration.cs" />
+    <Compile Include="InternalApi\Entities\SPFarmUser.cs" />
+    <Compile Include="InternalApi\Entities\SPSiteUser.cs" />
+    <Compile Include="InternalApi\Entities\SyncDirection.cs" />
+    <Compile Include="InternalApi\Entities\TEApiUser.cs" />
+    <Compile Include="InternalApi\Entities\User.cs" />
+    <Compile Include="InternalApi\Entities\UserFieldMapping.cs" />
+    <Compile Include="InternalApi\FarmUserProfileService.cs" />
+    <Compile Include="InternalApi\Interfaces\IProfileSyncService.cs" />
+    <Compile Include="InternalApi\SiteUserProfileService.cs" />
+    <Compile Include="InternalApi\SPConfigurationService.cs" />
+    <Compile Include="InternalApi\SPProfileSyncService.cs" />
+    <Compile Include="InternalApi\SPPropertyKey.cs" />
+    <Compile Include="InternalApi\TEUserProfileFieldsHelper.cs" />
+    <Compile Include="Jobs\FullProfileSyncJob.cs" />
+    <Compile Include="Jobs\IncrementalProfileSyncJob.cs" />
+    <Compile Include="Jobs\ProfileSyncHelper.cs" />
+    <Compile Include="Managers\FullProfileSyncManager.cs" />
+    <Compile Include="Managers\IncrementalProfileSyncManager.cs" />
+    <Compile Include="Managers\ProfileSyncManager.cs" />
+    <Compile Include="Model\SPProfileSyncProvider.cs" />
+    <Compile Include="Model\SPProfileSyncProviderList.cs" />
+    <Compile Include="Plugins\SPProfileSyncPlugin.cs" />
+    <Compile Include="PropertyControls\SPProfileSyncControl.cs" />
+    <Compile Include="PropertyControls\SPProfileSyncPresenter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Web\SharePoint\ProfileSync\Configuration.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web\SharePoint\ProfileSync\Administration.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Telligent.Evolution.Extensions.SharePoint.Components\Telligent.Evolution.Extensions.SharePoint.Components.csproj">
+      <Project>{F7E0B876-70D3-421C-BE64-CE2967B26FC1}</Project>
+      <Name>Telligent.Evolution.Extensions.SharePoint.Components</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Telligent.Evolution.Extensions.SharePoint.WebServices\Telligent.Evolution.Extensions.SharePoint.WebServices.csproj">
+      <Project>{B4A0D6A9-1A0F-4CF3-A13D-26FBD2B45882}</Project>
+      <Name>Telligent.Evolution.Extensions.SharePoint.WebServices</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Web\SharePoint\ProfileSync\Configuration.aspx" />
+    <Content Include="Web\SharePoint\ProfileSync\Administration.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Content Include="Web\SharePoint\ProfileSync\Style\Administration.js" />
+    <Content Include="Web\SharePoint\ProfileSync\Style\SPProfileSync.css" />
+    <EmbeddedResource Include="PropertyControls\SPProfileSyncControl.js" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetDir)*.dll" "$(SolutionDir)Assemblies\"
+"$(ProjectDir)postbuild.bat"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

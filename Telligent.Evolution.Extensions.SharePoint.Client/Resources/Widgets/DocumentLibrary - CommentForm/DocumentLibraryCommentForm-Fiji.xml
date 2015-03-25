@@ -1,0 +1,113 @@
+﻿<scriptedContentFragments>
+	<scriptedContentFragment name="${resource:DocumentLibrary_PostCommentForm_Name}" description="${resource:DocumentLibrary_PostCommentForm_Description}" instanceIdentifier="32823aeaa2db479797561bef039f6ef3" theme="7e987e474b714b01ba29b4336720c446" cssClass="document-library-post-comment-form" isCacheable="true" varyCacheByUser="true" showHeaderByDefault="false">
+		<contentScript>
+			<![CDATA[
+#set($file = false)
+#set($file = $sharepoint_v2_file.Current)
+#if(!$file || $file.HasErrors())
+	$core_v2_widget.Hide()
+#end
+
+## hide if no permission
+#set($canCreateComment = $core_v2_comments.CanCreateComment($file.ContentId, $file.ContentTypeId))
+#if(!$canCreateComment)
+	$core_v2_widget.Hide()
+#end
+
+<div id="$core_v2_widget.UniqueId('successMessage')" class="message success">
+	$core_v2_language.GetResource('CF_Comment_SuccessMessage') &nbsp;
+	<a href="#" class="internal-link close-message" title="$core_v2_language.GetResource('Close')"><span></span>$core_v2_language.GetResource('Close')</a>
+</div>
+
+<div id="$core_v2_widget.UniqueId('moderateMessage')" class="message warning">
+	$core_v2_language.GetResource('CF_Comment_ModeratedMessaage') &nbsp;
+	<a href="#" class="internal-link close-message" title="$core_v2_language.GetResource('Close')"><span></span>$core_v2_language.GetResource('Close')</a>
+</div>
+
+<div id="$core_v2_widget.UniqueId('errorMessage')" class="message error" style="display: none;"></div>
+
+<div id="$core_v2_widget.UniqueId('form')">
+	<div class="field-list-header"></div>
+	<fieldset class="field-list">
+		<legend class="field-list-description">$core_v2_language.GetResource('DocumentLibrary_PostCommentForm_LeaveComment')</legend>
+		<ul class="field-list">
+			<li class="field-item post-body">
+				<span class="field-item-input">
+					<textarea id="$core_v2_widget.UniqueId('body')" rows="3" name="$core_v2_widget.UniqueId('body')" style="resize: none; overflow-y: hidden;"></textarea>
+				</span>
+				<span class="field-item-validation" style="display: none;"></span>
+			</li>
+			<li class="field-item post-submit">
+				<span class="field-item-input">
+					<a href="#" onclick="return false;" class="internal-link add-reply submit-button" id="$core_v2_widget.UniqueId('save')">
+						<span></span>$core_v2_language.GetResource('DocumentLibrary_PostCommentForm_PostComment')
+					</a>
+					<span class="processing" style="visibility: hidden;"></span>
+				</span>
+			</li>
+		</ul>
+	</fieldset>
+	<div class="field-list-footer"></div>
+</div>
+
+#registerEndOfPageHtml('autoresize.jquery.min.js')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('autoresize.jquery.min.js'))"></script>
+#end
+
+#registerEndOfPageHtml('telligent.evolution.widgets.documentLibraryPostCommentForm')
+	<script type="text/javascript" src="$core_v2_encoding.HtmlAttributeEncode($core_v2_widget.GetFileUrl('ui.js'))"></script>
+#end
+
+#registerEndOfPageHtml()
+	<script type="text/javascript">
+	jQuery(document).ready(function(j){
+		j.telligent.evolution.widgets.documentLibraryPostCommentForm.register({
+			wrapperId: '$core_v2_widget.WrapperElementId',
+			contentId: '$file.ContentId',
+			contentTypeId: '$file.ContentTypeId',
+			publishErrorText: '$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('DocumentLibrary_PostCommentForm_PublishError'))',
+			publishingText: '$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('DocumentLibrary_PostCommentForm_Posting'))',
+			publishText: '$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('DocumentLibrary_PostCommentForm_PostComment'))',
+			bodyRequiredText: '$core_v2_encoding.JavascriptEncode($core_v2_language.GetResource('DocumentLibrary_PostCommentForm_EnterCommentWarning'))',
+			save: j('#$core_v2_widget.UniqueId('save')'),
+			addCommentFormUrl: '$core_v2_encoding.JavascriptEncode($core_v2_widget.GetExecutedFileUrl("addCommentForm.vm"))',
+			bodySelector: '#$core_v2_widget.UniqueId('body')',
+			successMessage: j('#$core_v2_widget.UniqueId('successMessage')'),
+			moderateMessage: j('#$core_v2_widget.UniqueId('moderateMessage')'),
+			errorMessage: j('#$core_v2_widget.UniqueId('errorMessage')')
+		});
+	});
+	</script>
+#end
+		]]>
+		</contentScript>
+		<headerScript>
+			<![CDATA[
+$core_v2_widget.ApplyTokens($core_v2_widget.GetStringValue('fragmentHeader', '${resource:DocumentLibrary_PostCommentForm_Name}'))
+		]]>
+		</headerScript>
+		<configuration>
+			<![CDATA[
+				<propertyGroup id="options" resourceName="Options">
+					<property id="fragmentHeader" resourceName="CF_Title" dataType="string" defaultValue="${resource:DocumentLibrary_PostCommentForm_Name}" controlType="Telligent.Evolution.Controls.ContentFragmentTokenStringControl, Telligent.Evolution.Controls" />
+				</propertyGroup>
+			]]>
+		</configuration>
+		<languageResources>
+			<language key="en-us">
+				<resource name="DocumentLibrary_PostCommentForm_Name">SharePoint - Document Library - Add Comment Form</resource>
+				<resource name="DocumentLibrary_PostCommentForm_Description">Displays a form used to add comments to a Document Library file.</resource>
+				<resource name="Options">Options</resource>
+				<resource name="CF_Title">Widget Title</resource>
+				<resource name="CF_Comment_SuccessMessage">Your comment has been posted.</resource>
+				<resource name="Close">Close</resource>
+				<resource name="CF_Comment_ModeratedMessaage">Thank you, your comment requires moderation so it may take a while to appear.</resource>
+				<resource name="DocumentLibrary_PostCommentForm_LeaveComment">Leave a Comment</resource>
+				<resource name="DocumentLibrary_PostCommentForm_PostComment">Post</resource>
+				<resource name="DocumentLibrary_PostCommentForm_PublishError">There was an error saving your comment.</resource>
+				<resource name="DocumentLibrary_PostCommentForm_Posting">Publishing</resource>
+				<resource name="DocumentLibrary_PostCommentForm_EnterCommentWarning">Please enter a comment</resource>
+			</language>
+		</languageResources>
+	</scriptedContentFragment>
+</scriptedContentFragments>

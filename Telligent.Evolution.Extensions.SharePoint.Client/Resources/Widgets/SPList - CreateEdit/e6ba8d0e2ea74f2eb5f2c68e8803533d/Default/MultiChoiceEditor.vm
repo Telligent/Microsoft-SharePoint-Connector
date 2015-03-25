@@ -1,0 +1,72 @@
+﻿#set($fillin = "_fillin")
+#set($ownValue = "_OwnValue")
+#set($msg = "_msg")
+#set($delimiter = "_")
+
+#if(!$core_v2_page.IsPost || $isInPreviewMode)
+	<script type="text/javascript">
+		jQuery(function(j) {
+			var rbtns = j(".choice-editor.${field.InternalName} .fill-in input");
+			#if($field.FillInChoice)
+				var input = j(".choice-editor.${field.InternalName} .own-value input");
+				input.focus(function() { 
+					j(this).closest("tr").prev().find("input")[0].checked = true;
+					j('#${field.InternalName}${msg}').hide(); 
+				});
+				OnCloseForm.push(function() {
+					if (!rbtns[rbtns.length - 1].checked || input.val() == "") {
+						input[0].name = "";
+					}
+				});
+			#end
+			#if($field.Required)
+				BeforeSubmitForm.push(function() {
+					var msg = jQuery("#$field.InternalName$msg");
+					var anyCheck = false;
+					for (var i = 0; i < rbtns.length #if($field.FillInChoice)- 1#end; i++) {
+						if (rbtns[i].checked) {
+							anyCheck = true;
+							break;
+						}
+					}
+					if (anyCheck || (typeof(input) != "undefined" && rbtns[rbtns.length - 1].checked && input.val() != "")) {
+						msg.hide();
+						return true;
+					}
+					msg.show();
+					return false;
+				});
+			#end
+		});
+	</script>
+	<table class="choice-editor $field.InternalName" cellSpacing="0" cellPadding="0" border="0">
+		#foreach ($item in $sharepoint_v1_multichoice.GetChoices($field))
+		<tr>
+			<td class="fill-in">
+				<input type="checkbox" id="$field.InternalName$delimiter$item.Key" name="$field.InternalName" value="$item.Value" onchange="DataChanged(); jQuery('#$field.InternalName$msg').hide();" #if($sharepoint_v1_multichoice.IsSelected($item.Value, $listItem.ValueAsText("$field.InternalName")))checked="checked"#end />
+			</td>
+			<td>
+				<label for="$field.InternalName$delimiter$item.Key">$item.Value</label>
+			</td>
+		</tr>
+		#end
+		#if($field.FillInChoice)
+		<tr>
+			<td class="fill-in"><input type="checkbox" id="$field.InternalName$ownValue" name="$field.InternalName" value="$field.InternalName$ownValue" onchange="DataChanged(); jQuery('#$field.InternalName$msg').hide();" #if($sharepoint_v1_multichoice.GetOwnValue($field, $listItem.ValueAsText("$field.InternalName"))!="")checked="checked"#end /></td>
+			<td><label for="$field.InternalName$ownValue">$core_v2_language.GetResource('SPListWidget_ListItem_SpecifyYourOwnValue')</label></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td class="own-value">
+				<input type="text" name="$field.InternalName$ownValue" value="$sharepoint_v1_multichoice.GetOwnValue($field, $listItem.ValueAsText("$field.InternalName"))" onchange="DataChanged(); jQuery('#$field.InternalName$msg').hide();" onkeypress="InputKeyPress(event); jQuery('#$field.InternalName$msg').hide();" />
+			</td>
+		</tr>
+		#end
+	</table>
+	<div id="$field.InternalName$msg" class="invalid-msg" style="display: none;">$core_v2_language.GetResource('SPFFs_ListItem_FieldRequired')</div>
+#else
+	#set($values = $core_v2_page.GetFormValue("$field.InternalName"))
+	#set($ownVal = $core_v2_page.GetFormValue("$field.InternalName$ownValue"))
+	#set($value = $sharepoint_v1_multichoice.GetValueToSave($values, "$field.InternalName$ownValue", $ownVal))
+	$listItem.Fields.Add("$field.InternalName", $value)
+#end
