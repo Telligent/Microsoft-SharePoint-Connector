@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{99AC6BA3-28EC-450B-9F6B-C536503FD8D1}</ProjectGuid>
+    <ProjectGuid>{D5E59F97-E28F-4240-ACFE-742C8B711212}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Telligent.Evolution.Extensions.SharePoint.ProfileSync</RootNamespace>
-    <AssemblyName>Telligent.Evolution.Extensions.SharePoint.ProfileSync</AssemblyName>
+    <RootNamespace>Telligent.Evolution.Extensions.SharePoint.IntegrationManager</RootNamespace>
+    <AssemblyName>Telligent.Evolution.Extensions.SharePoint.IntegrationManager</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -45,92 +45,81 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web.Services" />
-    <Reference Include="System.XML" />
+    <Reference Include="System.Xml" />
     <Reference Include="Telligent.DynamicConfiguration, Version=1.0.133.22115, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Telligent.Evolution.Core\Telligent.DynamicConfiguration.dll</HintPath>
+      <HintPath>..\References\Telligent.DynamicConfiguration.dll</HintPath>
     </Reference>
     <Reference Include="Telligent.Evolution.Api, Version=7.0.1539.24262, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Api.dll</HintPath>
+      <HintPath>..\References\Telligent.Evolution.Api.dll</HintPath>
     </Reference>
     <Reference Include="Telligent.Evolution.Components, Version=7.0.1539.24262, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Components.dll</HintPath>
+      <HintPath>..\References\Telligent.Evolution.Components.dll</HintPath>
     </Reference>
     <Reference Include="Telligent.Evolution.Controls, Version=7.0.1539.24262, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Controls.dll</HintPath>
+      <HintPath>..\References\Telligent.Evolution.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Telligent.Evolution.Core">
-      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Core.dll</HintPath>
+      <HintPath>..\References\Telligent.Evolution.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Telligent.Evolution.Rest">
+      <HintPath>..\References\Telligent.Evolution.Rest.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
-    <Compile Include="ExecuteProfileSyncHelper.cs" />
-    <Compile Include="InternalApi\Entities\SPBaseConfig.cs" />
-    <Compile Include="InternalApi\Entities\ProfileField.cs" />
-    <Compile Include="InternalApi\Entities\SPConfiguration.cs" />
-    <Compile Include="InternalApi\Entities\SPFarmUser.cs" />
-    <Compile Include="InternalApi\Entities\SPSiteUser.cs" />
-    <Compile Include="InternalApi\Entities\SyncDirection.cs" />
-    <Compile Include="InternalApi\Entities\TEApiUser.cs" />
-    <Compile Include="InternalApi\Entities\User.cs" />
-    <Compile Include="InternalApi\Entities\UserFieldMapping.cs" />
-    <Compile Include="InternalApi\FarmUserProfileService.cs" />
-    <Compile Include="InternalApi\Interfaces\IProfileSyncService.cs" />
-    <Compile Include="InternalApi\SiteUserProfileService.cs" />
-    <Compile Include="InternalApi\SPConfigurationService.cs" />
-    <Compile Include="InternalApi\SPProfileSyncService.cs" />
-    <Compile Include="InternalApi\SPPropertyKey.cs" />
-    <Compile Include="InternalApi\TEUserProfileFieldsHelper.cs" />
-    <Compile Include="Jobs\FullProfileSyncJob.cs" />
-    <Compile Include="Jobs\IncrementalProfileSyncJob.cs" />
-    <Compile Include="Jobs\ProfileSyncHelper.cs" />
-    <Compile Include="Managers\FullProfileSyncManager.cs" />
-    <Compile Include="Managers\IncrementalProfileSyncManager.cs" />
-    <Compile Include="Managers\ProfileSyncManager.cs" />
-    <Compile Include="Model\SPProfileSyncProvider.cs" />
-    <Compile Include="Model\SPProfileSyncProviderList.cs" />
-    <Compile Include="Plugins\SPProfileSyncPlugin.cs" />
-    <Compile Include="PropertyControls\SPProfileSyncControl.cs" />
-    <Compile Include="PropertyControls\SPProfileSyncPresenter.cs" />
+    <Compile Include="IntegrationManagerPlugin.cs" />
+    <Compile Include="Model\SPWeb.cs" />
+    <Compile Include="PropertyControls\IntegrationManagerPresenter.cs" />
+    <Compile Include="Model\IntegrationProvider.cs" />
+    <Compile Include="Model\IntegrationProviders.cs" />
+    <Compile Include="Utility\TEHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Web\SharePoint\ProfileSync\Configuration.cs">
+    <Compile Include="PropertyControls\IntegrationManagerControl.cs" />
+    <Compile Include="Model\SPSite.cs" />
+    <Compile Include="Rest\Controllers\IntegrationManagerControllerHelper.cs" />
+    <Compile Include="Rest\Entities\RestIntegrationManager.cs" />
+    <Compile Include="Rest\Resources\IntegrationManagerRequest.cs" />
+    <Compile Include="Rest\Resources\IntegrationManagerListRequest.cs" />
+    <Compile Include="Rest\Resources\IntegrationManagerListData.cs" />
+    <Compile Include="Web\SharePoint\IntegrationManager\Configuration.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Web\SharePoint\ProfileSync\Administration.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Web\bin\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Telligent.Evolution.Extensions.SharePoint.Components\Telligent.Evolution.Extensions.SharePoint.Components.csproj">
       <Project>{F7E0B876-70D3-421C-BE64-CE2967B26FC1}</Project>
       <Name>Telligent.Evolution.Extensions.SharePoint.Components</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Telligent.Evolution.Extensions.SharePoint.WebServices\Telligent.Evolution.Extensions.SharePoint.WebServices.csproj">
-      <Project>{B4A0D6A9-1A0F-4CF3-A13D-26FBD2B45882}</Project>
-      <Name>Telligent.Evolution.Extensions.SharePoint.WebServices</Name>
-    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="Web\SharePoint\ProfileSync\Configuration.aspx" />
-    <Content Include="Web\SharePoint\ProfileSync\Administration.aspx">
+    <EmbeddedResource Include="PropertyControls\IntegrationManagerControl.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web\SharePoint\IntegrationManager\Configuration.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
-    <Content Include="Web\SharePoint\ProfileSync\Style\Administration.js" />
-    <Content Include="Web\SharePoint\ProfileSync\Style\SPProfileSync.css" />
-    <EmbeddedResource Include="PropertyControls\SPProfileSyncControl.js" />
+    <Content Include="Web\SharePoint\IntegrationManager\Style\IntegrationManager.css" />
+    <Content Include="Web\SharePoint\IntegrationManager\Style\LookUpGroup.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetDir)*.dll" "$(SolutionDir)Assemblies\"
 "$(ProjectDir)postbuild.bat"</PostBuildEvent>
   </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

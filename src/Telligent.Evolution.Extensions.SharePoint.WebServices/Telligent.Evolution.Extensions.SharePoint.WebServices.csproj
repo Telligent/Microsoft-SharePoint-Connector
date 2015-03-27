@@ -66,10 +66,10 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
     <Reference Include="Telligent.Evolution.Components">
-      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Components.dll</HintPath>
+      <HintPath>..\References\Telligent.Evolution.Components.dll</HintPath>
     </Reference>
     <Reference Include="Telligent.Evolution.SecurityModules">
-      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.SecurityModules.dll</HintPath>
+      <HintPath>..\References\Telligent.Evolution.SecurityModules.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

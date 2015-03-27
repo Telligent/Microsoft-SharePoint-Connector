@@ -60,37 +60,37 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Telligent.Common, Version=1.0.50.34258, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Common.dll</HintPath>
+      <HintPath>..\References\Telligent.Common.dll</HintPath>
     </Reference>
     <Reference Include="Telligent.DynamicConfiguration, Version=1.0.133.22115, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Telligent.Evolution.Core\Telligent.DynamicConfiguration.dll</HintPath>
+      <HintPath>..\References\Telligent.DynamicConfiguration.dll</HintPath>
     </Reference>
     <Reference Include="Telligent.Evolution.Api, Version=7.0.1539.24262, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Api.dll</HintPath>
+      <HintPath>..\References\Telligent.Evolution.Api.dll</HintPath>
     </Reference>
     <Reference Include="Telligent.Evolution.Components, Version=7.0.2028.29668, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Components.dll</HintPath>
+      <HintPath>..\References\Telligent.Evolution.Components.dll</HintPath>
     </Reference>
     <Reference Include="Telligent.Evolution.Controls, Version=7.0.1539.24262, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Controls.dll</HintPath>
+      <HintPath>..\References\Telligent.Evolution.Controls.dll</HintPath>
     </Reference>
     <Reference Include="Telligent.Evolution.Core">
-      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Core.dll</HintPath>
+      <HintPath>..\References\Telligent.Evolution.Core.dll</HintPath>
     </Reference>
     <Reference Include="Telligent.Evolution.MediaGalleries, Version=7.0.1539.24262, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.MediaGalleries.dll</HintPath>
+      <HintPath>..\References\Telligent.Evolution.MediaGalleries.dll</HintPath>
     </Reference>
     <Reference Include="Telligent.Evolution.Rest">
-      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.Rest.dll</HintPath>
+      <HintPath>..\References\Telligent.Evolution.Rest.dll</HintPath>
     </Reference>
     <Reference Include="Telligent.Evolution.ScriptedContentFragments, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Telligent.Evolution.Core\Telligent.Evolution.ScriptedContentFragments.dll</HintPath>
+      <HintPath>..\References\Telligent.Evolution.ScriptedContentFragments.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
