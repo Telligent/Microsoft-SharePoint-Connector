@@ -3,14 +3,14 @@
 Version 4.1
 Compatible with Telligent Evolution 8.5
 
-## INSTALLATION INSTRUCTIONS
+## Prerequisites
 
 Please copy your local Community library files to the references path described below. There are also some 3rd party libraries required that can be downloaded and added to the 3rdParty folder.
 
 ## References
 
 ### Community references
-Path to Community references: src\References
+###### Path to Community references: src\References
 
 + Telligent.Common.dll
 + Telligent.DynamicConfiguration.dll
@@ -24,7 +24,7 @@ Path to Community references: src\References
 + Telligent.Evolution.SecurityModules.dll
 
 ### 3rd Party resources
-Path to 3rd party references: src\3rdParty
+###### Path to 3rd party references: src\3rdParty
 
 [SharePoint Client Object Model](http://www.microsoft.com/en-us/download/details.aspx?id=21786)
 + Microsoft.SharePoint.Client.dll

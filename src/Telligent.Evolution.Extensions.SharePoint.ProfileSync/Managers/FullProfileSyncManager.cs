@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Telligent.Evolution.Extensibility.Api.Version1;
+using Telligent.Evolution.Extensions.SharePoint.Components.Data;
 using Telligent.Evolution.Extensions.SharePoint.Components.Data.Log;
 using Telligent.Evolution.Extensions.SharePoint.ProfileSync.InternalApi;
 
@@ -59,9 +60,18 @@ namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync.Managers
 
             if (missingUsers.Count > 0)
             {
-                SPLog.Event(string.Format("Profile Sync could not find following Evolution user(s) {0}. Total not found: {1}", string.Join(", ", missingUsers.ToArray()), missingUserCount));
+                SPLog.Event( string.Format("Profile Sync could not find following Evolution user(s) {0}. Total not found: {1}", string.Join(", ", missingUsers.ToArray()), missingUserCount));
+                UpdateLastRunStatus(Status.Failed);
             }
+            else
+            {
+                UpdateLastRunStatus(Status.Succeeded);
+            }
+        }
 
+        private void UpdateLastRunStatus(Status syncStatus)
+        {
+            ProfileSyncController.SetLastRunStatus(InternalProviderId, syncStatus);
         }
     }
 }
