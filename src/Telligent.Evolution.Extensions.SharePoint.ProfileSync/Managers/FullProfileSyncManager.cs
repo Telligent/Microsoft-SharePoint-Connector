@@ -61,17 +61,14 @@ namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync.Managers
             if (missingUsers.Count > 0)
             {
                 SPLog.Event( string.Format("Profile Sync could not find following Evolution user(s) {0}. Total not found: {1}", string.Join(", ", missingUsers.ToArray()), missingUserCount));
-                UpdateLastRunStatus(Status.Failed);
             }
-            else
-            {
-                UpdateLastRunStatus(Status.Succeeded);
-            }
+
+            UpdateLastRunStatus(Status.Succeeded);
         }
 
         private void UpdateLastRunStatus(Status syncStatus)
         {
-            ProfileSyncController.SetLastRunStatus(InternalProviderId, syncStatus);
+            ProfileSyncController.ResetLastRunTime(InternalProviderId, syncStatus);
         }
     }
 }
