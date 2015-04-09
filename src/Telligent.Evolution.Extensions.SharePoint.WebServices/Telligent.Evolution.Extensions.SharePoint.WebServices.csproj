@@ -68,7 +68,8 @@
     <Reference Include="Telligent.Evolution.Components">
       <HintPath>..\References\Telligent.Evolution.Components.dll</HintPath>
     </Reference>
-    <Reference Include="Telligent.Evolution.SecurityModules">
+    <Reference Include="Telligent.Evolution.SecurityModules, Version=9.0.3251.44234, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\Telligent.Evolution.SecurityModules.dll</HintPath>
     </Reference>
   </ItemGroup>

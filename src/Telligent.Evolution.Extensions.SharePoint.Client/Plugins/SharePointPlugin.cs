@@ -198,8 +198,6 @@ namespace Telligent.Evolution.Extensions.SharePoint.Client.Plugins
                     typeof(version1.SharePointCalendarExtension),
                     typeof(version1.SharePointFileExtension),
                     typeof(version1.SharePointFolderExtension),
-                    typeof(version1.SharePointLibraryExtension),
-                    typeof(version1.SharePointListExtension),
                     typeof(version1.SharePointListItemExtension),
                     typeof(version1.SharePointPermissionsExtension),
                     typeof(version1.SharePointUIExtension),

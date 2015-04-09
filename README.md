@@ -1,13 +1,11 @@
 # Microsoft-SharePoint-Connector
 
-Version 4.1
+Version 4.2
 Compatible with Telligent Evolution 8.5
 
-## Prerequisites
+####Dependencies
 
 Please copy your local Community library files to the references path described below. There are also some 3rd party libraries required that can be downloaded and added to the 3rdParty folder.
-
-## References
 
 ### Community references
 ###### Path to Community references: src\References
@@ -18,7 +16,6 @@ Please copy your local Community library files to the references path described 
 + Telligent.Evolution.Components.dll
 + Telligent.Evolution.Controls.dll
 + Telligent.Evolution.Core.dll
-+ Telligent.Evolution.MediaGalleries.dll
 + Telligent.Evolution.Rest.dll
 + Telligent.Evolution.ScriptedContentFragments.dll
 + Telligent.Evolution.SecurityModules.dll

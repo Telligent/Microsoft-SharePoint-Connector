@@ -58,8 +58,6 @@ namespace Telligent.Evolution.Extensions.SharePoint.Client
             Controller.Bind<version1.ISharePointCalendar, version1.SharePointCalendar>();
             Controller.Bind<version1.ISharePointFile, version1.SharePointFile>();
             Controller.Bind<version1.ISharePointFolder, version1.SharePointFolder>();
-            Controller.Bind<version1.ISharePointLibrary, version1.SharePointLibrary>();
-            Controller.Bind<version1.ISharePointList, version1.SharePointList>();
             Controller.Bind<version1.ISharePointListItem, version1.SharePointListItem>();
             Controller.Bind<version1.ISharePointUI, version1.SharePointUI>();
             Controller.Bind<version1.ISharePointUrls, version1.SharePointUrls>();

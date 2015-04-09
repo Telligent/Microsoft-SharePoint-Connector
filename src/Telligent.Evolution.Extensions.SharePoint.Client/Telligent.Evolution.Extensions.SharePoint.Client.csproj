@@ -81,10 +81,6 @@
     <Reference Include="Telligent.Evolution.Core">
       <HintPath>..\References\Telligent.Evolution.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Telligent.Evolution.MediaGalleries, Version=7.0.1539.24262, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\Telligent.Evolution.MediaGalleries.dll</HintPath>
-    </Reference>
     <Reference Include="Telligent.Evolution.Rest">
       <HintPath>..\References\Telligent.Evolution.Rest.dll</HintPath>
     </Reference>
@@ -244,8 +240,6 @@
     <Compile Include="WidgetApi\V1\ScriptedListExtension\SharePointFolder.cs" />
     <Compile Include="WidgetApi\V1\ScriptedListExtension\SharePointUI.cs" />
     <Compile Include="WidgetApi\V1\ScriptedListExtension\SharePointFile.cs" />
-    <Compile Include="WidgetApi\V1\ScriptedListExtension\SharePointLibrary.cs" />
-    <Compile Include="WidgetApi\V1\ScriptedListExtension\SharePointList.cs" />
     <Compile Include="WidgetApi\V1\ScriptedListExtension\SharePointListItem.cs" />
     <Compile Include="WidgetApi\V1\ScriptedListExtension\SharePointView.cs" />
     <Compile Include="WidgetApi\V1\ScriptedTypeExtension\AttachmentsEditor.cs" />
