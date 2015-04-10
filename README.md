@@ -1,7 +1,6 @@
 # Microsoft-SharePoint-Connector
 
-Version 4.2
-Compatible with Telligent Evolution 8.5
+Version 4.2 compatible with Zimbra Social 8.5
 
 ####Dependencies
 
