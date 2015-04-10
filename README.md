@@ -2,11 +2,11 @@
 
 Version 4.2 compatible with Zimbra Social 8.5
 
-####Dependencies
+#### Dependencies
 
 Please copy your local Community library files to the references path described below. There are also some 3rd party libraries required that can be downloaded and added to the 3rdParty folder.
 
-### Community references
+#### Community references
 ###### Path to Community references: src\References
 
 + Telligent.Common.dll
@@ -19,7 +19,7 @@ Please copy your local Community library files to the references path described 
 + Telligent.Evolution.ScriptedContentFragments.dll
 + Telligent.Evolution.SecurityModules.dll
 
-### 3rd Party resources
+#### 3rd Party resources
 ###### Path to 3rd party references: src\3rdParty
 
 [SharePoint Client Object Model](http://www.microsoft.com/en-us/download/details.aspx?id=21786)
