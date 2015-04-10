@@ -1,4 +1,4 @@
-# Microsoft-SharePoint-Connector
+# Microsoft SharePoint Connector
 
 Version 4.2 compatible with Zimbra Social 8.5
 
