@@ -1,5 +1,6 @@
 ﻿using System;
 using Telligent.Evolution.Extensibility.Jobs.Version1;
+using Telligent.Evolution.Extensibility.Version1;
 using Telligent.Evolution.Extensions.SharePoint.Components.Data;
 using Telligent.Evolution.Extensions.SharePoint.Components.Data.Log;
 using Telligent.Evolution.Extensions.SharePoint.ProfileSync.InternalApi;
@@ -7,13 +8,11 @@ using Telligent.Evolution.Extensions.SharePoint.ProfileSync.Managers;
 
 namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync.Jobs
 {
-    public class FullProfileSyncJob : IRecurringEvolutionJobPlugin
+    public class FullProfileSyncJob : IRecurringEvolutionJobPlugin, ICategorizedPlugin
     {
-        #region IRecurringEvolutionJobPlugin
-
         public string Name
         {
-            get { return "SharePoint Full Profile Sync Job"; }
+            get { return "SharePoint User Profile Full Sync"; }
         }
 
         public string Description
@@ -22,6 +21,8 @@ namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync.Jobs
         }
 
         public void Initialize() { }
+
+        public string[] Categories { get { return new[] { "SharePoint" }; } }
 
         public JobSchedule DefaultSchedule
         {
@@ -64,7 +65,5 @@ namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync.Jobs
                 }
             }
         }
-
-        #endregion
     }
 }

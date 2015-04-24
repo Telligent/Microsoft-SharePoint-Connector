@@ -5,12 +5,11 @@ using Telligent.DynamicConfiguration.Components;
 using Telligent.Evolution.Extensibility.Version1;
 using Telligent.Evolution.Extensions.SharePoint.Components.AuthenticationUtil;
 using Telligent.Evolution.Extensions.SharePoint.Components.AuthenticationUtil.Methods;
-using Telligent.Evolution.Extensions.SharePoint.ProfileSync.Jobs;
 using Telligent.Evolution.Extensions.SharePoint.ProfileSync.Model;
 
 namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync.Plugins
 {
-    public class SPProfileSyncPlugin : IConfigurablePlugin, IPluginGroup, ICategorizedPlugin
+    public class SPProfileSyncPlugin : IConfigurablePlugin, ICategorizedPlugin
     {
         public static class PropertyId
         {
@@ -63,20 +62,6 @@ namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync.Plugins
             }
         }
 
-        #endregion
-
-        #region IPluginGroup
-        public IEnumerable<Type> Plugins
-        {
-            get
-            {
-                return new[]
-                {
-                    typeof(FullProfileSyncJob),
-                    typeof(IncrementalProfileSyncJob),
-                };
-            }
-        }
         #endregion
 
         public static SPProfileSyncPlugin Plugin

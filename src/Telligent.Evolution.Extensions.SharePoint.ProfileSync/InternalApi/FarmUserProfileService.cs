@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Script.Serialization;
 using Microsoft.SharePoint.Client;
+using Telligent.Evolution.Extensibility.Caching.Version1;
 using Telligent.Evolution.Extensions.SharePoint.Components;
 using Telligent.Evolution.Extensions.SharePoint.Components.Data.Log;
 using Telligent.Evolution.Extensions.SharePoint.ProfileSync.InternalApi.Entities;
@@ -30,7 +31,9 @@ namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync.InternalApi
         private readonly UserProfileChangeService farmUserProfileChangeService;
         private readonly SPContext spcontext;
 
-        private readonly string[] TimeZones = {"(UTC) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London", "(UTC) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London", "(UTC) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London", "(UTC+01:00) Brussels, Copenhagen, Madrid, Paris", "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna", "(UTC+02:00) Athens, Bucharest, Istanbul", "(UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague", "(UTC+02:00) Minsk", "(UTC-03:00) Brasilia", "(UTC-04:00) Atlantic Time (Canada)", "(UTC-05:00) Eastern Time (US and Canada)", "(UTC-06:00) Central Time (US and Canada)", "(UTC-07:00) Mountain Time (US and Canada)", "(UTC-08:00) Pacific Time (US and Canada)", "(UTC-09:00) Alaska", "(UTC-10:00) Hawaii", "(UTC-11:00) Midway Island, Samoa", "(UTC+12:00) Auckland, Wellington", "(UTC+10:00) Brisbane", "(UTC+09:30) Adelaide", "(UTC+09:00) Osaka, Sapporo, Tokyo", "(UTC+08:00) Kuala Lumpur, Singapore", "(UTC+07:00) Bangkok, Hanoi, Jakarta", "(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi", "(UTC+04:00) Abu Dhabi, Muscat", "(UTC+03:30) Tehran", "(UTC+03:00) Baghdad", "(UTC+02:00) Jerusalem", "(UTC-03:30) Newfoundland and Labrador", "(UTC-01:00) Azores", "(UTC-02:00) Mid-Atlantic", "(UTC) Monrovia, Reykjavik", "(UTC-03:00) Cayenne", "(UTC-04:00) Georgetown, La Paz, San Juan", "(UTC-05:00) Indiana (East)", "(UTC-05:00) Bogota, Lima, Quito", "(UTC-06:00) Saskatchewan", "(UTC-06:00) Guadalajara, Mexico City, Monterrey", "(UTC-07:00) Arizona", "(UTC-12:00) International Date Line West", "(UTC+12:00) Fiji Is., Marshall Is.", "(UTC+11:00) Magadan, Solomon Is., New Caledonia", "(UTC+10:00) Hobart", "(UTC+10:00) Guam, Port Moresby", "(UTC+09:30) Darwin", "(UTC+08:00) Beijing, Chongqing, Hong Kong S.A.R., Urumqi", "(UTC+06:00) Novosibirsk", "(UTC+05:00) Tashkent", "(UTC+04:30) Kabul", "(UTC+02:00) Cairo", "(UTC+02:00) Harare, Pretoria", "(UTC+03:00) Moscow, St. Petersburg, Volgograd", "(UTC-01:00) Cape Verde Is.", "(UTC+04:00) Baku", "(UTC-06:00) Central America", "(UTC+03:00) Nairobi", "(UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb", "(UTC+05:00) Ekaterinburg", "(UTC+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius", "(UTC-03:00) Greenland", "(UTC+06:30) Yangon (Rangoon)", "(UTC+05:45) Kathmandu", "(UTC+08:00) Irkutsk", "(UTC+07:00) Krasnoyarsk", "(UTC-04:00) Santiago", "(UTC+05:30) Sri Jayawardenepura", "(UTC+13:00) Nuku'alofa", "(UTC+10:00) Vladivostok", "(UTC+01:00) West Central Africa", "(UTC+09:00) Yakutsk", "(UTC+06:00) Astana, Dhaka", "(UTC+09:00) Seoul", "(UTC+08:00) Perth", "(UTC+03:00) Kuwait, Riyadh", "(UTC+08:00) Taipei", "(UTC+10:00) Canberra, Melbourne, Sydney", "(UTC-07:00) Chihuahua, La Paz, Mazatlan", "(UTC-08:00) Tijuana, Baja California", "(UTC+02:00) Amman", "(UTC+02:00) Beirut", "(UTC-04:00) Manaus", "(UTC+04:00) Tbilisi", "(UTC+02:00) Windhoek", "(UTC+04:00) Yerevan", "(UTC-03:00) Buenos Aires", "(UTC) Casablanca", "(UTC+05:00) Islamabad, Karachi", "(UTC-04:30) Caracas", "(UTC+04:00) Port Louis", "(UTC-03:00) Montevideo", "(UTC-04:00) Asuncion", "(UTC+12:00) Petropavlovsk-Kamchatsky", "(UTC) Coordinated Universal Time", "(UTC+08:00) Ulaanbaatar"};
+        private readonly string[] timeZones = {"(UTC) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London", "(UTC) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London", "(UTC) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London", "(UTC+01:00) Brussels, Copenhagen, Madrid, Paris", "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna", "(UTC+02:00) Athens, Bucharest, Istanbul", "(UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague", "(UTC+02:00) Minsk", "(UTC-03:00) Brasilia", "(UTC-04:00) Atlantic Time (Canada)", "(UTC-05:00) Eastern Time (US and Canada)", "(UTC-06:00) Central Time (US and Canada)", "(UTC-07:00) Mountain Time (US and Canada)", "(UTC-08:00) Pacific Time (US and Canada)", "(UTC-09:00) Alaska", "(UTC-10:00) Hawaii", "(UTC-11:00) Midway Island, Samoa", "(UTC+12:00) Auckland, Wellington", "(UTC+10:00) Brisbane", "(UTC+09:30) Adelaide", "(UTC+09:00) Osaka, Sapporo, Tokyo", "(UTC+08:00) Kuala Lumpur, Singapore", "(UTC+07:00) Bangkok, Hanoi, Jakarta", "(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi", "(UTC+04:00) Abu Dhabi, Muscat", "(UTC+03:30) Tehran", "(UTC+03:00) Baghdad", "(UTC+02:00) Jerusalem", "(UTC-03:30) Newfoundland and Labrador", "(UTC-01:00) Azores", "(UTC-02:00) Mid-Atlantic", "(UTC) Monrovia, Reykjavik", "(UTC-03:00) Cayenne", "(UTC-04:00) Georgetown, La Paz, San Juan", "(UTC-05:00) Indiana (East)", "(UTC-05:00) Bogota, Lima, Quito", "(UTC-06:00) Saskatchewan", "(UTC-06:00) Guadalajara, Mexico City, Monterrey", "(UTC-07:00) Arizona", "(UTC-12:00) International Date Line West", "(UTC+12:00) Fiji Is., Marshall Is.", "(UTC+11:00) Magadan, Solomon Is., New Caledonia", "(UTC+10:00) Hobart", "(UTC+10:00) Guam, Port Moresby", "(UTC+09:30) Darwin", "(UTC+08:00) Beijing, Chongqing, Hong Kong S.A.R., Urumqi", "(UTC+06:00) Novosibirsk", "(UTC+05:00) Tashkent", "(UTC+04:30) Kabul", "(UTC+02:00) Cairo", "(UTC+02:00) Harare, Pretoria", "(UTC+03:00) Moscow, St. Petersburg, Volgograd", "(UTC-01:00) Cape Verde Is.", "(UTC+04:00) Baku", "(UTC-06:00) Central America", "(UTC+03:00) Nairobi", "(UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb", "(UTC+05:00) Ekaterinburg", "(UTC+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius", "(UTC-03:00) Greenland", "(UTC+06:30) Yangon (Rangoon)", "(UTC+05:45) Kathmandu", "(UTC+08:00) Irkutsk", "(UTC+07:00) Krasnoyarsk", "(UTC-04:00) Santiago", "(UTC+05:30) Sri Jayawardenepura", "(UTC+13:00) Nuku'alofa", "(UTC+10:00) Vladivostok", "(UTC+01:00) West Central Africa", "(UTC+09:00) Yakutsk", "(UTC+06:00) Astana, Dhaka", "(UTC+09:00) Seoul", "(UTC+08:00) Perth", "(UTC+03:00) Kuwait, Riyadh", "(UTC+08:00) Taipei", "(UTC+10:00) Canberra, Melbourne, Sydney", "(UTC-07:00) Chihuahua, La Paz, Mazatlan", "(UTC-08:00) Tijuana, Baja California", "(UTC+02:00) Amman", "(UTC+02:00) Beirut", "(UTC-04:00) Manaus", "(UTC+04:00) Tbilisi", "(UTC+02:00) Windhoek", "(UTC+04:00) Yerevan", "(UTC-03:00) Buenos Aires", "(UTC) Casablanca", "(UTC+05:00) Islamabad, Karachi", "(UTC-04:30) Caracas", "(UTC+04:00) Port Louis", "(UTC-03:00) Montevideo", "(UTC-04:00) Asuncion", "(UTC+12:00) Petropavlovsk-Kamchatsky", "(UTC) Coordinated Universal Time", "(UTC+08:00) Ulaanbaatar"};
+
+        private static string _changeToken = string.Empty;
 
         private Dictionary<string, PropertyInfo> farmUserPropertyInfo;
         private bool? isSyncEnabled;
@@ -261,19 +264,29 @@ namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync.InternalApi
             var users = new List<User>();
             try
             {
-                var changeToken = new UserProfileChangeToken();
-                var profileChanges = farmUserProfileChangeService.GetChanges(string.Empty, new UserProfileChangeQuery
-                {
-                    ChangeTokenStart = changeToken,
-                    Add = true,
-                    Update = true,
-                    UserProfile = true,
-                    SingleValueProperty = true,
-                    MultiValueProperty = true,
-                });
+                var accNameList = new List<string>();
+                bool hasMoreChanges;
+                bool hasTokenChanged;
 
-                var accNameList = profileChanges.Changes.Where(ch => ch.EventTime >= date).GroupBy(d => d.UserAccountName).Select(gr => gr.Key).ToList();
-                
+                do{
+                    var profileChanges = farmUserProfileChangeService.GetChanges(_changeToken, new UserProfileChangeQuery
+                    {
+                        ChangeTokenStart = new UserProfileChangeToken(),
+                        Add = true,
+                        Update = true,
+                        UserProfile = true,
+                        SingleValueProperty = true,
+                        MultiValueProperty = true,
+                    });
+
+                    hasMoreChanges = profileChanges.HasExceededCountLimit;
+                    hasTokenChanged = !_changeToken.Equals(profileChanges.ChangeToken);
+                    _changeToken = profileChanges.ChangeToken;
+
+                    accNameList.AddRange(profileChanges.Changes.Where(ch => ch.EventTime >= date).GroupBy(d => d.UserAccountName).Select(gr => gr.Key).ToList());
+
+                } while (hasMoreChanges && hasTokenChanged);
+
                 foreach (var accName in accNameList)
                 {
                     try
@@ -382,7 +395,7 @@ namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync.InternalApi
                 if (tzValue == null) return propertyDataValue;
 
                 var tz = ((SPTimeZone)propertyDataValue).ID;
-                propertyDataValue = TimeZones[tz];
+                propertyDataValue = timeZones[tz];
             }
             else
             {
