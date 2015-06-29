@@ -232,16 +232,23 @@ namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync.InternalApi
                 do
                 {
                     userInstance = farmUserProfileService.GetUserProfileByIndex(nextIndex);
-                    if (userInstance != null && userInstance.UserProfile != null)
+                    if (userInstance == null || userInstance.UserProfile == null) continue;
+
+                    try
                     {
                         var user = new SPFarmUser(syncSettings.SPFarmUserIdFieldName, syncSettings.SPFarmUserEmailFieldName, userInstance.UserProfile);
                         InitUserFields(user, userInstance.UserProfile);
-                        if (!string.IsNullOrEmpty(user.Email))
-                        {
-                            users.Add(user);
-                        }
-                        nextIndex = Convert.ToInt32(userInstance.NextValue);
+                        if (!string.IsNullOrEmpty(user.Email)) { users.Add(user); }
                     }
+                    catch (Exception ex)
+                    {
+                        SPLog.Event(string.Format("Error : {0} FieldCount: {1} Fields: {2}", 
+                            ex.Message,
+                            userInstance.UserProfile.Length, 
+                            ProfileFieldDump(userInstance.UserProfile)));
+                    }
+                        
+                    nextIndex = Convert.ToInt32(userInstance.NextValue);
                 }
                 while (userInstance != null && userInstance.UserProfile != null && users.Count < userProfileBatchCapacity);
             }
@@ -250,6 +257,25 @@ namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync.InternalApi
                 SPLog.UserProfileUpdated(ex, string.Format("FarmUserProfileService.List() Failed: {0} {1}", ex.Message, ex.StackTrace));
             }
             return users;
+        }
+
+        private static string ProfileFieldDump(IEnumerable<PropertyData> fields)
+        {
+            string values;
+
+            try
+            {
+                values = string.Join(" | \n",
+                    fields.Select(p =>
+                    string.Format("{0}:{1}", p.Name,
+                    string.Join(", ", p.Values.Select(v => v.Value.ToString())))));
+            }
+            catch (Exception ex)
+            {
+                values = ex.Message;
+            }
+
+            return values;
         }
 
         #endregion
