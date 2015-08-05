@@ -45,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SyncFull.cs" />
+    <Compile Include="SyncIncremental.cs" />
+    <Compile Include="ProfileSync.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -52,7 +55,14 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="SyncBase.cs" />
+    <Compile Include="Util\SyncUtil.cs" />
     <Compile Include="Web References\MyProfileUPSService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\UserProfileChangeService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
@@ -99,11 +109,30 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Web References\MyProfileUPSService\UserProfileService.wsdl" />
+    <None Include="Web References\UserProfileChangeService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\UserProfileChangeService\UserProfileChangeDataContainer.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\UserProfileChangeService\UserProfileChangeService.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
+    <WebReferenceUrl Include="http://sharepoint2010.dev.telligent.com/_vti_bin/UserProfileChangeService.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\UserProfileChangeService\</RelPath>
+      <UpdateFromURL>http://sharepoint2010.dev.telligent.com/_vti_bin/UserProfileChangeService.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ConsoleUPS_UserProfileChangeService_UserProfileChangeService</CachedSettingsPropName>
+    </WebReferenceUrl>
     <WebReferenceUrl Include="http://sharepoint2010.dev.telligent.com/_vti_bin/UserProfileService.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\MyProfileUPSService\</RelPath>
@@ -120,7 +149,7 @@
     <None Include="Web References\MyProfileUPSService\UserProfileService.disco" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
+    <None Include="Web References\UserProfileChangeService\UserProfileChangeService.disco" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

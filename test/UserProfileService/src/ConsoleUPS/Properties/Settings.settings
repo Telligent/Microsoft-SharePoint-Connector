@@ -12,7 +12,13 @@
       <Value Profile="(Default)">Pa$$word</Value>
     </Setting>
     <Setting Name="Domain" Type="System.String" Scope="User">
-      <Value Profile="(Default)">DEV</Value>
+      <Value Profile="(Default)">dev</Value>
+    </Setting>
+    <Setting Name="ConsoleUPS_UserProfileChangeService_UserProfileChangeService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://sharepoint2010.dev.telligent.com/_vti_bin/UserProfileChangeService.asmx</Value>
+    </Setting>
+    <Setting Name="ChangeToken" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>
