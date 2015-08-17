@@ -1,6 +1,6 @@
 # Microsoft SharePoint Connector
 
-Version 4.2 compatible with Zimbra Social 8.5
+Version 4.2 compatible with Telligent Community 8.5
 
 #### Dependencies
 
