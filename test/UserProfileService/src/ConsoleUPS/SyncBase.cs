@@ -12,13 +12,20 @@ namespace ConsoleUPS
             if (string.IsNullOrEmpty(filter)) return true;
 
             var regex = new Regex(filter, RegexOptions.Compiled);
-            return properties.Any(p => p.Name == "AccountName" && regex.IsMatch(GetValueData(p.Values.FirstOrDefault())));
+            return properties.Any(p => p != null && p.Name == "AccountName" && regex.IsMatch(GetValueData(p.Values.FirstOrDefault())));
         }
 
         public virtual string FieldsToJson(IEnumerable<PropertyData> properties)
         {
-            var fields = string.Join(",", properties.Select(p => string.Format(@"""{0}"" : ""{1}""", p.Name.Replace(@"""", "'"), GetValueData(p.Values.FirstOrDefault()))));
+            var fields = string.Join(",", properties.Select(FormatField));
             return string.Concat("{", fields, "}");
+        }
+
+        private string FormatField(PropertyData propertyData)
+        {
+            return (propertyData == null) ? 
+                string.Empty :
+                string.Format(@"""{0}"" : ""{1}""", propertyData.Name.Replace(@"""", "'"), GetValueData(propertyData.Values.FirstOrDefault()));
         }
 
         private string GetValueData(ValueData data)
