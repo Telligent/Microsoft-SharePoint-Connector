@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Script.Serialization;
 using Microsoft.SharePoint.Client;
+using Telligent.Evolution.Extensibility.Api.Version1;
 using Telligent.Evolution.Extensions.SharePoint.Components;
 using Telligent.Evolution.Extensions.SharePoint.Components.Data.Log;
 using Telligent.Evolution.Extensions.SharePoint.ProfileSync.InternalApi.Entities;
@@ -369,6 +370,17 @@ namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync.InternalApi
         {
             foreach (var propertyData in userProfileData)
             {
+                if (propertyData == null)
+                {
+                    PublicApi.Eventlogs.Write("Null PropertyData object found in User Profile while initializing user fields.", 
+                        new EventLogEntryWriteOptions
+                        {
+                            Category = "SharePoint"
+                        });
+
+                    continue;
+                }
+
                 var name = propertyData.Name;
                 user.Fields.Add(name, GetSanitizeUserFieldValue(propertyData));
             }
@@ -379,7 +391,30 @@ namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync.InternalApi
             object propertyDataValue;
             if (!propertyData.Values.Any()) return null;
 
+            if (!FarmUserPropertyInfo.ContainsKey(propertyData.Name))
+            {
+                PublicApi.Eventlogs.Write(string.Format("ProperyInfo does not contain key ({0}).", propertyData.Name),
+                    new EventLogEntryWriteOptions
+                    {
+                        Category = "SharePoint"
+                    });
+
+                return null;
+            }
+
             var propertyInfo = FarmUserPropertyInfo[propertyData.Name];
+
+            if (propertyInfo == null)
+            {
+                PublicApi.Eventlogs.Write(string.Format("ProperyInfo cannot be null ({0}).", propertyData.Name),
+                    new EventLogEntryWriteOptions
+                    {
+                        Category = "SharePoint"
+                    });
+
+                return null;
+            }
+
             if (!propertyInfo.IsMultiValue)
             {
                 propertyDataValue = propertyData.Values[0].Value;
