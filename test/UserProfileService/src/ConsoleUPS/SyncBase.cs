@@ -9,7 +9,7 @@ namespace ConsoleUPS
     {
         public virtual bool IsValidProfile(IEnumerable<PropertyData> properties, string filter)
         {
-            if (string.IsNullOrEmpty(filter)) return true;
+            if (string.IsNullOrEmpty(filter) || filter == "*") return true;
 
             var regex = new Regex(filter, RegexOptions.Compiled);
             return properties.Any(p => p != null && p.Name == "AccountName" && regex.IsMatch(GetValueData(p.Values.FirstOrDefault())));
