@@ -49,6 +49,7 @@ namespace ConsoleUPS
                         if (IsValidProfile(userInstance.UserProfile, userAccountFilter))
                         {
                             users.Add(FieldsToJson(userInstance.UserProfile));
+                            if (users.Count % 100 == 0) SyncUtil.WriteLine("Saving {0] users.", users.Count);
                         }
                     }
                     catch (Exception ex)

@@ -22,7 +22,7 @@ namespace ConsoleUPS
 
     public class ProfileSync
     {
-        private const string DefaultSite = "http://sharepoint2010.dev";
+        private const string DefaultSite = "http://test.sharepoint2010.dev";
 
         private readonly string _domain;
         private readonly string _username;
@@ -32,14 +32,24 @@ namespace ConsoleUPS
 
         public ProfileSync(string domain, string username, string password)
         {
-            _domain = domain;
-            _username = username;
-            _password = password;
+            _domain = domain != "domain" ? domain : string.Empty;
+            _username = domain != "username" ? username : string.Empty;
+            _password = domain != "password" ? password : string.Empty;
         }
 
         public void Sync(SyncOptions options)
         {
-            var nc = new NetworkCredential { Domain = _domain, UserName = _username, Password = _password };
+            NetworkCredential nc = null;
+
+            if (!string.IsNullOrEmpty(_domain) && !string.IsNullOrEmpty(_username) && !string.IsNullOrEmpty(_password))
+            {
+                nc = new NetworkCredential {Domain = _domain, UserName = _username, Password = _password};
+                SyncUtil.WriteLine("Using Credentials for {0}\\{1}.", _domain, _username);
+            }
+            else
+            {
+                SyncUtil.WriteLine("Using Default Credentials.");
+            }
 
             try
             {
@@ -49,8 +59,11 @@ namespace ConsoleUPS
                     return;
                 }
 
-                using(var ups = new UserProfileService { PreAuthenticate = false, Credentials = nc })
+                using(var ups = new UserProfileService { PreAuthenticate = false })
                 {
+                    if (nc != null) { ups.Credentials = nc; }
+                    else { ups.UseDefaultCredentials = true; }
+
                     var total = ups.GetUserProfileCount();
                     Console.WriteLine(@"""getUserProfileCount"":" + total + ",");
 
