@@ -1,7 +1,10 @@
-﻿using ConsoleUPS.MyProfileUPSService;
+﻿using System;
+using System.Text;
+using ConsoleUPS.MyProfileUPSService;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ConsoleUPS.Util;
 
 namespace ConsoleUPS
 {
@@ -17,8 +20,25 @@ namespace ConsoleUPS
 
         public virtual string FieldsToJson(IEnumerable<PropertyData> properties)
         {
-            var fields = string.Join(",", properties.Select(p => string.Format(@"""{0}"" : ""{1}""", p.Name.Replace(@"""", "'"), GetValueData(p.Values.FirstOrDefault()))));
-            return string.Concat("{", fields, "}");
+            var fields = new List<string>();
+            var currentName = string.Empty;
+
+            foreach (var propertyData in properties)
+            {
+                try
+                {
+                    currentName = propertyData.Name;
+                    fields.Add(string.Format(@"""{0}"" : ""{1}""", propertyData.Name.Replace(@"""", "'"), GetValueData(propertyData.Values.FirstOrDefault())));
+                }
+                catch (Exception ex)
+                {
+                    SyncUtil.WriteLine("{0} Warning : {1}", currentName, ex.Message);
+                }
+            }
+            
+            //var fields = string.Join(",", properties.Select(p => string.Format(@"""{0}"" : ""{1}""", p.Name.Replace(@"""", "'"), GetValueData(p.Values.FirstOrDefault()))));
+
+            return string.Concat("{", string.Join(",", fields), "}");
         }
 
         private string GetValueData(ValueData data)
