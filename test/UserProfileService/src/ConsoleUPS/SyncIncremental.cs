@@ -88,6 +88,8 @@ namespace ConsoleUPS
             catch (Exception ex)
             {
                 SyncUtil.WriteLine("IncrementalSyncGetChangesFailed : {0} {1}", ex.Message, ex.StackTrace);
+                Settings.Default.ChangeToken = string.Empty;
+                Settings.Default.Save();
             }
 
             return users;

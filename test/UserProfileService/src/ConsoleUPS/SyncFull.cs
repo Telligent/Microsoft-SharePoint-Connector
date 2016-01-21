@@ -58,7 +58,12 @@ namespace ConsoleUPS
                         SyncUtil.WriteLine("Error : {0} FieldCount: {1}", ex.Message, fieldCount);
                     }
 
-                    nextIndex = Convert.ToInt32(userInstance.NextValue);
+                    var nextValue = userInstance.NextValue ?? string.Empty;
+
+                    if (!int.TryParse(nextValue.Replace(",", ""), out nextIndex))
+                    {
+                        SyncUtil.WriteLine("Error with next index : {0}", nextValue);
+                    }
                 }
                 while (userInstance != null && userInstance.UserProfile != null);
             }

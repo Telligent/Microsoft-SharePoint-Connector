@@ -248,8 +248,13 @@ namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync.InternalApi
                             userInstance.UserProfile.Length, 
                             ProfileFieldDump(userInstance.UserProfile)));
                     }
-                        
-                    nextIndex = Convert.ToInt32(userInstance.NextValue);
+
+                    var nextValue = userInstance.NextValue ?? string.Empty;
+
+                    if (!int.TryParse(nextValue.Replace(",", ""), out nextIndex))
+                    {
+                        SPLog.Event(string.Format("Error with next index : {0}", nextValue));
+                    }
                 }
                 while (userInstance != null && userInstance.UserProfile != null && users.Count < userProfileBatchCapacity);
             }
@@ -368,21 +373,29 @@ namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync.InternalApi
 
         private void InitUserFields(SPFarmUser user, IEnumerable<PropertyData> userProfileData)
         {
+            const string log = "Null PropertyData object found in User Profile while initializing user fields.";
+            var propertyName = string.Empty;
+
             foreach (var propertyData in userProfileData)
             {
-                if (propertyData == null)
+                try
                 {
-                    PublicApi.Eventlogs.Write("Null PropertyData object found in User Profile while initializing user fields.", 
-                        new EventLogEntryWriteOptions
-                        {
-                            Category = "SharePoint"
-                        });
+                    if (propertyData == null)
+                    {
+                        PublicApi.Eventlogs.Write(log, new EventLogEntryWriteOptions { Category = "SharePoint" });
+                        continue;
+                    }
 
-                    continue;
+                    propertyName = propertyData.Name;
+                    
+                    var name = propertyName;
+                    user.Fields.Add(name, GetSanitizeUserFieldValue(propertyData));
                 }
-
-                var name = propertyData.Name;
-                user.Fields.Add(name, GetSanitizeUserFieldValue(propertyData));
+                catch (Exception ex)
+                {
+                    var msg = string.Format("FarmUserProfileService.InitUserFields() Error on property: {0} {1}", propertyName, ex.StackTrace);
+                    SPLog.UserProfileUpdated(ex, msg);
+                }
             }
         }
 
