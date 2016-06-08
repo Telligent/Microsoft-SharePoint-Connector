@@ -79,7 +79,7 @@ namespace Telligent.Evolution.Extensions.SharePoint.Client.Plugins
         public string GetAuthorizationLink()
         {
             var redirect = RemoveParameter(CallbackUrl, "ReturnUrl");
-            return string.Format("{0}/_layouts/15/OAuthAuthorize.aspx?client_id={1}&scope=Site.Manage%20Web.Manage%20List.Manage&response_type=code&redirect_uri={2}", Office365Url, ConsumerKey, Globals.UrlEncode(redirect));
+            return string.Format("{0}/_layouts/15/OAuthAuthorize.aspx?client_id={1}&scope=List.Write&response_type=code&redirect_uri={2}", Office365Url, ConsumerKey, Globals.UrlEncode(redirect));
         }
 
         public OAuthData ProcessLogin(HttpContextBase context)
@@ -240,7 +240,7 @@ namespace Telligent.Evolution.Extensions.SharePoint.Client.Plugins
                 groups[0].Properties.Add(consumerSecret);
 
                 groups[0].Properties.Add(new Property("Office365Url", "Office365 URL", PropertyType.Url, 0, ""));
-
+                
                 return groups;
             }
         }

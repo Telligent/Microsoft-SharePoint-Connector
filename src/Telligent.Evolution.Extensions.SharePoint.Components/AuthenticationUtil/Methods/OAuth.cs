@@ -14,7 +14,7 @@ namespace Telligent.Evolution.Extensions.SharePoint.Components.AuthenticationUti
 {
     public class OAuth : Authentication, IEncrypted
     {
-        const string UserNamePattern = @"^[a-zA-Z0-9]+((_|-| |\.|@)*[a-zA-Z0-9]+)*$";
+        const string UserNamePattern = @"^[^\s]+$";
         const int BulletsNumber = 8;
 
         private AuthenticationParam userName;
@@ -54,6 +54,8 @@ namespace Telligent.Evolution.Extensions.SharePoint.Components.AuthenticationUti
 
         public override ICredentials Credentials()
         {
+            if (userName.Value.Contains("\\")) return NetworkCredentials();
+
             var securePassword = new SecureString();
             foreach (char c in password.Value)
             {
@@ -61,6 +63,21 @@ namespace Telligent.Evolution.Extensions.SharePoint.Components.AuthenticationUti
             }
 
             return new SharePointOnlineCredentials(userName.Value, securePassword);
+        }
+
+        public ICredentials NetworkCredentials()
+        {
+            var userCred = userName.Value.Split('\\');
+            if (userCred.Length != 2) return null;
+
+            var cred = new NetworkCredential
+            {
+                UserName = userCred[1],
+                Password = password.Value,
+                Domain = userCred[0]
+            };
+
+            return cred;
         }
 
         public override string ToQueryString()

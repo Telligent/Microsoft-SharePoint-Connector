@@ -1,6 +1,16 @@
 # Microsoft SharePoint Connector
 
-Version 4.2 compatible with Telligent Community 8.5
+Version 4.2 compatible with Telligent Community 8.5. The connector adds new applications to Telligent groups as Lists and Libraries with the follow capabilities.
+
+| Libraries | Lists |
+|---|---|
+| Import Library | Import List |
+| Create Library | View List Item |
+| Add/Remove Folder | Edit List Item |
+| Add/Remove Files | Delete List Item |
+| Drag and Drop |  |
+| View/Edit metadata |  |
+| Check in/out Documents |  |
 
 #### Dependencies
 
