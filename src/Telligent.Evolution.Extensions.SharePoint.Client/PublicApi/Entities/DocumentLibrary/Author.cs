@@ -62,7 +62,7 @@ namespace Telligent.Evolution.Extensions.SharePoint.Client.Api.Version1
         /// </summary>
         public string Name { get; private set; }
 
-        private const string defaultAvatarUrl = "/utility/anonymous.gif";
+        private const string defaultAvatarUrl = "~/cfs-file/__key/system/images/anonymous.gif";
         private string avatarUrl;
         /// <summary>
         /// Avatar Url

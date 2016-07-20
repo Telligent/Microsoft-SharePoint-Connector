@@ -7,6 +7,7 @@ using Telligent.Evolution.Extensions.SharePoint.Components.AuthenticationUtil.Me
 using Telligent.Evolution.Extensions.SharePoint.Components.Controls;
 using Telligent.Evolution.Extensions.SharePoint.Components.Controls.Layout;
 using Telligent.Evolution.Extensions.SharePoint.IntegrationManager.Model;
+using WindowsAuth = Telligent.Evolution.Extensions.SharePoint.Components.AuthenticationUtil.Methods.Windows;
 
 namespace Telligent.Evolution.Extensions.SharePoint.IntegrationManager
 {
@@ -34,7 +35,7 @@ namespace Telligent.Evolution.Extensions.SharePoint.IntegrationManager
         {
             get
             {
-                if (provider.Authentication is Windows)
+                if (provider.Authentication is WindowsAuth)
                     return "Windows";
                 if (provider.Authentication is ServiceAccount)
                     return "Service";

@@ -6,6 +6,7 @@ using Telligent.Evolution.Extensions.SharePoint.Components.AuthenticationUtil;
 using Telligent.Evolution.Extensions.SharePoint.Components.AuthenticationUtil.Methods;
 using Telligent.Evolution.Extensions.SharePoint.Components.Data.Log;
 using Telligent.Evolution.SecurityModules;
+using WindowsAuth = Telligent.Evolution.Extensions.SharePoint.Components.AuthenticationUtil.Methods.Windows;
 
 namespace Telligent.Evolution.Extensions.SharePoint.WebServices
 {
@@ -24,7 +25,7 @@ namespace Telligent.Evolution.Extensions.SharePoint.WebServices
 
             Credentials = this.authentication.Credentials();
 
-            if (this.authentication is Windows)
+            if (this.authentication is WindowsAuth)
             {
                 impersonate = Impersonate();
             }

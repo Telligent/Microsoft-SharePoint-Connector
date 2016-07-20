@@ -48,7 +48,7 @@
                             <br />
                         </td>
                         <td class="CommonFormField">
-                            <asp:TextBox ID="TbSPSiteUrl" runat="server" EnableViewState="true" CssClass="control"></asp:TextBox>
+                            <asp:TextBox ID="TbSPSiteUrl" runat="server" EnableViewState="true" CssClass="control spsite-url"></asp:TextBox>
                             <asp:RequiredFieldValidator ID="ReqSPSiteUrl" runat="server" Text="*" ControlToValidate="TbSPSiteUrl" />
                         </td>
                     </tr>

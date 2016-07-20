@@ -87,8 +87,7 @@ namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync
             }
             catch (Exception ex)
             {
-                var csEx = new CSException(CSExceptionType.UserProfileUpdated, string.Format("Could Not Update Internal User: {0}/{1}", user.Id, user.Email ?? string.Empty), ex);
-                csEx.Log();
+                throw new Exception(string.Format("Could Not Update Internal User: {0}/{1}", user.Id, user.Email ?? string.Empty));
             }
         }
 

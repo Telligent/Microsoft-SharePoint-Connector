@@ -154,7 +154,7 @@ namespace Telligent.Evolution.Extensions.SharePoint.Client.Plugins
 
         private void FailedLogin()
         {
-            throw new CSException(CSExceptionType.OAuthLoginFailed);
+            throw new Exception("OAuthLoginFailed");
         }
 
         private OAuthData GetUserData()

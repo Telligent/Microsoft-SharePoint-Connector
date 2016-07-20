@@ -7,17 +7,8 @@ namespace Telligent.Evolution.Extensions.SharePoint.IdentityProvider
     {
         internal static void Log(Exception exception, CSExceptionType exceptionType, string msg, params Object[] args)
         {
-            try
-            {
-                string logMsg = string.Format(msg, args);
-                var csEx = new CSException(exceptionType, logMsg, exception);
-                csEx.Log();
-            }
-            catch (Exception ex)
-            {
-                var csEx = new CSException(exceptionType, string.Format("Error logging error: {0}", msg), ex);
-                csEx.Log();
-            }
+            string logMsg = string.Format(msg, args);
+            throw new Exception(logMsg);
         }
 
         public static void UserInvalidCredentials(Exception exception, string msg, params Object[] args)

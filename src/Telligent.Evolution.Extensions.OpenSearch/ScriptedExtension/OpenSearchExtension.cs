@@ -266,8 +266,7 @@ namespace Telligent.Evolution.Extensions.OpenSearch.ScriptedExtension
             catch (Exception ex)
             {
                 string msg = string.Format("Enable Windows Authentication and set roleManager enabled=\"false\" : {0} {1}", ex.Message, ex.StackTrace);
-                var csEx = new CSException(CSExceptionType.UserInvalidCredentials, msg, ex);
-                csEx.Log();
+                throw new Exception(msg);
             }
 
             return null;

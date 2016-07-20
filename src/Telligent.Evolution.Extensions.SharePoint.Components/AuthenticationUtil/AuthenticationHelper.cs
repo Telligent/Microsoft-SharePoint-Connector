@@ -7,7 +7,7 @@ namespace Telligent.Evolution.Extensions.SharePoint.Components.AuthenticationUti
 {
     public static class AuthenticationHelper
     {
-        private static AuthenticationBuilder defauldAuthBuilder = new AuthenticationBuilder(new Anonymous(), new ServiceAccount(), new Windows(), new SAML(), new Methods.OAuth());
+        private static AuthenticationBuilder defauldAuthBuilder = new AuthenticationBuilder(new Anonymous(), new ServiceAccount(), new Methods.Windows(), new SAML(), new Methods.OAuth());
 
         public static HtmlGenericControl GetPropertyControls()
         {

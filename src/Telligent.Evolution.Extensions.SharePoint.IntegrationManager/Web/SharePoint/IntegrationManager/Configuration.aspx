@@ -26,7 +26,7 @@
                             <br />
                         </td>
                         <td class="CommonFormField">
-                            <asp:TextBox ID="TbSPSiteUrl" runat="server" EnableViewState="true" CssClass="control"/>
+                            <asp:TextBox ID="TbSPSiteUrl" runat="server" EnableViewState="true" CssClass="control spsite-url"/>
                             <asp:CustomValidator ID="SPSiteCustomValidator" runat="server" 
                                 Text="*" ControlToValidate="TbSPSiteUrl" OnServerValidate="SPSiteUrlServerValidate"/>
                             <asp:RequiredFieldValidator ID="SPSiteRequiredFieldValidator" runat="server" 

@@ -21,4 +21,24 @@ namespace Telligent.Evolution.Extensions.SharePoint.Client.InternalApi
             return new ApplicationKeyValidator(isDuplicate).MakeValid(key);
         }
     }
+
+    internal class ApplicationKeyValidator
+    {
+        private Func<string, bool> isDuplicate;
+
+        public ApplicationKeyValidator(Func<string, bool> isDuplicate)
+        {
+            this.isDuplicate = isDuplicate;
+        }
+
+        public bool IsValid(string key)
+        {
+            return !isDuplicate(key);
+        }
+
+        public string MakeValid(string key)
+        {
+            return IsValid(key) ? key : key + "-2";
+        }
+    }
 }

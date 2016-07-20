@@ -11,6 +11,7 @@ using Telligent.Evolution.Extensions.SharePoint.Components.Data.Log;
 using Telligent.Evolution.Extensions.SharePoint.ProfileSync.InternalApi;
 using Telligent.Evolution.Extensions.SharePoint.ProfileSync.Model;
 using SP = Microsoft.SharePoint.Client;
+using WindowsAuth = Telligent.Evolution.Extensions.SharePoint.Components.AuthenticationUtil.Methods.Windows;
 
 namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync
 {
@@ -57,7 +58,7 @@ namespace Telligent.Evolution.Extensions.SharePoint.ProfileSync
         {
             get
             {
-                if (syncSettings.Authentication is Windows)
+                if (syncSettings.Authentication is WindowsAuth)
                 {
                     return "Windows";
                 }

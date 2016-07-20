@@ -2,7 +2,7 @@
     if (data != '' & data != null) {
         jQuery('input[id$="ManagerAction"]').val("add");
         jQuery('input[id$="ManagerData"]').val(data);
-        theForm.submit();
+        jQuery('form:first').submit();
     }
 }
 
@@ -10,7 +10,7 @@ function DeleteManager(data) {
     if (confirm("Are you sure that you want to delete this item?")) {
         jQuery('input[id$="ManagerAction"]').val("delete");
         jQuery('input[id$="ManagerData"]').val(data);
-        theForm.submit();
+        jQuery('form:first').submit();
     }
 }
 
@@ -25,6 +25,6 @@ function DeleteSelectedSPObjecManager($selector) {
         });
         jQuery('input[id$="ManagerAction"]').val("delete");
         jQuery('input[id$="ManagerData"]').val(itemsCollection);
-        theForm.submit();
+        jQuery('form:first').submit();
     }
 }
